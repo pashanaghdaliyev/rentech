@@ -161,6 +161,15 @@ def gemini_tercume(xeberler: list) -> list:
 
     print(f"  (model: {GEMINI_MODEL})")
     try:
+        model_list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={GEMINI_ACAR}"
+        with urllib.request.urlopen(model_list_url, timeout=30) as r:
+            models_data = json.loads(r.read().decode("utf-8"))
+        available = [m["name"] for m in models_data.get("models", []) if "generateContent" in m.get("supportedGenerationMethods", [])]
+        print(f"  (v1beta-da generateContent üçün mövcud modellər: {available[:10]})")
+    except Exception as e:
+        print(f"  (model siyahısı alınmadı: {e})")
+
+    try:
         istek = urllib.request.Request(
             unvan,
             data=json.dumps(sorgu).encode("utf-8"),

@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 21:05",
+  "updated": "2026-09-17 21:06",
   "items": [
     {
       "cat": "Dünya",
@@ -9,7 +9,7 @@
       "excerpt": "Alpex Solar şaquli inteqrasiya olunmuş istehsal əməliyyatlarını genişləndirərək Uttar Pradeşdə G12R TOPCon fotovoltaik element fabrikinin açılışını edib. Mənbə: Alpex Solar inaugurates 2.2 GW TOPCon cell factory in India, pv magazine Global .",
       "source": "pv magazine",
       "url": "https://www.pv-magazine.com/2026/09/17/alpex-solar-inaugurates-2-2-gw-topcon-cell-manufacturing-facility-in-uttar-pradesh/",
-      "status": "derc",
+      "status": "redd",
       "tercume": true
     },
     {
@@ -99,7 +99,7 @@
       "excerpt": "EnergyTrend-ə əsasən, BYD və Hithium […] təqdim ediblər",
       "source": "EnergyTrend",
       "url": "https://www.energytrend.com/news/20260917-52157.html",
-      "status": "derc",
+      "status": "redd",
       "tercume": true
     },
     {
@@ -369,7 +369,7 @@
       "excerpt": "UAE state-run renewables developer Masdar has signed an agreement with renewables developer Azerbaijan Green Energy Company (AGEC) to explore the development of new renewable energy projects in Azerbaijan.",
       "source": "PV Tech",
       "url": "https://www.pv-tech.org/masdar-to-expand-solar-pv-and-energy-storage-development-in-azerbaijan/",
-      "status": "derc"
+      "status": "redd"
     },
     {
       "cat": "Çin",

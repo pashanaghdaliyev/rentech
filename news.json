@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 20:58",
+  "updated": "2026-09-17 20:59",
   "items": [
     {
       "cat": "Dünya",
@@ -269,7 +269,7 @@
       "excerpt": "Elektrikli nəqliyyat vasitələri 5 il əvvəlki ilə müqayisədə, 10, 20 və ya 30 il əvvəli demirəm, qat-qat yaxşıdır. Onların yüzlərlə mil yürüş məsafəsi var və “müqayisə oluna bilən” benzinlə işləyən avtomobillərin qiymətinə bərabərdir. Əslində, sahibkarlığın…",
       "source": "CleanTechnica",
       "url": "https://cleantechnica.com/2026/09/16/most-americans-now-thinking-about-electric-cars-thanks-to-high-gas-prices/",
-      "status": "gozleyir",
+      "status": "derc",
       "tercume": true
     },
     {

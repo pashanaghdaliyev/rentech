@@ -80,7 +80,7 @@ XULASE_UZUNLUGU = 260
 CIXIS_FAYLI = "news.json"
 
 GEMINI_ACAR = os.environ.get("GEMINI_API_KEY", "").strip()
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "").strip() or "gemini-2.5-flash"
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "").strip() or "gemini-flash-latest"
 
 # ───────────────────────── KÖMƏKÇİLƏR ──────────────────────────
 

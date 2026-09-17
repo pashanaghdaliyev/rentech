@@ -40,14 +40,26 @@ jobs:
         run: |
           git config user.name  "rentech-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add news.json
-          if git diff --staged --quiet; then
+          if git diff --quiet news.json; then
             echo "Yeni xəbər yoxdur — dəyişiklik edilmədi."
-          else
-            git commit -m "xəbərlər yeniləndi ($(date -u '+%Y-%m-%d %H:%M') UTC)"
-            for i in 1 2 3; do
-              git pull --rebase --autostash origin main && git push && break
-              echo "push cəhdi $i alınmadı, təkrar edirəm..."
-              sleep 5
-            done
+            exit 0
           fi
+          for i in 1 2 3 4; do
+            cp news.json /tmp/news.json.new
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/news.json.new news.json
+            git add news.json
+            if git diff --staged --quiet; then
+              echo "Uzaq repo artıq eyni məzmunu daşıyır."
+              exit 0
+            fi
+            git commit -m "xəbərlər yeniləndi ($(date -u '+%Y-%m-%d %H:%M') UTC)"
+            if git push; then
+              exit 0
+            fi
+            echo "push cəhdi $i alınmadı, təkrar edirəm..."
+            sleep $((i * 3))
+          done
+          echo "4 cəhddən sonra push mümkün olmadı."
+          exit 1

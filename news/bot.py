@@ -159,37 +159,37 @@ def gemini_tercume(xeberler: list) -> list:
     unvan = (f"https://generativelanguage.googleapis.com/v1beta/models/"
              f"{GEMINI_MODEL}:generateContent?key={GEMINI_ACAR}")
 
-    print(f"  (model: {GEMINI_MODEL})")
-    try:
-        model_list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={GEMINI_ACAR}"
-        with urllib.request.urlopen(model_list_url, timeout=30) as r:
-            models_data = json.loads(r.read().decode("utf-8"))
-        available = [m["name"] for m in models_data.get("models", []) if "generateContent" in m.get("supportedGenerationMethods", [])]
-        print(f"  (v1beta-da generateContent üçün mövcud modellər: {available[:10]})")
-    except Exception as e:
-        print(f"  (model siyahısı alınmadı: {e})")
-
-    try:
-        istek = urllib.request.Request(
-            unvan,
-            data=json.dumps(sorgu).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
-        )
-        with urllib.request.urlopen(istek, timeout=90) as cavab:
-            data = json.loads(cavab.read().decode("utf-8"))
-        metn = data["candidates"][0]["content"]["parts"][0]["text"]
-        netice = json.loads(metn)
-    except urllib.error.HTTPError as xeta:
-        cavab_metn = ""
+    import time
+    netice = None
+    for cehd in range(1, 4):
         try:
-            cavab_metn = xeta.read().decode("utf-8", errors="replace")[:500]
-        except Exception:
-            pass
-        print(f"  (tərcümə alınmadı: HTTP {xeta.code} — {cavab_metn})")
-        return xeberler
-    except (urllib.error.URLError, KeyError, IndexError,
-            json.JSONDecodeError, TimeoutError) as xeta:
-        print(f"  (tərcümə alınmadı: {xeta} — mətn ingiliscə qaldı)")
+            istek = urllib.request.Request(
+                unvan,
+                data=json.dumps(sorgu).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+            )
+            with urllib.request.urlopen(istek, timeout=90) as cavab:
+                data = json.loads(cavab.read().decode("utf-8"))
+            metn = data["candidates"][0]["content"]["parts"][0]["text"]
+            netice = json.loads(metn)
+            break
+        except urllib.error.HTTPError as xeta:
+            cavab_metn = ""
+            try:
+                cavab_metn = xeta.read().decode("utf-8", errors="replace")[:300]
+            except Exception:
+                pass
+            if xeta.code in (429, 500, 502, 503, 504) and cehd < 3:
+                print(f"  (cəhd {cehd}: HTTP {xeta.code} — {cavab_metn[:100]}, 10 sn gözləyirəm)")
+                time.sleep(10 * cehd)
+                continue
+            print(f"  (tərcümə alınmadı: HTTP {xeta.code} — {cavab_metn})")
+            return xeberler
+        except (urllib.error.URLError, KeyError, IndexError,
+                json.JSONDecodeError, TimeoutError) as xeta:
+            print(f"  (tərcümə alınmadı: {xeta} — mətn ingiliscə qaldı)")
+            return xeberler
+    if netice is None:
         return xeberler
 
     sayğac = 0

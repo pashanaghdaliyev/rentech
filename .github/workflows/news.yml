@@ -2,8 +2,8 @@ name: Xəbər botu
 
 on:
   schedule:
-    # UTC ilə hər 3 saatdan bir (Bakı vaxtı ilə +4 saat)
-    - cron: "17 */3 * * *"
+    # Hər 30 dəqiqədən bir
+    - cron: "*/30 * * * *"
   workflow_dispatch:        # düymə ilə əl ilə də işə salmaq üçün
 
 permissions:

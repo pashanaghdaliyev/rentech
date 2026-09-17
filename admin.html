@@ -73,6 +73,8 @@
   }
   .btn-solid:hover{background:var(--brand-dark);}
   .btn-solid:disabled{opacity:.5;cursor:not-allowed;}
+  .btn-solid.danger{background:var(--danger);}
+  .btn-solid.danger:hover{background:#8f2323;}
   .btn-ghost{
     background:transparent;color:var(--brand);border:2px solid var(--line-strong);
     border-radius:10px;padding:10px 16px;font-weight:600;
@@ -106,8 +108,38 @@
   .tab .n{color:var(--ink-mute);font-weight:600;margin-left:4px;}
   .tab.active .n{color:var(--brand);}
 
-  .bulk{display:flex;gap:8px;margin-bottom:12px;}
-  .bulk button{flex:1;font-size:14px;padding:10px;}
+  /* ---------- bulk toolbar (seçim əsaslı) ---------- */
+  .bulk{
+    display:flex;gap:8px;margin-bottom:12px;align-items:stretch;
+  }
+  .bulk button{
+    font-size:14px;padding:10px 14px;font-weight:700;border-radius:10px;
+  }
+  .bulk .master{
+    flex:1;display:inline-flex;align-items:center;gap:10px;
+    background:#fff;border:1px solid var(--line-strong);color:var(--ink);
+    justify-content:flex-start;
+  }
+  .bulk .master .box{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:20px;height:20px;border:2px solid var(--line-strong);border-radius:5px;flex:none;
+  }
+  .bulk .master.some .box, .bulk .master.all .box{background:var(--brand);border-color:var(--brand);color:#fff;}
+  .bulk .master.all .box::after{content:"✓";font-size:12px;font-weight:800;}
+  .bulk .master.some .box::after{content:"–";font-size:16px;font-weight:800;}
+  .bulk .master:hover{border-color:var(--brand);}
+  .bulk .bulk-act{flex:1;}
+
+  /* ---------- card checkbox ---------- */
+  .card-select{
+    display:inline-flex;align-items:center;justify-content:center;flex:none;
+    width:24px;height:24px;border:2px solid var(--line-strong);border-radius:6px;
+    background:#fff;cursor:pointer;padding:0;transition:background .12s, border-color .12s;
+  }
+  .card-select:hover{border-color:var(--brand);}
+  .card-select.on{background:var(--brand);border-color:var(--brand);color:#fff;}
+  .card-select.on::after{content:"✓";font-size:14px;font-weight:800;line-height:1;}
+  .card.selected{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand-soft);}
 
   /* ---------- cards ---------- */
   .list{display:flex;flex-direction:column;gap:12px;}
@@ -212,7 +244,11 @@
       <div class="filters" id="filters"></div>
     </div>
     <div class="bulk" id="bulk" hidden>
-      <button class="btn-ghost" id="bulk-approve">Hamısını dərc et</button>
+      <button class="master" id="master-select" type="button">
+        <span class="box"></span>
+        <span id="master-label">Hamısını seç</span>
+      </button>
+      <button class="btn-solid bulk-act" id="bulk-action" type="button" hidden></button>
     </div>
     <div class="list" id="list"></div>
   </section>
@@ -238,6 +274,9 @@
   var filtersBox = $("filters");
   var tabsBox = $("tabs");
   var bulkBox = $("bulk");
+  var masterBtn = $("master-select");
+  var masterLabel = $("master-label");
+  var bulkActionBtn = $("bulk-action");
   var headActions = $("head-actions");
 
   var STATUS_TABS = [
@@ -253,6 +292,14 @@
     statusTab: "gozleyir", // hansı status göstərilir
     filter: "Bütün",     // kateqoriya süzgəci: "Bütün" | "ABŞ" | ...
     editingUrl: null,    // hazırda redaktə olunan xəbərin url-i
+    selected: {},        // {url: true} — seçilmiş xəbərlər (yalnız cari tab-da)
+  };
+
+  // Tab dəyişəndə seçim təmizlənir
+  var TAB_BULK_LABEL = {
+    gozleyir: function(n){ return "Seçilənləri dərc et (" + n + ")"; },
+    derc:     function(n){ return "Seçilənləri saytdan sil (" + n + ")"; },
+    redd:     function(n){ return "Seçilənləri bərpa et (" + n + ")"; },
   };
 
   // ---------- toast ----------
@@ -364,6 +411,7 @@
         state.statusTab = t.id;
         state.filter = "Bütün";
         state.editingUrl = null;
+        state.selected = {};
         render();
       });
       tabsBox.appendChild(b);
@@ -399,7 +447,8 @@
   function renderList(){
     var shown = filtered();
     listBox.innerHTML = "";
-    bulkBox.hidden = !(state.statusTab === "gozleyir" && shown.length);
+    bulkBox.hidden = !shown.length;
+    updateBulkToolbar(shown);
 
     if (!shown.length) {
       var e = document.createElement("div");
@@ -411,11 +460,19 @@
 
     shown.forEach(function(x){
       var card = document.createElement("article");
-      card.className = "card";
+      card.className = "card" + (state.selected[x.url] ? " selected" : "");
       card.dataset.url = x.url;
 
       var meta = document.createElement("div");
       meta.className = "meta";
+      if (state.editingUrl !== x.url) {
+        var cbox = document.createElement("button");
+        cbox.type = "button";
+        cbox.className = "card-select" + (state.selected[x.url] ? " on" : "");
+        cbox.setAttribute("aria-label", "Seç");
+        cbox.addEventListener("click", function(ev){ ev.stopPropagation(); toggleSelect(x.url); });
+        meta.appendChild(cbox);
+      }
       var chip = document.createElement("span");
       chip.className = "chip";
       chip.textContent = x.cat;
@@ -599,18 +656,73 @@
     });
   }
 
-  function bulkApprove(){
-    var target = filtered();
-    if (!target.length) return;
-    if (!confirm(target.length + " xəbəri birdən dərc edim?")) return;
-    var urls = {};
-    target.forEach(function(x){ urls[x.url] = true; });
+  // ---------- seçim ----------
+  function selectedUrls(){
+    var visible = filtered();
+    var out = [];
+    for (var i=0; i<visible.length; i++) if (state.selected[visible[i].url]) out.push(visible[i].url);
+    return out;
+  }
+
+  function toggleSelect(url){
+    if (state.selected[url]) delete state.selected[url];
+    else state.selected[url] = true;
+    // full re-render — kart görünüşü və bulk toolbar birlikdə yenilənir
+    render();
+  }
+
+  function toggleMaster(){
+    var visible = filtered();
+    var allOn = visible.length && visible.every(function(x){ return state.selected[x.url]; });
+    if (allOn) {
+      visible.forEach(function(x){ delete state.selected[x.url]; });
+    } else {
+      visible.forEach(function(x){ state.selected[x.url] = true; });
+    }
+    render();
+  }
+
+  function updateBulkToolbar(shown){
+    if (!shown.length) return;
+    var selCount = selectedUrls().length;
+    var allOn = selCount === shown.length && shown.length > 0;
+    var someOn = selCount > 0 && !allOn;
+
+    masterBtn.className = "master" + (allOn ? " all" : someOn ? " some" : "");
+    masterLabel.textContent = selCount
+      ? selCount + " / " + shown.length + " seçilib"
+      : "Hamısını seç";
+
+    if (selCount > 0) {
+      bulkActionBtn.hidden = false;
+      bulkActionBtn.textContent = TAB_BULK_LABEL[state.statusTab](selCount);
+      bulkActionBtn.className = "btn-solid bulk-act" +
+        (state.statusTab === "derc" ? " danger" : "");
+    } else {
+      bulkActionBtn.hidden = true;
+    }
+  }
+
+  function bulkAction(){
+    var urls = selectedUrls();
+    if (!urls.length) return;
+    var tab = state.statusTab;
+    var newStatus, actLabel, commitMsg, successMsg;
+    if (tab === "gozleyir")      { newStatus = "derc"; actLabel = "dərc et"; commitMsg = "bulk dərc"; successMsg = "dərc olundu"; }
+    else if (tab === "derc")     { newStatus = "redd"; actLabel = "saytdan sil"; commitMsg = "bulk saytdan sil"; successMsg = "saytdan silindi"; }
+    else                          { newStatus = "derc"; actLabel = "bərpa et"; commitMsg = "bulk bərpa"; successMsg = "bərpa edildi"; }
+
+    if (!confirm(urls.length + " xəbəri " + actLabel + "?")) return;
+    var set = {};
+    urls.forEach(function(u){ set[u] = true; });
+
     updateItems(function(items){
       for (var i=0; i<items.length; i++) {
-        if (urls[items[i].url] && items[i].status === "gozleyir") items[i].status = "derc";
+        if (set[items[i].url]) items[i].status = newStatus;
       }
-    }, "telefondan bulk dərc (" + target.length + " xəbər)").then(function(){
-      toast(target.length + " xəbər dərc olundu");
+    }, "telefondan " + commitMsg + " (" + urls.length + " xəbər)").then(function(){
+      toast(urls.length + " xəbər " + successMsg);
+      state.selected = {};
       render();
     }).catch(function(err){
       toast(err.message || "Xəta baş verdi", true);
@@ -672,7 +784,8 @@
   });
 
   $("refresh-btn").addEventListener("click", loadAll);
-  $("bulk-approve").addEventListener("click", bulkApprove);
+  masterBtn.addEventListener("click", toggleMaster);
+  bulkActionBtn.addEventListener("click", bulkAction);
 
   // ---------- boot ----------
   var saved = null;

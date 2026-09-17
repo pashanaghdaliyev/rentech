@@ -37,12 +37,14 @@ except ImportError:
 #   suzgec     – True olsa, yalnız açar sözlərə uyğun xəbərlər götürülür
 #   dil        – "az" birbaşa dərc olunur, "en" tərcümə olunub təsdiq gözləyir
 MENBELER = [
+    # Azərbaycan — süzgəclə (ümumi lentdir, yalnız enerji mövzusu keçir)
     {"url": "https://report.az/rss/", "ad": "Report.az",
      "kateqoriya": "Azərbaycan", "suzgec": True, "dil": "az"},
 
     {"url": "https://az.trend.az/feeds/index.rss", "ad": "Trend.az",
      "kateqoriya": "Azərbaycan", "suzgec": True, "dil": "az"},
 
+    # Dünya — sənaye və bazar
     {"url": "https://www.pv-magazine.com/feed/", "ad": "pv magazine",
      "kateqoriya": "Dünya", "suzgec": False, "dil": "en"},
 
@@ -63,15 +65,38 @@ MENBELER = [
 
     {"url": "https://www.energytrend.com/rss.xml", "ad": "EnergyTrend",
      "kateqoriya": "Çin", "suzgec": False, "dil": "en"},
+
+    # Texnologiya və innovasiya — öyrənmək istəyənlər üçün
+    # Electrek: EV, günəş, batareya innovasiyaları (praktik texnologiya)
+    {"url": "https://electrek.co/feed/", "ad": "Electrek",
+     "kateqoriya": "Texnologiya", "suzgec": True, "dil": "en"},
+
+    # Energy Storage News: batareya və enerji anbarı texnologiyası
+    {"url": "https://www.energy-storage.news/feed/", "ad": "Energy Storage News",
+     "kateqoriya": "Texnologiya", "suzgec": False, "dil": "en"},
+
+    # MIT News — enerji araşdırmaları (laboratoriya kəşfləri)
+    {"url": "https://news.mit.edu/topic/mitenergy-rss.xml", "ad": "MIT News",
+     "kateqoriya": "Texnologiya", "suzgec": False, "dil": "en"},
 ]
 
 ACAR_SOZLER = [
+    # Azərbaycanca
     "günəş enerji", "günəş panel", "günəş elektrik", "fotovoltaik",
     "bərpa olunan", "yaşıl enerji", "alternativ enerji", "yaşıl keçid",
     "külək enerji", "külək elektrik", "günəş stansiya", "elektrik stansiyası",
-    "enerji səmərəliliyi", "socar green", "masdar", "solar", "photovoltaic",
-    "renewable", "wind power", "wind farm", "battery storage",
-    "grid-scale", "utility-scale", "gigafactory", "solarmodul", "energiewende",
+    "enerji səmərəliliyi", "hidrogen", "yaşıl hidrogen", "batareya",
+    "enerji anbarı", "elektromobil", "elektrik avtomobil", "elektroliz",
+    "perovskit", "mikro şəbəkə", "ağıllı şəbəkə", "iqlim",
+    "socar green", "masdar", "azərişıq",
+    # İngiliscə
+    "solar", "photovoltaic", "renewable", "wind power", "wind farm",
+    "battery", "battery storage", "energy storage", "grid-scale",
+    "utility-scale", "gigafactory", "perovskite", "tandem cell", "bifacial",
+    "hydrogen", "green hydrogen", "electrolyzer", "electric vehicle",
+    " ev ", "microgrid", "smart grid",
+    # Almanca
+    "solarmodul", "energiewende", "wasserstoff", "batterie",
 ]
 
 MAKS_XEBER = 30            # saxlanılacaq maksimum xəbər sayı

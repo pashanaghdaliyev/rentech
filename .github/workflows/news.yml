@@ -32,8 +32,11 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           # Model adı dəyişsə, Settings → Secrets and variables → Variables
-          # bölməsində GEMINI_MODEL yaz. Boş qalsa gemini-2.0-flash işlənir.
+          # bölməsində GEMINI_MODEL yaz. Boş qalsa default işlənir.
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          # ntfy.sh push. NTFY_TOPIC secret olsa: yeni xəbər gələndə telefona
+          # push gedir. Boş qalsa bildiriş göndərilmir.
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: python news/bot.py
 
       - name: Dəyişiklik varsa yaz

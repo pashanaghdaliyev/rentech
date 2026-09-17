@@ -82,6 +82,12 @@ CIXIS_FAYLI = "news.json"
 GEMINI_ACAR = os.environ.get("GEMINI_API_KEY", "").strip()
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "").strip() or "gemini-flash-lite-latest"
 
+# ntfy.sh push bildirişi. Topic təyin edilməsə, bildiriş göndərilmir.
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "").strip()
+NTFY_SERVER = os.environ.get("NTFY_SERVER", "").strip() or "https://ntfy.sh"
+ADMIN_URL = os.environ.get("ADMIN_URL", "").strip() or \
+    "https://pashanaghdaliyev.github.io/rentech/admin.html"
+
 # ───────────────────────── KÖMƏKÇİLƏR ──────────────────────────
 
 
@@ -261,6 +267,50 @@ def kohnəni_yuklə(yol: str) -> list:
         return []
 
 
+def ntfy_gonder(yeni_gozleyen: list) -> None:
+    """Yeni "gozleyir" xəbərlər üçün ntfy.sh push göndərir.
+    Uğursuz olsa səssizcə keçir — bildiriş bot işini dayandırmır."""
+    if not NTFY_TOPIC or not yeni_gozleyen:
+        return
+
+    from collections import Counter
+    ölkələr = Counter(x.get("cat", "?") for x in yeni_gozleyen)
+    say = len(yeni_gozleyen)
+    bölgü = ", ".join(f"{k}: {v}" for k, v in ölkələr.most_common())
+
+    mesaj_setirleri = [f"{say} yeni xəbər təsdiq gözləyir", ""]
+    mesaj_setirleri.append(bölgü)
+    mesaj_setirleri.append("")
+    for x in yeni_gozleyen[:3]:
+        mesaj_setirleri.append(f"• [{x.get('cat', '?')}] {x.get('title', '')[:80]}")
+    if say > 3:
+        mesaj_setirleri.append(f"...və {say - 3} xəbər daha")
+
+    mesaj = "\n".join(mesaj_setirleri)
+    baslıq = f"RenTech: {say} yeni xəbər"
+
+    yuk = {
+        "topic": NTFY_TOPIC,
+        "title": baslıq,
+        "message": mesaj,
+        "click": ADMIN_URL,
+        "tags": ["newspaper"],
+        "priority": 3,
+    }
+    try:
+        istek = urllib.request.Request(
+            NTFY_SERVER,
+            data=json.dumps(yuk, ensure_ascii=False).encode("utf-8"),
+            headers={"Content-Type": "application/json; charset=utf-8"},
+            method="POST",
+        )
+        with urllib.request.urlopen(istek, timeout=15) as cavab:
+            cavab.read()
+        print(f"ntfy bildirişi göndərildi ({say} xəbər)")
+    except Exception as xeta:
+        print(f"  (ntfy göndərilmədi: {xeta})")
+
+
 def main() -> int:
     print("RenTech xəbər botu işə düşdü\n")
 
@@ -318,6 +368,14 @@ def main() -> int:
           f"({gozleyen} təsdiq gözləyir).")
     if hamısı:
         print(f"Ən yenisi: {hamısı[0]['date']} · {hamısı[0]['title'][:70]}")
+
+    # yalnız YENİ əlavə olunmuş "gozleyir" xəbərlər üçün bildiriş
+    kohne_url = {x.get("url") for x in kohne}
+    yeni_gozleyen = [x for x in hamısı
+                     if x.get("status") == "gozleyir" and x.get("url") not in kohne_url]
+    if yeni_gozleyen:
+        ntfy_gonder(yeni_gozleyen)
+
     return 0
 
 

@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 14:58",
+  "updated": "2026-09-17 15:45",
   "items": [
     {
       "cat": "Azərbaycan",
@@ -138,7 +138,7 @@
       "excerpt": "ABŞ-də transformatorların çatdırılma müddəti iki ili keçdiyi bir vaxtda, bu müəssisə kommunal avadanlıqların kəskin çatışmazlığını aradan qaldırmaq üçün şirkətin ABŞ-dakı 1,5 milyard dollarlıq istehsalın genişləndirilməsi proqramının bir hissəsi kimi…",
       "source": "pv magazine USA",
       "url": "https://pv-magazine-usa.com/2026/09/17/hitachi-energy-commits-528-million-for-mississippi-transformer-factory/",
-      "status": "gozleyir",
+      "status": "redd",
       "tercume": true
     },
     {

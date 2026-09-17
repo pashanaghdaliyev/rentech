@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 15:46",
+  "updated": "2026-09-17 15:47",
   "items": [
     {
       "cat": "Azərbaycan",
@@ -238,7 +238,7 @@
       "excerpt": "İspaniya \"təchizat təhlükəsizliyi\"ni təmin etmək üçün milli elektrik sistemi üçün güc bazarı yaratmaq planlarını elan edib.",
       "source": "PV Tech",
       "url": "https://www.pv-tech.org/spain-launch-capacity-market-us19-5-billion-grid-infrastructure-investment/",
-      "status": "gozleyir",
+      "status": "derc",
       "tercume": true
     },
     {

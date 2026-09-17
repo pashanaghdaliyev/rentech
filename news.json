@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 21:03",
+  "updated": "2026-09-17 21:05",
   "items": [
     {
       "cat": "Dünya",
@@ -428,7 +428,7 @@
       "excerpt": "LFP bu gün Almaniyanın BESS bazarı üçün faktiki seçimdir, natrium-ion isə hələ də maliyyələşdirmək üçün çox uzaqdadır, lakin bu, təchizatçı seçməyin mütləq sadə olduğu anlamına gəlmir.",
       "source": "Energy Storage News",
       "url": "https://www.energy-storage.news/sodium-ion-still-very-much-on-the-fringe-german-market-sources-on-technology-and-procurement/",
-      "status": "gozleyir",
+      "status": "derc",
       "tercume": true
     },
     {

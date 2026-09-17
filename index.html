@@ -212,10 +212,62 @@
   .page-head.ink p{color:rgba(255,255,255,.75);}
   .page-head .in{padding-block:36px;}
   @media (min-width:768px){.page-head .in{padding-block:64px;}}
-  .page-head h2{margin-top:12px;font-size:26px;line-height:1.15;}
+  .page-head h2{margin-top:12px;font-size:26px;line-height:1.15;position:relative;}
   @media (min-width:768px){.page-head h2{margin-top:16px;font-size:48px;}}
   .page-head p{margin-top:12px;max-width:42rem;font-size:15px;line-height:1.75;color:var(--ink-soft);}
   @media (min-width:768px){.page-head p{margin-top:20px;font-size:18px;}}
+
+  /* ---------- Səhifə başlığında damcı düşməsi (scroll-spy tetiklənəndə) ---------- */
+  /* .drip classı .page-head .in və ya .hero-in üzərinə qoyulur, ::before/::after uşaq h1/h2-də oynayır */
+  .hero h1{position:relative;}
+  .page-head h2::before, .hero h1::before{
+    content:"";position:absolute;top:0;left:3px;
+    width:9px;height:12px;background:var(--brand);
+    border-radius:50% 50% 50% 50% / 55% 55% 45% 45%;
+    transform:translate(0,-34px) scaleY(1.4);
+    opacity:0;pointer-events:none;z-index:1;
+  }
+  .page-head.dark h2::before, .page-head.ink h2::before{background:var(--sun);}
+  .page-head h2::after, .hero h1::after{
+    content:"";position:absolute;top:8px;left:3px;
+    width:10px;height:10px;border:2px solid var(--brand);
+    border-radius:50%;transform:scale(0);opacity:0;pointer-events:none;
+  }
+  .page-head.dark h2::after, .page-head.ink h2::after{border-color:var(--sun);}
+
+  .page-head .in.drip h2::before, .hero-in.drip h1::before{
+    animation:title-drip .8s cubic-bezier(.55,.06,.68,.19);
+  }
+  .page-head .in.drip h2::after, .hero-in.drip h1::after{
+    animation:title-splash .55s ease-out .45s;
+  }
+  .page-head .in.drip h2, .hero-in.drip h1{
+    animation:title-bounce .4s cubic-bezier(.34,1.56,.64,1) .48s;
+  }
+
+  @keyframes title-drip {
+    0%   { transform:translate(0,-34px) scaleY(1.4); opacity:0; }
+    15%  { opacity:.95; }
+    60%  { transform:translate(0,2px) scaleY(.9); opacity:.95;
+           border-radius:50% 50% 50% 50% / 55% 55% 45% 45%; }
+    75%  { transform:translate(0,6px) scale(2.6,.28); opacity:.55;
+           border-radius:100% 100% 40% 40% / 50% 50% 40% 40%; }
+    100% { transform:translate(0,10px) scale(3.5,.05); opacity:0; }
+  }
+  @keyframes title-splash {
+    0%   { transform:scale(0); opacity:.75; }
+    100% { transform:scale(4); opacity:0; }
+  }
+  @keyframes title-bounce {
+    0%   { transform:translateY(0); }
+    45%  { transform:translateY(2px); }
+    100% { transform:translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .page-head .in.drip h2::before, .hero-in.drip h1::before,
+    .page-head .in.drip h2::after, .hero-in.drip h1::after,
+    .page-head .in.drip h2, .hero-in.drip h1 { animation:none; }
+  }
 
   .cards{display:grid;gap:16px;}
 
@@ -1522,6 +1574,29 @@
   var topNav = document.querySelector(".top-nav");
   var navBlob = topNav && topNav.querySelector(".nav-blob");
   var lastActiveId = null;
+  var dripTimer = null;
+
+  /* Hər view-nin əsas başlığının konteyneri (drip classı buraya qoyulur) */
+  var VIEW_HEADING = {
+    "view-home":    document.querySelector("#view-home .hero-in"),
+    "view-news":    document.querySelector("#view-news .page-head .in"),
+    "view-calc":    document.querySelector("#view-calc .page-head .in"),
+    "view-lessons": document.querySelector("#view-lessons .page-head .in"),
+    "view-service": document.querySelector("#view-service .page-head .in"),
+  };
+
+  function tripTitleDrip(id) {
+    var h = VIEW_HEADING[id];
+    if (!h) return;
+    // əvvəlki drip class-ını təmizlə (yaxın-yaxına scroll-larda animasiya təzələnsin)
+    if (dripTimer) { clearTimeout(dripTimer); dripTimer = null; }
+    Object.keys(VIEW_HEADING).forEach(function (k) {
+      if (VIEW_HEADING[k]) VIEW_HEADING[k].classList.remove("drip");
+    });
+    void h.offsetWidth;
+    h.classList.add("drip");
+    dripTimer = setTimeout(function () { h.classList.remove("drip"); dripTimer = null; }, 1200);
+  }
 
   /* Damcı pill-i aktiv linkin arxasına yerləşdirir */
   function positionBlob(withMorph) {
@@ -1547,7 +1622,10 @@
       else a.removeAttribute("aria-current");
     });
     lastActiveId = id;
-    // ilk render-də morph atlanır — blob sadəcə fade-in edir
+    // ilk render-də morph və başlıq damcısı atlanır
+    if (changed && !isFirst) {
+      tripTitleDrip(id);
+    }
     positionBlob(changed && !isFirst);
   }
 

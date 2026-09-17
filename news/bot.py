@@ -45,6 +45,24 @@ MENBELER = [
 
     {"url": "https://www.pv-magazine.com/feed/", "ad": "pv magazine",
      "kateqoriya": "Dünya", "suzgec": False, "dil": "en"},
+
+    # ABŞ
+    {"url": "https://www.pv-magazine-usa.com/feed/", "ad": "pv magazine USA",
+     "kateqoriya": "ABŞ", "suzgec": False, "dil": "en"},
+
+    {"url": "https://cleantechnica.com/feed/", "ad": "CleanTechnica",
+     "kateqoriya": "ABŞ", "suzgec": True, "dil": "en"},
+
+    # Almaniya
+    {"url": "https://www.pv-magazine.de/feed/", "ad": "pv magazine Deutschland",
+     "kateqoriya": "Almaniya", "suzgec": False, "dil": "de"},
+
+    # Çin və Asiya PV bazarı
+    {"url": "https://www.pv-tech.org/feed/", "ad": "PV Tech",
+     "kateqoriya": "Çin", "suzgec": False, "dil": "en"},
+
+    {"url": "https://www.energytrend.com/rss.xml", "ad": "EnergyTrend",
+     "kateqoriya": "Çin", "suzgec": False, "dil": "en"},
 ]
 
 ACAR_SOZLER = [
@@ -52,6 +70,8 @@ ACAR_SOZLER = [
     "bərpa olunan", "yaşıl enerji", "alternativ enerji", "yaşıl keçid",
     "külək enerji", "külək elektrik", "günəş stansiya", "elektrik stansiyası",
     "enerji səmərəliliyi", "socar green", "masdar", "solar", "photovoltaic",
+    "renewable", "wind power", "wind farm", "battery storage",
+    "grid-scale", "utility-scale", "gigafactory", "solarmodul", "energiewende",
 ]
 
 MAKS_XEBER = 30            # saxlanılacaq maksimum xəbər sayı
@@ -102,7 +122,8 @@ def normal_baslıq(b: str) -> str:
 # ─────────────────────────── TƏRCÜMƏ ───────────────────────────
 
 TERCUME_TAPSIRIGI = """Sən enerji sahəsi üzrə peşəkar tərcüməçisən.
-Aşağıdakı xəbər başlıqlarını və xülasələrini ingiliscədən Azərbaycan dilinə tərcümə et.
+Aşağıdakı xəbər başlıqlarını və xülasələrini Azərbaycan dilinə tərcümə et.
+Mətnlər müxtəlif dillərdə (əsasən ingilis və alman) ola bilər — mənbə dilini özün müəyyən et.
 
 Qaydalar:
 - Texniki terminləri Azərbaycan enerji sahəsində işlənən formada saxla:

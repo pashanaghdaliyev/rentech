@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 15:45",
+  "updated": "2026-09-17 15:46",
   "items": [
     {
       "cat": "Azərbaycan",
@@ -158,7 +158,7 @@
       "excerpt": "Təxminən dörd illik planlaşdırma və işlərdən sonra layihə təntənəli şəkildə istismara verilmək üzrədir. 76,5 meqavat saat tutumlu batareya saxlancı ilkin olaraq tamamilə yaşıl enerji saxlancı kimi idarə olunmalıdır, çünki Eon Edis əvvəlcədən vəd edilmiş…",
       "source": "pv magazine Deutschland",
       "url": "https://www.pv-magazine.de/2026/09/17/hybridkraftwerk-mit-69-megawatt-photovoltaik-und-765-megawattstunden-speicher-geht-ans-netz/",
-      "status": "gozleyir",
+      "status": "redd",
       "tercume": true
     },
     {

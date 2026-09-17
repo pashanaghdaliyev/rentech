@@ -1,0 +1,105 @@
+{
+  "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
+  "updated": "2026-09-17 14:08",
+  "items": [
+    {
+      "cat": "Azərbaycan",
+      "date": "2026-09-17",
+      "title": "Azərbaycanda külək enerjisi istehsalı 22 dəfəyədək artıb",
+      "excerpt": "",
+      "source": "Trend.az",
+      "url": "https://az.trend.az/business/energy/4225243.html",
+      "status": "derc"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "Alpex Solar inaugurates 2.2 GW TOPCon cell factory in India",
+      "excerpt": "Alpex Solar has inaugurated a G12R TOPCon solar cell factory in Uttar Pradesh, expanding its vertically integrated manufacturing operations. The post Alpex Solar inaugurates 2.2 GW TOPCon cell factory in India appeared first on pv magazine Global .",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/alpex-solar-inaugurates-2-2-gw-topcon-cell-manufacturing-facility-in-uttar-pradesh/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "Taiwan adds carbon-footprint requirement to high-efficiency PV module standard",
+      "excerpt": "Taiwan has tied its voluntary high-efficiency solar module certification to a new emissions-based qualification bar, tightening durability testing along the way. The post Taiwan adds carbon-footprint requirement to high-efficiency PV module standard appeared…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/taiwan-adds-carbon-footprint-requirement-to-high-efficiency-pv-module-standard/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "First Solar drops TOPCon patent complaint",
+      "excerpt": "The thin-film manufacturer withdrew its Section 337 filing before the USITC following new Section 232 import restrictions, while federal court patent battles against domestic and foreign manufacturers move forward. The post First Solar drops TOPCon patent…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/first-solar-drops-topcon-patent-complaint/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "Bangladesh launches $123 million rooftop solar fund",
+      "excerpt": "Bangladesh has launched a $123 million fund to provide concessional financing for rooftop solar and other renewable energy projects. The government is also seeking international funding to install 4 GW of rooftop solar before next summer. The post Bangladesh…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/bangladesh-launches-123-million-rooftop-solar-fund/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "South Korea’s new agrivoltaics law sets 30-year permit ceiling",
+      "excerpt": "South Korea has enacted its first dedicated agrivoltaics law, extending the maximum project period to 30 years from a previously reported 23-year framework, but key technical requirements remain undecided pending additional regulations. The post South Korea’s…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/south-koreas-new-agrivoltaics-law-sets-30-year-permit-ceiling/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "Spain launches capacity market as grid investment rises above €17 billion",
+      "excerpt": "Spain is introducing a new mechanism to remunerate generation, battery storage and demand for providing firm capacity and flexibility, while increasing planned electricity grid investment through 2030 to more than €17 billion ($19.5 billion). The post Spain…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/spain-launches-capacity-market-as-grid-investment-rises-above-e17-billion/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "Scientists build 17%-efficient semi-transparent perovskite solar cell based on sputter-resistant aluminum oxide layer",
+      "excerpt": "Researchers replaced the conventional 20 nm SnOₓ buffer layer with just 3 nm of ALD-deposited AlOₓ, which protected inverted perovskite cells from ITO sputtering damage while maintaining efficient charge extraction. The resulting devices achieved efficiencies…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/scientists-build-17-efficient-semi-transparent-perovskite-solar-cell-based-on-sputter-resistant-aluminum-oxide-layer/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "China targets perovskite solar, advanced batteries in five-year plan",
+      "excerpt": "China has identified perovskite solar and next-generation batteries as strategic priorities in its 2026-30 industrial roadmap. The plan also calls for tighter oversight of manufacturing capacity and price competition. The post China targets perovskite solar…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/china-targets-perovskite-solar-advanced-batteries-in-five-year-plan/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "PV inverters provide reactive power to Milan’s grid at night",
+      "excerpt": "Researchers in Milan used PV inverters to supply 500 kVAr of reactive power to the distribution grid for four hours overnight. The trial showed that existing solar equipment can support voltage regulation even when it is not generating electricity. The post…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/pv-inverters-provide-reactive-power-to-milans-grid-at-night/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "Global residential storage market to hit 46.1 GWh in 2026",
+      "excerpt": "InfoLink Consulting expects global residential energy storage capacity additions to reach 46.1 GWh in 2026, led by Europe, Oceania, and Asia. Fox ESS, Sigenergy, and Deye ranked as the top three suppliers by shipment volume in the first half of 2026. The post…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/global-residential-storage-market-to-hit-46-1-gwh-in-2026/",
+      "status": "gozleyir"
+    }
+  ]
+}

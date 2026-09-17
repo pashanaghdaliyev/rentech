@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 20:29",
+  "updated": "2026-09-17 20:30",
   "items": [
     {
       "cat": "Azərbaycan",
@@ -88,7 +88,7 @@
       "excerpt": "Çin 2026-2030-cu illər üzrə sənaye yol xəritəsində perovskit günəş texnologiyalarını və yeni nəsil batareyaları strateji prioritetlər kimi müəyyənləşdirib. Plan həmçinin istehsal gücü və qiymət rəqabəti üzərində daha sərt nəzarətə çağırır. Mənbə: China…",
       "source": "pv magazine",
       "url": "https://www.pv-magazine.com/2026/09/17/china-targets-perovskite-solar-advanced-batteries-in-five-year-plan/",
-      "status": "derc",
+      "status": "redd",
       "tercume": true
     },
     {

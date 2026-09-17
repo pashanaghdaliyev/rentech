@@ -1,0 +1,12 @@
+{
+  "name": "RenTech admin",
+  "short_name": "RenTech admin",
+  "start_url": "admin.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F7FAF8",
+  "theme_color": "#0E6B4F",
+  "icons": [
+    { "src": "rentech-mark.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

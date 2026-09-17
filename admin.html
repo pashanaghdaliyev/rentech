@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>RenTech admin</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --paper:#FFFFFF; --paper-dim:#F7FAF8; --paper-deep:#EEF5F1;
+    --brand:#0E6B4F; --brand-dark:#0A5240; --brand-soft:#E8F2ED;
+    --sun:#E4A93B; --sun-soft:#FCF3E1;
+    --danger:#B12F2F; --danger-soft:#F8E4E4;
+    --ink:#122019; --ink-soft:#54665D; --ink-mute:#8A998F;
+    --line:#E2ECE7; --line-strong:#CBDDD4;
+    --font:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;background:var(--paper-dim);color:var(--ink);
+    font-family:var(--font);font-size:16px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    -webkit-tap-highlight-color:rgba(14,107,79,.12);
+  }
+  a{color:var(--brand);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.02em;}
+  p{margin:0;}
+  button{font-family:inherit;font-size:15px;cursor:pointer;}
+  :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px;}
+
+  .wrap{max-width:44rem;margin-inline:auto;padding:16px;}
+  @media (min-width:640px){.wrap{padding:24px;}}
+
+  .site-head{
+    position:sticky;top:0;z-index:10;
+    background:rgba(255,255,255,.95);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .head-in{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;gap:12px;}
+  .brand{display:flex;align-items:center;gap:9px;color:var(--brand);font-weight:800;font-size:16px;}
+  .brand svg{width:26px;height:26px;flex:none;}
+  .head-actions{display:flex;gap:8px;}
+  .icon-btn{
+    background:transparent;border:1px solid var(--line-strong);color:var(--ink-soft);
+    border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;
+  }
+  .icon-btn:hover{border-color:var(--brand);color:var(--brand);}
+
+  /* ---------- login ---------- */
+  .login{max-width:32rem;margin-top:24px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;}
+  .login h2{font-size:20px;margin-bottom:8px;}
+  .login p{color:var(--ink-soft);margin-bottom:16px;font-size:14px;}
+  .login ol{padding-left:20px;color:var(--ink-soft);font-size:14px;line-height:1.7;}
+  .login ol li{margin-bottom:6px;}
+  .login code{background:var(--paper-deep);padding:2px 6px;border-radius:6px;font-size:13px;}
+  .login input{
+    width:100%;padding:12px 14px;font-size:15px;font-family:inherit;
+    border:1px solid var(--line-strong);border-radius:10px;margin-top:12px;
+    background:#fff;color:var(--ink);
+  }
+  .login input:focus{outline:none;border-color:var(--brand);}
+  .login .row{display:flex;gap:8px;margin-top:12px;}
+  .login .row button{flex:1;}
+  .btn-solid{
+    background:var(--brand);color:#fff;border:0;border-radius:10px;
+    padding:12px 16px;font-weight:700;
+  }
+  .btn-solid:hover{background:var(--brand-dark);}
+  .btn-solid:disabled{opacity:.5;cursor:not-allowed;}
+  .btn-ghost{
+    background:transparent;color:var(--brand);border:2px solid var(--line-strong);
+    border-radius:10px;padding:10px 16px;font-weight:600;
+  }
+  .btn-ghost:hover{border-color:var(--brand);}
+
+  /* ---------- toolbar ---------- */
+  .toolbar{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin:16px 0 12px;flex-wrap:wrap;
+  }
+  .count{font-weight:700;color:var(--ink);}
+  .count small{color:var(--ink-mute);font-weight:500;margin-left:6px;}
+  .filters{display:flex;gap:6px;flex-wrap:wrap;}
+  .filter-chip{
+    background:#fff;border:1px solid var(--line-strong);color:var(--ink-soft);
+    border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;
+  }
+  .filter-chip.active{background:var(--brand);color:#fff;border-color:var(--brand);}
+
+  .bulk{display:flex;gap:8px;margin-bottom:12px;}
+  .bulk button{flex:1;font-size:14px;padding:10px;}
+
+  /* ---------- cards ---------- */
+  .list{display:flex;flex-direction:column;gap:12px;}
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .card .meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--ink-mute);}
+  .chip{
+    display:inline-block;border-radius:999px;background:var(--brand-soft);color:var(--brand);
+    padding:3px 9px;font-size:11px;font-weight:700;letter-spacing:.02em;
+  }
+  .card h3{font-size:16px;line-height:1.35;}
+  .card p{color:var(--ink-soft);font-size:14px;}
+  .card .src-link{font-size:13px;color:var(--brand);word-break:break-all;}
+  .card .actions{display:flex;gap:8px;margin-top:4px;}
+  .card .actions button{flex:1;padding:10px 12px;font-weight:700;border-radius:10px;font-size:14px;}
+  .btn-approve{background:var(--brand);color:#fff;border:0;}
+  .btn-approve:hover{background:var(--brand-dark);}
+  .btn-reject{background:transparent;color:var(--danger);border:2px solid var(--danger-soft);}
+  .btn-reject:hover{border-color:var(--danger);}
+
+  .empty{text-align:center;padding:40px 20px;color:var(--ink-mute);}
+  .empty h3{color:var(--ink);margin-bottom:8px;font-size:18px;}
+
+  /* ---------- toast ---------- */
+  .toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;
+    font-size:14px;font-weight:600;box-shadow:0 6px 24px rgba(0,0,0,.2);
+    z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;
+    max-width:calc(100vw - 40px);
+  }
+  .toast.show{opacity:1;}
+  .toast.err{background:var(--danger);}
+
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite;vertical-align:-2px;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+
+  .card.busy{opacity:.55;pointer-events:none;}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="head-in">
+    <a class="brand" href="./">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="2" y="2" width="60" height="60" rx="14" fill="#0E6B4F"/>
+        <g fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M24 43.5V20.5h7a7 7 0 0 1 0 14h-7"/>
+          <path d="M30 34.5l9 9"/>
+        </g>
+        <circle cx="45" cy="17" r="5.5" fill="#E4A93B"/>
+      </svg>
+      <span>RenTech admin</span>
+    </a>
+    <div class="head-actions" id="head-actions" hidden>
+      <button class="icon-btn" id="refresh-btn" title="Yenilə">↻</button>
+      <button class="icon-btn" id="logout-btn" title="Token-ı sil">Çıxış</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="login" id="login" hidden>
+    <h2>GitHub token daxil et</h2>
+    <p>Xəbərləri təsdiqləmək üçün fine-grained GitHub token lazımdır. Token bu telefondan çıxmır — yalnız localStorage-da saxlanılır.</p>
+    <ol>
+      <li>Aç: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Fine-grained tokens</a></li>
+      <li>Repository access: <code>Only select repositories</code> → <code>pashanaghdaliyev/rentech</code></li>
+      <li>Permissions: <code>Contents</code> → <code>Read and write</code></li>
+      <li>Generate → token-ı kopyala → aşağıya yapışdır</li>
+    </ol>
+    <input type="password" id="token-input" placeholder="github_pat_..." autocomplete="off" spellcheck="false">
+    <div class="row">
+      <button class="btn-solid" id="save-token">Yadda saxla</button>
+    </div>
+  </section>
+
+  <section id="app" hidden>
+    <div class="toolbar">
+      <div class="count" id="count">—</div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="bulk" id="bulk" hidden>
+      <button class="btn-ghost" id="bulk-approve">Hamısını dərc et</button>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var REPO_OWNER = "pashanaghdaliyev";
+  var REPO_NAME = "rentech";
+  var NEWS_PATH = "news.json";
+  var API_BASE = "https://api.github.com";
+
+  var $ = function(id){ return document.getElementById(id); };
+  var login = $("login");
+  var app = $("app");
+  var listBox = $("list");
+  var countBox = $("count");
+  var filtersBox = $("filters");
+  var bulkBox = $("bulk");
+  var headActions = $("head-actions");
+
+  var state = {
+    token: "",
+    items: [],       // bütün xəbərlər (news.json-dan)
+    sha: "",         // GitHub Contents API üçün cari sha
+    filter: "Bütün", // "Bütün" | "ABŞ" | "Almaniya" | "Çin" | "Dünya" | "Azərbaycan"
+  };
+
+  // ---------- toast ----------
+  var toastTimer = null;
+  function toast(msg, isErr){
+    var el = $("toast");
+    el.textContent = msg;
+    el.classList.toggle("err", !!isErr);
+    el.classList.add("show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove("show"); }, 2600);
+  }
+
+  // ---------- base64 (utf-8 safe) ----------
+  function encB64(str){
+    var bytes = new TextEncoder().encode(str);
+    var bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function decB64(b64){
+    var bin = atob(b64.replace(/\s/g, ""));
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder("utf-8").decode(bytes);
+  }
+
+  // ---------- GitHub API ----------
+  function apiGetNews(){
+    return fetch(API_BASE + "/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + NEWS_PATH, {
+      headers: {
+        "Authorization": "Bearer " + state.token,
+        "Accept": "application/vnd.github+json",
+      },
+      cache: "no-store",
+    }).then(function(r){
+      if (!r.ok) throw new Error("news.json oxunmadı: HTTP " + r.status);
+      return r.json();
+    }).then(function(data){
+      state.sha = data.sha;
+      var parsed = JSON.parse(decB64(data.content));
+      state.items = parsed.items || [];
+      state._meta = { _qeyd: parsed._qeyd, updated: parsed.updated };
+      return state.items;
+    });
+  }
+
+  function apiPutNews(msg){
+    var payload = {
+      _qeyd: state._meta && state._meta._qeyd,
+      updated: new Date().toISOString().slice(0,16).replace("T"," "),
+      items: state.items,
+    };
+    return fetch(API_BASE + "/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + NEWS_PATH, {
+      method: "PUT",
+      headers: {
+        "Authorization": "Bearer " + state.token,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: msg,
+        content: encB64(JSON.stringify(payload, null, 2) + "\n"),
+        sha: state.sha,
+      }),
+    }).then(function(r){
+      if (r.status === 409 || r.status === 422) {
+        var err = new Error("sha_conflict");
+        err.code = r.status;
+        throw err;
+      }
+      if (!r.ok) throw new Error("PUT alınmadı: HTTP " + r.status);
+      return r.json();
+    }).then(function(data){
+      state.sha = data.content.sha;
+      return data;
+    });
+  }
+
+  // Retry-li yazma: sha uyğunsuzluqda yenidən oxu və mutate-i təkrarla
+  function updateItems(mutator, commitMsg){
+    var cehd = 0;
+    function attempt(){
+      cehd++;
+      mutator(state.items);
+      return apiPutNews(commitMsg).catch(function(err){
+        if (err.message === "sha_conflict" && cehd < 3) {
+          return apiGetNews().then(attempt);
+        }
+        throw err;
+      });
+    }
+    return attempt();
+  }
+
+  // ---------- render ----------
+  function pending(){ return state.items.filter(function(x){ return x.status === "gozleyir"; }); }
+
+  function renderFilters(){
+    var cats = {};
+    pending().forEach(function(x){ cats[x.cat] = (cats[x.cat]||0) + 1; });
+    var keys = ["Bütün"].concat(Object.keys(cats).sort());
+    filtersBox.innerHTML = "";
+    keys.forEach(function(k){
+      var b = document.createElement("button");
+      b.className = "filter-chip" + (state.filter === k ? " active" : "");
+      b.textContent = k === "Bütün" ? "Bütün (" + pending().length + ")" : k + " (" + cats[k] + ")";
+      b.addEventListener("click", function(){ state.filter = k; render(); });
+      filtersBox.appendChild(b);
+    });
+  }
+
+  function filtered(){
+    var p = pending();
+    if (state.filter === "Bütün") return p;
+    return p.filter(function(x){ return x.cat === state.filter; });
+  }
+
+  function renderList(){
+    var shown = filtered();
+    listBox.innerHTML = "";
+    if (!shown.length) {
+      var e = document.createElement("div");
+      e.className = "empty";
+      e.innerHTML = "<h3>Boşdur</h3><p>Təsdiq gözləyən xəbər yoxdur.</p>";
+      listBox.appendChild(e);
+      bulkBox.hidden = true;
+      return;
+    }
+    bulkBox.hidden = false;
+
+    shown.forEach(function(x){
+      var card = document.createElement("article");
+      card.className = "card";
+      card.dataset.url = x.url;
+
+      var meta = document.createElement("div");
+      meta.className = "meta";
+      var chip = document.createElement("span");
+      chip.className = "chip";
+      chip.textContent = x.cat;
+      meta.appendChild(chip);
+      var srcTxt = document.createElement("span");
+      srcTxt.textContent = x.source + " · " + x.date;
+      meta.appendChild(srcTxt);
+      card.appendChild(meta);
+
+      var h = document.createElement("h3");
+      h.textContent = x.title;
+      card.appendChild(h);
+
+      if (x.excerpt) {
+        var p = document.createElement("p");
+        p.textContent = x.excerpt;
+        card.appendChild(p);
+      }
+
+      var a = document.createElement("a");
+      a.className = "src-link";
+      a.href = x.url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = "Mənbəyə keç →";
+      card.appendChild(a);
+
+      var actions = document.createElement("div");
+      actions.className = "actions";
+      var bA = document.createElement("button");
+      bA.className = "btn-approve";
+      bA.textContent = "Dərc et";
+      bA.addEventListener("click", function(){ approve(x.url, card); });
+      var bR = document.createElement("button");
+      bR.className = "btn-reject";
+      bR.textContent = "Rədd et";
+      bR.addEventListener("click", function(){ reject(x.url, card); });
+      actions.appendChild(bA);
+      actions.appendChild(bR);
+      card.appendChild(actions);
+
+      listBox.appendChild(card);
+    });
+  }
+
+  function updateTitleAndBadge(){
+    var n = pending().length;
+    countBox.innerHTML = "";
+    var strong = document.createElement("span");
+    strong.textContent = n + " xəbər gözləyir";
+    countBox.appendChild(strong);
+    document.title = n ? "(" + n + ") RenTech admin" : "RenTech admin";
+    if ("setAppBadge" in navigator) {
+      navigator.setAppBadge(n).catch(function(){});
+    }
+  }
+
+  function render(){
+    renderFilters();
+    renderList();
+    updateTitleAndBadge();
+  }
+
+  // ---------- əməllər ----------
+  function approve(url, card){
+    if (card) card.classList.add("busy");
+    updateItems(function(items){
+      for (var i=0; i<items.length; i++) if (items[i].url === url) items[i].status = "derc";
+    }, "telefondan dərc: " + url).then(function(){
+      toast("Dərc olundu");
+      render();
+    }).catch(function(err){
+      if (card) card.classList.remove("busy");
+      toast(err.message || "Xəta baş verdi", true);
+    });
+  }
+
+  function reject(url, card){
+    if (card) card.classList.add("busy");
+    updateItems(function(items){
+      for (var i=0; i<items.length; i++) if (items[i].url === url) items[i].status = "redd";
+    }, "telefondan rədd: " + url).then(function(){
+      toast("Rədd edildi");
+      render();
+    }).catch(function(err){
+      if (card) card.classList.remove("busy");
+      toast(err.message || "Xəta baş verdi", true);
+    });
+  }
+
+  function bulkApprove(){
+    var target = filtered();
+    if (!target.length) return;
+    if (!confirm(target.length + " xəbəri birdən dərc edim?")) return;
+    var urls = {};
+    target.forEach(function(x){ urls[x.url] = true; });
+    updateItems(function(items){
+      for (var i=0; i<items.length; i++) {
+        if (urls[items[i].url] && items[i].status === "gozleyir") items[i].status = "derc";
+      }
+    }, "telefondan bulk dərc (" + target.length + " xəbər)").then(function(){
+      toast(target.length + " xəbər dərc olundu");
+      render();
+    }).catch(function(err){
+      toast(err.message || "Xəta baş verdi", true);
+    });
+  }
+
+  // ---------- login flow ----------
+  function showLogin(){
+    login.hidden = false;
+    app.hidden = true;
+    headActions.hidden = true;
+    $("token-input").value = "";
+    setTimeout(function(){ $("token-input").focus(); }, 100);
+  }
+
+  function showApp(){
+    login.hidden = true;
+    app.hidden = false;
+    headActions.hidden = false;
+  }
+
+  function loadAll(){
+    countBox.textContent = "Yüklənir...";
+    listBox.innerHTML = "";
+    apiGetNews().then(function(){
+      showApp();
+      render();
+    }).catch(function(err){
+      var msg = String(err.message || err);
+      if (msg.indexOf("401") >= 0 || msg.indexOf("403") >= 0) {
+        toast("Token qəbul olunmadı. Yenidən daxil et.", true);
+        localStorage.removeItem("rentech_pat");
+        state.token = "";
+        showLogin();
+      } else {
+        toast(msg, true);
+      }
+    });
+  }
+
+  $("save-token").addEventListener("click", function(){
+    var v = $("token-input").value.trim();
+    if (!v) { toast("Token boşdur", true); return; }
+    state.token = v;
+    localStorage.setItem("rentech_pat", v);
+    loadAll();
+  });
+
+  $("token-input").addEventListener("keydown", function(e){
+    if (e.key === "Enter") $("save-token").click();
+  });
+
+  $("logout-btn").addEventListener("click", function(){
+    if (!confirm("Token silinsin?")) return;
+    localStorage.removeItem("rentech_pat");
+    state.token = "";
+    state.items = [];
+    showLogin();
+  });
+
+  $("refresh-btn").addEventListener("click", loadAll);
+  $("bulk-approve").addEventListener("click", bulkApprove);
+
+  // ---------- boot ----------
+  var saved = null;
+  try { saved = localStorage.getItem("rentech_pat"); } catch (e) {}
+  if (saved) {
+    state.token = saved;
+    loadAll();
+  } else {
+    showLogin();
+  }
+
+})();
+</script>
+
+</body>
+</html>

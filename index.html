@@ -867,9 +867,10 @@
   }
 
   /* Yalnız təsdiqlənmiş xəbərlər göstərilir.
-     status: "gozleyir" olanlar bot tərəfindən gətirilib, amma hələ yoxlanmayıb. */
+     status: "gozleyir" — bot gətirib, amma təsdiq gözləyir.
+     status: "redd" — telefondan rədd edilib. */
   function derc(siyahi) {
-    return siyahi.filter(function (x) { return x.status !== "gozleyir"; });
+    return siyahi.filter(function (x) { return x.status === "derc"; });
   }
 
   /* Əvvəlcə fayldakı ehtiyat siyahı göstərilir — sayt internetsiz də işləyir. */

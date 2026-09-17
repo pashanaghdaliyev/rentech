@@ -93,6 +93,19 @@
   }
   .filter-chip.active{background:var(--brand);color:#fff;border-color:var(--brand);}
 
+  /* ---------- status tabs ---------- */
+  .tabs{
+    display:flex;gap:4px;margin:16px 0 12px;
+    background:var(--paper-deep);padding:4px;border-radius:12px;
+  }
+  .tab{
+    flex:1;background:transparent;border:0;color:var(--ink-soft);
+    padding:9px 8px;font-size:13px;font-weight:700;border-radius:9px;
+  }
+  .tab.active{background:#fff;color:var(--brand);box-shadow:0 1px 3px rgba(0,0,0,.06);}
+  .tab .n{color:var(--ink-mute);font-weight:600;margin-left:4px;}
+  .tab.active .n{color:var(--brand);}
+
   .bulk{display:flex;gap:8px;margin-bottom:12px;}
   .bulk button{flex:1;font-size:14px;padding:10px;}
 
@@ -116,6 +129,22 @@
   .btn-approve:hover{background:var(--brand-dark);}
   .btn-reject{background:transparent;color:var(--danger);border:2px solid var(--danger-soft);}
   .btn-reject:hover{border-color:var(--danger);}
+  .btn-edit{background:var(--sun-soft);color:var(--brand-dark);border:1px solid transparent;}
+  .btn-edit:hover{border-color:var(--sun);}
+  .btn-restore{background:var(--brand-soft);color:var(--brand);border:1px solid transparent;}
+  .btn-restore:hover{border-color:var(--brand);}
+
+  /* ---------- inline edit form ---------- */
+  .edit-form{display:flex;flex-direction:column;gap:8px;}
+  .edit-form .lbl{font-size:11px;font-weight:700;color:var(--ink-mute);letter-spacing:.03em;text-transform:uppercase;}
+  .edit-form input, .edit-form textarea{
+    width:100%;padding:10px 12px;font-size:14px;font-family:inherit;line-height:1.45;
+    border:1px solid var(--line-strong);border-radius:10px;background:#fff;color:var(--ink);
+  }
+  .edit-form textarea{min-height:80px;resize:vertical;}
+  .edit-form input:focus, .edit-form textarea:focus{outline:none;border-color:var(--brand);}
+  .btn-neutral{background:#fff;color:var(--ink-soft);border:2px solid var(--line-strong);}
+  .btn-neutral:hover{border-color:var(--brand);color:var(--brand);}
 
   .empty{text-align:center;padding:40px 20px;color:var(--ink-mute);}
   .empty h3{color:var(--ink);margin-bottom:8px;font-size:18px;}
@@ -177,6 +206,7 @@
   </section>
 
   <section id="app" hidden>
+    <div class="tabs" id="tabs"></div>
     <div class="toolbar">
       <div class="count" id="count">—</div>
       <div class="filters" id="filters"></div>
@@ -206,14 +236,23 @@
   var listBox = $("list");
   var countBox = $("count");
   var filtersBox = $("filters");
+  var tabsBox = $("tabs");
   var bulkBox = $("bulk");
   var headActions = $("head-actions");
 
+  var STATUS_TABS = [
+    { id: "gozleyir", label: "Gözləyən" },
+    { id: "derc",     label: "Dərc olunmuş" },
+    { id: "redd",     label: "Rədd edilmiş" },
+  ];
+
   var state = {
     token: "",
-    items: [],       // bütün xəbərlər (news.json-dan)
-    sha: "",         // GitHub Contents API üçün cari sha
-    filter: "Bütün", // "Bütün" | "ABŞ" | "Almaniya" | "Çin" | "Dünya" | "Azərbaycan"
+    items: [],           // bütün xəbərlər (news.json-dan)
+    sha: "",             // GitHub Contents API üçün cari sha
+    statusTab: "gozleyir", // hansı status göstərilir
+    filter: "Bütün",     // kateqoriya süzgəci: "Bütün" | "ABŞ" | ...
+    editingUrl: null,    // hazırda redaktə olunan xəbərin url-i
   };
 
   // ---------- toast ----------
@@ -310,40 +349,65 @@
   }
 
   // ---------- render ----------
-  function pending(){ return state.items.filter(function(x){ return x.status === "gozleyir"; }); }
+  function byStatus(s){ return state.items.filter(function(x){ return x.status === s; }); }
+  function currentList(){ return byStatus(state.statusTab); }
+
+  function renderTabs(){
+    tabsBox.innerHTML = "";
+    STATUS_TABS.forEach(function(t){
+      var n = byStatus(t.id).length;
+      var b = document.createElement("button");
+      b.className = "tab" + (state.statusTab === t.id ? " active" : "");
+      b.innerHTML = t.label + " <span class=\"n\">" + n + "</span>";
+      b.addEventListener("click", function(){
+        if (state.statusTab === t.id) return;
+        state.statusTab = t.id;
+        state.filter = "Bütün";
+        state.editingUrl = null;
+        render();
+      });
+      tabsBox.appendChild(b);
+    });
+  }
 
   function renderFilters(){
     var cats = {};
-    pending().forEach(function(x){ cats[x.cat] = (cats[x.cat]||0) + 1; });
+    currentList().forEach(function(x){ cats[x.cat] = (cats[x.cat]||0) + 1; });
     var keys = ["Bütün"].concat(Object.keys(cats).sort());
     filtersBox.innerHTML = "";
     keys.forEach(function(k){
       var b = document.createElement("button");
       b.className = "filter-chip" + (state.filter === k ? " active" : "");
-      b.textContent = k === "Bütün" ? "Bütün (" + pending().length + ")" : k + " (" + cats[k] + ")";
+      b.textContent = k === "Bütün" ? "Bütün (" + currentList().length + ")" : k + " (" + cats[k] + ")";
       b.addEventListener("click", function(){ state.filter = k; render(); });
       filtersBox.appendChild(b);
     });
   }
 
   function filtered(){
-    var p = pending();
+    var p = currentList();
     if (state.filter === "Bütün") return p;
     return p.filter(function(x){ return x.cat === state.filter; });
+  }
+
+  function emptyMessage(){
+    if (state.statusTab === "gozleyir") return "Təsdiq gözləyən xəbər yoxdur.";
+    if (state.statusTab === "derc")     return "Saytda hazırda dərc olunmuş xəbər yoxdur.";
+    return "Rədd edilmiş xəbər yoxdur.";
   }
 
   function renderList(){
     var shown = filtered();
     listBox.innerHTML = "";
+    bulkBox.hidden = !(state.statusTab === "gozleyir" && shown.length);
+
     if (!shown.length) {
       var e = document.createElement("div");
       e.className = "empty";
-      e.innerHTML = "<h3>Boşdur</h3><p>Təsdiq gözləyən xəbər yoxdur.</p>";
+      e.innerHTML = "<h3>Boşdur</h3><p>" + emptyMessage() + "</p>";
       listBox.appendChild(e);
-      bulkBox.hidden = true;
       return;
     }
-    bulkBox.hidden = false;
 
     shown.forEach(function(x){
       var card = document.createElement("article");
@@ -361,67 +425,130 @@
       meta.appendChild(srcTxt);
       card.appendChild(meta);
 
-      var h = document.createElement("h3");
-      h.textContent = x.title;
-      card.appendChild(h);
+      if (state.editingUrl === x.url) {
+        card.appendChild(buildEditForm(x, card));
+      } else {
+        var h = document.createElement("h3");
+        h.textContent = x.title;
+        card.appendChild(h);
 
-      if (x.excerpt) {
-        var p = document.createElement("p");
-        p.textContent = x.excerpt;
-        card.appendChild(p);
+        if (x.excerpt) {
+          var p = document.createElement("p");
+          p.textContent = x.excerpt;
+          card.appendChild(p);
+        }
+
+        var a = document.createElement("a");
+        a.className = "src-link";
+        a.href = x.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = "Mənbəyə keç →";
+        card.appendChild(a);
+
+        card.appendChild(buildActions(x, card));
       }
-
-      var a = document.createElement("a");
-      a.className = "src-link";
-      a.href = x.url;
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.textContent = "Mənbəyə keç →";
-      card.appendChild(a);
-
-      var actions = document.createElement("div");
-      actions.className = "actions";
-      var bA = document.createElement("button");
-      bA.className = "btn-approve";
-      bA.textContent = "Dərc et";
-      bA.addEventListener("click", function(){ approve(x.url, card); });
-      var bR = document.createElement("button");
-      bR.className = "btn-reject";
-      bR.textContent = "Rədd et";
-      bR.addEventListener("click", function(){ reject(x.url, card); });
-      actions.appendChild(bA);
-      actions.appendChild(bR);
-      card.appendChild(actions);
 
       listBox.appendChild(card);
     });
   }
 
+  function buildActions(x, card){
+    var actions = document.createElement("div");
+    actions.className = "actions";
+
+    function mkBtn(cls, text, handler){
+      var b = document.createElement("button");
+      b.className = cls;
+      b.textContent = text;
+      b.addEventListener("click", handler);
+      return b;
+    }
+
+    if (state.statusTab === "gozleyir") {
+      actions.appendChild(mkBtn("btn-approve", "Dərc et", function(){ approve(x.url, card); }));
+      actions.appendChild(mkBtn("btn-reject",  "Rədd et", function(){ reject(x.url, card); }));
+    } else if (state.statusTab === "derc") {
+      actions.appendChild(mkBtn("btn-edit",   "Redaktə et", function(){ startEdit(x.url); }));
+      actions.appendChild(mkBtn("btn-reject", "Saytdan sil", function(){ removeFromSite(x.url, card); }));
+    } else { // redd
+      actions.appendChild(mkBtn("btn-restore", "Bərpa et (saytda göstər)", function(){ restore(x.url, card); }));
+    }
+    return actions;
+  }
+
+  function buildEditForm(x, card){
+    var wrap = document.createElement("div");
+    wrap.className = "edit-form";
+
+    var l1 = document.createElement("div"); l1.className = "lbl"; l1.textContent = "Başlıq";
+    var inTitle = document.createElement("input");
+    inTitle.type = "text";
+    inTitle.value = x.title || "";
+
+    var l2 = document.createElement("div"); l2.className = "lbl"; l2.textContent = "Xülasə";
+    var inExcerpt = document.createElement("textarea");
+    inExcerpt.value = x.excerpt || "";
+
+    var srcInfo = document.createElement("a");
+    srcInfo.className = "src-link";
+    srcInfo.href = x.url; srcInfo.target = "_blank"; srcInfo.rel = "noopener";
+    srcInfo.textContent = "Mənbə: " + (x.source || "") + " ↗";
+
+    var actions = document.createElement("div");
+    actions.className = "actions";
+    var bSave = document.createElement("button");
+    bSave.className = "btn-approve";
+    bSave.textContent = "Yadda saxla";
+    bSave.addEventListener("click", function(){
+      saveEdit(x.url, inTitle.value.trim(), inExcerpt.value.trim(), card);
+    });
+    var bCancel = document.createElement("button");
+    bCancel.className = "btn-neutral";
+    bCancel.textContent = "Ləğv et";
+    bCancel.addEventListener("click", function(){
+      state.editingUrl = null;
+      render();
+    });
+    actions.appendChild(bSave);
+    actions.appendChild(bCancel);
+
+    wrap.appendChild(l1); wrap.appendChild(inTitle);
+    wrap.appendChild(l2); wrap.appendChild(inExcerpt);
+    wrap.appendChild(srcInfo);
+    wrap.appendChild(actions);
+    setTimeout(function(){ inTitle.focus(); }, 30);
+    return wrap;
+  }
+
   function updateTitleAndBadge(){
-    var n = pending().length;
+    var nGoz = byStatus("gozleyir").length;
+    var nShown = currentList().length;
+    var labelMap = { gozleyir: "gözləyir", derc: "dərc olunub", redd: "rədd edilib" };
     countBox.innerHTML = "";
     var strong = document.createElement("span");
-    strong.textContent = n + " xəbər gözləyir";
+    strong.textContent = nShown + " xəbər " + labelMap[state.statusTab];
     countBox.appendChild(strong);
-    document.title = n ? "(" + n + ") RenTech admin" : "RenTech admin";
+    document.title = nGoz ? "(" + nGoz + ") RenTech admin" : "RenTech admin";
     if ("setAppBadge" in navigator) {
-      navigator.setAppBadge(n).catch(function(){});
+      navigator.setAppBadge(nGoz).catch(function(){});
     }
   }
 
   function render(){
+    renderTabs();
     renderFilters();
     renderList();
     updateTitleAndBadge();
   }
 
   // ---------- əməllər ----------
-  function approve(url, card){
+  function setStatus(url, newStatus, msg, successToast, card){
     if (card) card.classList.add("busy");
-    updateItems(function(items){
-      for (var i=0; i<items.length; i++) if (items[i].url === url) items[i].status = "derc";
-    }, "telefondan dərc: " + url).then(function(){
-      toast("Dərc olundu");
+    return updateItems(function(items){
+      for (var i=0; i<items.length; i++) if (items[i].url === url) items[i].status = newStatus;
+    }, msg).then(function(){
+      toast(successToast);
       render();
     }).catch(function(err){
       if (card) card.classList.remove("busy");
@@ -429,12 +556,42 @@
     });
   }
 
+  function approve(url, card){
+    return setStatus(url, "derc", "telefondan dərc: " + url, "Dərc olundu", card);
+  }
+
   function reject(url, card){
+    return setStatus(url, "redd", "telefondan rədd: " + url, "Rədd edildi", card);
+  }
+
+  function removeFromSite(url, card){
+    if (!confirm("Bu xəbəri saytdan silim? (Rədd edilmişlərdən sonra bərpa edə bilərsən.)")) return;
+    return setStatus(url, "redd", "telefondan saytdan sil: " + url, "Saytdan silindi", card);
+  }
+
+  function restore(url, card){
+    return setStatus(url, "derc", "telefondan bərpa: " + url, "Saytda göstərilir", card);
+  }
+
+  function startEdit(url){
+    state.editingUrl = url;
+    render();
+  }
+
+  function saveEdit(url, newTitle, newExcerpt, card){
+    if (!newTitle) { toast("Başlıq boş ola bilməz", true); return; }
     if (card) card.classList.add("busy");
     updateItems(function(items){
-      for (var i=0; i<items.length; i++) if (items[i].url === url) items[i].status = "redd";
-    }, "telefondan rədd: " + url).then(function(){
-      toast("Rədd edildi");
+      for (var i=0; i<items.length; i++) {
+        if (items[i].url === url) {
+          items[i].title = newTitle;
+          items[i].excerpt = newExcerpt;
+          items[i].edited = true;
+        }
+      }
+    }, "telefondan redaktə: " + url).then(function(){
+      state.editingUrl = null;
+      toast("Yadda saxlandı");
       render();
     }).catch(function(err){
       if (card) card.classList.remove("busy");

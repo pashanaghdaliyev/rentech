@@ -99,7 +99,8 @@ ACAR_SOZLER = [
     "solarmodul", "energiewende", "wasserstoff", "batterie",
 ]
 
-MAKS_XEBER = 30            # saxlanılacaq maksimum xəbər sayı
+MAKS_XEBER = 50            # aktiv (derc + gozleyir) maksimum sayı
+REDD_DEDUP_LIMIT = 150     # rədd edilmişlər yalnız dedup üçün saxlanır
 MAKS_TERCUME = 30          # bir işləmədə tərcümə olunacaq maksimum xəbər
 XULASE_UZUNLUGU = 260
 CIXIS_FAYLI = "news.json"
@@ -360,43 +361,53 @@ def main() -> int:
 
     print(f"\nYeni xəbər: {len(təzə)}")
 
-    # əvvəl sırala və MAKS_XEBER limitinə al ki, tərcümə boşa getməsin
-    hamısı = kohne + təzə          # köhnələr öndə → onların vəziyyəti qorunur
-    hamısı.sort(key=lambda x: x.get("date", ""), reverse=True)
-    hamısı = hamısı[:MAKS_XEBER]
+    # Statusa görə iki qrupa böl:
+    #  aktiv (derc + gozleyir) — saytda/admin-də görünür, MAKS_XEBER limiti
+    #  redd — yalnız dedup üçün saxlanır, REDD_DEDUP_LIMIT-ə qədər
+    hamısı = kohne + təzə          # köhnələr öndə → vəziyyət qorunur
+    aktiv = [x for x in hamısı if x.get("status") != "redd"]
+    redd  = [x for x in hamısı if x.get("status") == "redd"]
 
-    # son siyahıda tərcümə olunmamış "gozleyir" xəbərləri tərcümə et
-    # (həm yeni xarici xəbərlər, həm də əvvəllər Gemini xətası ilə qalanlar)
-    tercume_olunacaq = [x for x in hamısı
+    aktiv.sort(key=lambda x: x.get("date", ""), reverse=True)
+    redd.sort(key=lambda x: x.get("date", ""), reverse=True)
+
+    aktiv = aktiv[:MAKS_XEBER]
+    redd  = redd[:REDD_DEDUP_LIMIT]
+
+    # tərcümə: yalnız aktiv siyahıdakı "gozleyir" və hələ tərcümə olunmamışlar
+    tercume_olunacaq = [x for x in aktiv
                         if x.get("status") == "gozleyir"
                         and not x.get("tercume")][:MAKS_TERCUME]
     if tercume_olunacaq:
         print(f"Tərcümə olunur ({len(tercume_olunacaq)}):")
         gemini_tercume(tercume_olunacaq)
 
-    for x in hamısı:
+    for x in aktiv + redd:
         x.pop("_dil", None)
 
-    gozleyen = sum(1 for x in hamısı if x.get("status") == "gozleyir")
+    gozleyen = sum(1 for x in aktiv if x.get("status") == "gozleyir")
+
+    # yazılan siyahı: aktiv öndə, redd sonda (dedup üçün lazımdır, saytda göstərilmir)
+    yazılacaq = aktiv + redd
 
     with open(CIXIS_FAYLI, "w", encoding="utf-8") as f:
         json.dump({
             "_qeyd": ("status sahəsi: 'derc' — saytda görünür, "
-                      "'gozleyir' — təsdiq gözləyir. Xarici xəbəri saytda "
-                      "göstərmək üçün mətni yoxla və 'gozleyir' sözünü "
-                      "'derc' ilə əvəz et."),
+                      "'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. "
+                      "Xarici xəbəri saytda göstərmək üçün mətni yoxla və "
+                      "'gozleyir' sözünü 'derc' ilə əvəz et."),
             "updated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
-            "items": hamısı,
+            "items": yazılacaq,
         }, f, ensure_ascii=False, indent=2)
 
-    print(f"\n{CIXIS_FAYLI} yazıldı — {len(hamısı)} xəbər "
-          f"({gozleyen} təsdiq gözləyir).")
-    if hamısı:
-        print(f"Ən yenisi: {hamısı[0]['date']} · {hamısı[0]['title'][:70]}")
+    print(f"\n{CIXIS_FAYLI} yazıldı — {len(aktiv)} aktiv "
+          f"({gozleyen} təsdiq gözləyir), {len(redd)} rədd dedup üçün.")
+    if aktiv:
+        print(f"Ən yenisi: {aktiv[0]['date']} · {aktiv[0]['title'][:70]}")
 
     # yalnız YENİ əlavə olunmuş "gozleyir" xəbərlər üçün bildiriş
     kohne_url = {x.get("url") for x in kohne}
-    yeni_gozleyen = [x for x in hamısı
+    yeni_gozleyen = [x for x in aktiv
                      if x.get("status") == "gozleyir" and x.get("url") not in kohne_url]
     if yeni_gozleyen:
         ntfy_gonder(yeni_gozleyen)

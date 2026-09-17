@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512" role="img" aria-label="RenTech">
+  <circle cx="32" cy="32" r="31" fill="#0E6B4F"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 43.5V20.5h7a7 7 0 0 1 0 14h-7"/>
+    <path d="M30 34.5l9 9"/>
+  </g>
+  <circle cx="45" cy="17" r="5.5" fill="#E4A93B"/>
+</svg>

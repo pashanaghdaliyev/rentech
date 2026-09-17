@@ -75,14 +75,38 @@
   }
   .top-nav{display:none;gap:28px;}
   @media (min-width:768px){.top-nav{display:flex;}}
-  .top-nav{gap:6px;}
+  .top-nav{gap:6px;position:relative;isolation:isolate;}
   .top-nav a{
+    position:relative;
     font-size:14px;font-weight:600;color:var(--ink-soft);
     padding:8px 15px;border-radius:999px;
-    transition:background-color .22s ease,color .22s ease;
+    transition:color .22s ease;
   }
-  .top-nav a:hover{background:var(--paper-deep);color:var(--brand);}
-  .top-nav a[aria-current="page"]{background:var(--brand);color:#fff;font-weight:700;}
+  .top-nav a:hover{color:var(--brand);}
+  .top-nav a[aria-current="page"]{color:#fff;font-weight:700;}
+
+  /* Damcı — aktivin arxasında sürüşən yaşıl pill.
+     Keçid zamanı .morph classı ilə vertikal sıxılır (damcının sıçraması). */
+  .top-nav .nav-blob{
+    position:absolute;top:0;left:0;width:0;height:100%;
+    background:var(--brand);border-radius:999px;
+    pointer-events:none;z-index:-1;opacity:0;
+    transform-origin:center center;
+    transition:opacity .25s ease;
+  }
+  .top-nav .nav-blob.ready{
+    opacity:1;
+    transition:left .55s cubic-bezier(.34,1.56,.64,1),
+               width .55s cubic-bezier(.34,1.56,.64,1),
+               opacity .25s ease;
+  }
+  .top-nav .nav-blob.morph{animation:nav-drop .55s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes nav-drop {
+    0%   { border-radius:999px; transform:scaleY(1) scaleX(1); }
+    35%  { border-radius:50% 50% 55% 55% / 30% 30% 70% 70%; transform:scaleY(.55) scaleX(1.05); }
+    65%  { border-radius:55% 55% 50% 50% / 70% 70% 30% 30%; transform:scaleY(1.15) scaleX(.96); }
+    100% { border-radius:999px; transform:scaleY(1) scaleX(1); }
+  }
 
   /* ---------- tab bar ---------- */
   .tabbar{
@@ -96,9 +120,10 @@
   .tabbar ul{display:flex;max-width:32rem;margin-inline:auto;}
   .tabbar li{flex:1;}
   .tabbar a{
+    position:relative;
     display:flex;min-height:3.5rem;flex-direction:column;align-items:center;justify-content:center;
     gap:3px;padding:8px 2px;font-size:10.5px;font-weight:600;line-height:1;color:var(--ink-mute);
-    transition:color .22s ease;text-align:center;
+    transition:color .22s ease;text-align:center;overflow:hidden;
   }
   .tabbar .ico{
     display:flex;align-items:center;justify-content:center;
@@ -108,6 +133,21 @@
   .tabbar a[aria-current="page"]{color:var(--brand);font-weight:800;}
   .tabbar a[aria-current="page"] .ico{background:var(--brand-soft);transform:translateY(-2px);}
   .tabbar a:active .ico{transform:scale(.92);}
+  /* Damcı — tıqlamada yuxarıdan ikona doğru düşür */
+  .tabbar a::before{
+    content:"";position:absolute;top:0;left:50%;
+    width:8px;height:8px;background:var(--brand);
+    border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    transform:translate(-50%,-16px) scaleY(1.4);opacity:0;
+    pointer-events:none;
+  }
+  .tabbar a.drip::before{animation:tabbar-drip .55s cubic-bezier(.55,.06,.68,.19);}
+  @keyframes tabbar-drip {
+    0%   { transform:translate(-50%,-16px) scaleY(1.4); opacity:0; }
+    15%  { opacity:.95; }
+    70%  { transform:translate(-50%,10px) scaleY(1); opacity:.85; }
+    100% { transform:translate(-50%,18px) scale(1.3); opacity:0; }
+  }
   .tabbar svg{width:20px;height:20px;}
 
   /* ---------- hero ---------- */
@@ -366,6 +406,7 @@
         <span class="brand-tag">Renewable Energy Technologies</span>
       </a>
       <nav class="top-nav" aria-label="Əsas naviqasiya">
+        <span class="nav-blob" aria-hidden="true"></span>
         <a href="#view-home" data-nav="view-home">Ana səhifə</a>
         <a href="#view-news" data-nav="view-news">Xəbərlər</a>
         <a href="#view-calc" data-nav="view-calc">Hesablayıcılar</a>
@@ -1478,13 +1519,50 @@
   /* ---------- NAVİQASİYA (scroll-spy) ---------- */
   var VIEW_IDS = ["view-home", "view-news", "view-calc", "view-lessons", "view-service"];
   var navLinks = document.querySelectorAll("[data-nav]");
+  var topNav = document.querySelector(".top-nav");
+  var navBlob = topNav && topNav.querySelector(".nav-blob");
+  var lastActiveId = null;
+
+  /* Damcı pill-i aktiv linkin arxasına yerləşdirir */
+  function positionBlob(withMorph) {
+    if (!navBlob || !topNav) return;
+    var active = topNav.querySelector('a[aria-current="page"]');
+    if (!active) { navBlob.classList.remove("ready", "morph"); return; }
+    navBlob.style.left = active.offsetLeft + "px";
+    navBlob.style.width = active.offsetWidth + "px";
+    navBlob.classList.add("ready");
+    if (withMorph) {
+      navBlob.classList.remove("morph");
+      // reflow trigger — animation restarts
+      void navBlob.offsetWidth;
+      navBlob.classList.add("morph");
+    }
+  }
 
   function setActive(id) {
+    var isFirst = lastActiveId === null;
+    var changed = id !== lastActiveId;
     navLinks.forEach(function (a) {
       if (a.dataset.nav === id) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
     });
+    lastActiveId = id;
+    // ilk render-də morph atlanır — blob sadəcə fade-in edir
+    positionBlob(changed && !isFirst);
   }
+
+  /* Mobil tabbar-da tıqlamada damcı düşməsi */
+  navLinks.forEach(function (a) {
+    a.addEventListener("click", function () {
+      // yalnız .tabbar daxilindəki linklərə "drip" ver
+      if (a.closest(".tabbar")) {
+        a.classList.remove("drip");
+        void a.offsetWidth;
+        a.classList.add("drip");
+        setTimeout(function () { a.classList.remove("drip"); }, 600);
+      }
+    });
+  });
 
   if ("IntersectionObserver" in window) {
     var observer = new IntersectionObserver(function (entries) {
@@ -1496,6 +1574,12 @@
       var el = document.getElementById(id);
       if (el) observer.observe(el);
     });
+  }
+
+  /* Şrift/layout dəyişəndə blob-un yerini düzəlt */
+  window.addEventListener("resize", function () { positionBlob(false); });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { positionBlob(false); });
   }
 
   setActive("view-home");

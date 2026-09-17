@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 20:30",
+  "updated": "2026-09-17 20:31",
   "items": [
     {
       "cat": "Azərbaycan",
@@ -228,7 +228,7 @@
       "excerpt": "Çin şirkəti İsveçrə bazarında mövqeyini gücləndirmək istəyir. Buna görə də \"Solar & Storage Live Zurich\" sərgisində Ecoflow təkcə yeni məhsullarını təqdim etmir, həm də quraşdırıcılar və son müştərilər üçün əlavə xidmət təkliflərini elan edir.",
       "source": "pv magazine Deutschland",
       "url": "https://www.pv-magazine.de/2026/09/17/ecoflow-baut-serviceangebot-in-der-schweiz-aus-und-praesentiert-stapelbares-all-in-one-system/",
-      "status": "derc",
+      "status": "redd",
       "tercume": true
     },
     {

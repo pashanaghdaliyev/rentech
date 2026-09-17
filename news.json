@@ -1,16 +1,7 @@
 {
-  "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 20:53",
+  "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
+  "updated": "2026-09-17 20:56",
   "items": [
-    {
-      "cat": "Azərbaycan",
-      "date": "2026-09-17",
-      "title": "Azərbaycanda külək enerjisi istehsalı 22 dəfəyədək artıb",
-      "excerpt": "",
-      "source": "Trend.az",
-      "url": "https://az.trend.az/business/energy/4225243.html",
-      "status": "redd"
-    },
     {
       "cat": "Dünya",
       "date": "2026-09-17",
@@ -20,6 +11,486 @@
       "url": "https://www.pv-magazine.com/2026/09/17/alpex-solar-inaugurates-2-2-gw-topcon-cell-manufacturing-facility-in-uttar-pradesh/",
       "status": "derc",
       "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "Qlobal yaşayış binalarının batareya bazarı 2026-cı ildə 46,1 QVt·s-ə çatacaq",
+      "excerpt": "InfoLink Consulting Avropa, Okeaniya və Asiyanın rəhbərliyi ilə 2026-cı ildə qlobal yaşayış təyinatlı enerji saxlanc gücünün artımının 46,1 QVt·s olacağını gözləyir. 2026-cı ilin birinci yarısında daşınma həcminə görə Fox ESS, Sigenergy və Deye ilk üç…",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/17/global-residential-storage-market-to-hit-46-1-gwh-in-2026/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "First Solar TOPCon patent şikayətini geri götürdü",
+      "excerpt": "Nazik təbəqə istehsalçısı yeni Section 232 idxal məhdudiyyətlərindən sonra USITC qarşısındakı Section 337 ərizəsini geri götürüb, bu arada yerli və xarici istehsalçılara qarşı federal məhkəmədə patent mübarizəsi davam edir.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/17/first-solar-drops-topcon-patent-complaint/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "Stellantis BOW muxtar çatdırılmanı növbəti səviyyəyə qaldırır",
+      "excerpt": "HANNOVER, Almaniya — IAA Transportation 2026 sərgisindəki bir çox elektrikli avtomobil arasında Stellantis BOW-nu gözdən yayındırmaq çətindir. O, kiçikdir, yaşıldır və adi çatdırılma furqonuna bənzəmir. Kabinası və sürücü oturacağı yoxdur. Yük yeri dörd...",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/17/stellantis-bow-takes-autonomous-delivery-to-the-next-level/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "Trump-ın məhv etməyə çalışdığı elektrikli avtomobil doldurma stansiyalarına yeni həyat",
+      "excerpt": "Trump federal NEVI proqramının vəsaitləri ilə ştatların əsas nəqliyyat arteriyaları boyunca yeni ictimai elektrikli avtomobil doldurma stansiyaları tikməsinin qarşısını almağa çalışdı, lakin bacarmadı. The post New Life For EV Charging Stations Trump Tried To…",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/17/ev-charging-stations-public-nevi-funds-trump/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-17",
+      "title": "SEG Solar ABŞ-dakı ikinci fabrikində HJT modul istehsalına başlayıb",
+      "excerpt": "SEG Solar Texas ştatının Tomball şəhərində yerləşən ABŞ-dakı ikinci istehsal müəssisəsində heterokeçidli (HJT) modulların kommersiya miqyaslı istehsalına başlayıb.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/seg-solar-starts-hjt-module-production-at-second-us-factory/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-17",
+      "title": "ARENA-nın Launchpad proqramı Avstraliyada təmiz enerji startapları üçün erkən mərhələdə maliyyələşmə boşluğunu doldurmağı hədəfləyir",
+      "excerpt": "ARENA erkən mərhələli təmiz enerji startaplarına yönəlmiş 30 milyon Avstraliya dolları (20 milyon ABŞ dolları) dəyərində Launchpad maliyyələşdirmə proqramını təqdim edib.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/arenas-launchpad-programme-aims-to-close-early-stage-funding-gap-for-clean-energy-startups-in-australia/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-17",
+      "title": "Fotovoltaik sənaye zənciri polisilikon istehsalının məhdudlaşdırılması siyasətinin tətbiqini gözləyir; bazar tələbatı 210R element qiymətlərində mülayim bərpanı dəstəkləyir",
+      "excerpt": "Polisilikon Polisilikon ehtiyatları hazırda […] səviyyəsində qalır",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/pricequotes/20260917-52161.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-17",
+      "title": "2 QVt·s-dən çox: Sungrow və LONGi daxil olmaqla beş müəssisə iri enerji saxlanc sifarişləri imzalayıb",
+      "excerpt": "EnergyTrend-ə əsasən, Sungrow, LONGi Green Energy, […]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260917-52159.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-17",
+      "title": "Hithium və BYD şəbəkəqurucu enerji saxlancına və natrium-ion enerji saxlancına yönəlmiş yeni məhsullar təqdim edir",
+      "excerpt": "EnergyTrend-ə əsasən, BYD və Hithium […] təqdim ediblər",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260917-52157.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-17",
+      "title": "Ümumi sərmayə 12,5 milyard RMB-ni ötür! Altı əsas natrium-ion və enerji saxlanc layihəsi sürətləndirilib",
+      "excerpt": "Bu yaxınlarda bir çox natrium-ion batareyası və enerji saxlanc […]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260917-52155.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "Tenways elektrikli velosipedləri 1599 ABŞ dollarından başlayaraq 807 ABŞ dollarınadək endirimlə, Mammotion LUBA Mini 2 AWD robot biçən dəsti 379 ABŞ dolları endirimlə, EGO trimmer, Jetson və s.",
+      "excerpt": "Bu həftəki Cümə Yaşıl Təkliflərimiz ilk növbədə elektrikli velosipedlərə və alətlərə yönəlib, Tenways-in mövsüm sonu bağlanış satışları ilə başlayır, məsələn, adəti üzrə 118 ABŞ dolları dəyərində PULSUZ dəstlə birlikdə CGO600 Pro Yüngül Zəncirli Ötürücülü…",
+      "source": "Electrek",
+      "url": "https://electrek.co/2026/09/17/tenways-e-bikes-mammotion-luba-mini-2-awd-robot-mower-ego-string-trimmer-jetson-more/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "Bərk cisimli batareya istehsalçısı Factorial başqa bir böyük tərəfdaşlıq əldə edir",
+      "excerpt": "Bərk cisimli batareya mütəxəssisi Factorial Energy perspektivli yeni texnologiyanı miqyaslaşdırmaq üçün sulfid əsaslı bərk elektrolitlər istehsal edən azsaylı şirkətlərdən biri olan Mitsui Kinzoku ilə əməkdaşlıq edir. Daha ətraflı...",
+      "source": "Electrek",
+      "url": "https://electrek.co/2026/09/17/solid-state-battery-maker-factorial-secures-another-big-partnership/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "Hithium 20 000 dövrlük natrium-ion elementi və 4MVt·s BESS təqdim edir",
+      "excerpt": "Hithium 30 illik gözlənilən əməliyyat ömrü vəd edərək, yeni natrium-ion (Na-ion) batareya elementi və enerji saxlanc sistemi məhsul xətti üçün dünən təqdimat keçirib.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/hithium-unveils-20000-cycle-sodium-ion-cell-and-4mwh-bess/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "esVolta-nın baş direktoru izah edir ki, kommersiya bazarı zəiflədikcə müqaviləli gəlir Kaliforniyanın BESS maliyyələşdirilməsi üçün açardır",
+      "excerpt": "Energy-Storage.news Premium Kaliforniyanın Garden Grove şəhərində keçirilən 2026 US Battery Asset Management Summit tədbirində esVolta-nın tərtibatçısı və baş direktoru Randolph Mann ilə söhbət edir.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/contracted-revenue-key-to-california-bess-financing-as-merchant-market-weakens-esvolta-ceo-explains/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "Sənaye mütəxəssisləri xəbərdarlıq edir ki, istismara vermə gecikmələri və texniki boşluqlar batareya saxlancının təhvil verilməsini çətinləşdirir",
+      "excerpt": "Batareya enerjisi saxlanc sistemlərinin (BESS) işlənmədən əməliyyat mərhələsinə keçidi texniki boşluqlar və kommunikasiya nasazlıqları ilə doludur.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/commissioning-delays-and-technical-gaps-plague-battery-storage-handovers-industry-experts-warn/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "ABŞ-dakı istehsal gecikmələri fonunda Fluence 2026-cı ilin gəlir və EBITDA proqnozunu azaldır",
+      "excerpt": "Fluence 2026 maliyyə ili (FY2026) üçün proqnozuna yenidən baxıb və maliyyə zərbəsini əsasən ABŞ təchizat zəncirindəki gecikmələrlə əlaqələndirib.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/fluence-cuts-2026-revenue-ebitda-guidance-as-us-production-delays-bite/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "IHA-nın Dehli Bəyannaməsi Hindistanın 288 QVt nasos-akkumulyator enerji saxlanc potensialını reallaşdırmaq üçün siyasətin yenidən nəzərdən keçirilməsinə çağırır",
+      "excerpt": "IHA Hindistanı daha sürətli razılaşmalar, güclü gəlirlər və təkmilləşdirilmiş koordinasiya vasitəsilə nasosla saxlancı sürətləndirməyə çağırıb.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/ihas-delhi-declaration-calls-for-policy-overhaul-to-unlock-indias-288gw-pumped-hydro-energy-storage-potential/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "İspaniya-Portuqaliya BESS bazarı daha çox çevikliyə, daha dəqiq çərçivələrə və daha sürətli icazə prosesinə ehtiyac duyur",
+      "excerpt": "Keçən həftə İspaniyanın Barselona şəhərində keçirilən Battery & Energy Tech Expo sərgisində panel iştirakçıları şirkətlərin BESS-in daha sürətli tətbiqi zamanı üzləşdikləri bəzi çətinlikləri vurğulayıblar.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/iberian-bess-market-needs-more-flexibility-clearer-frameworks-and-faster-permitting/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "Alinta Energy Cənubi Avstraliyadakı 250 MVt gücündə Reeves Plains layihəsi üçün ilk batareya bloklarını qəbul edir",
+      "excerpt": "Alinta Energy Cənubi Avstraliyadakı 250 MVt gücündə Reeves Plains Battery layihəsi üçün ilk batareya blokları partiyasını qəbul edib.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/alinta-energy-receives-first-battery-units-for-250mw-reeves-plains-project-in-south-australia/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-17",
+      "title": "Viktoriyanın SEC şirkəti Aware Super və Birdwood ilə birlikdə Avstraliyadakı 1,86 QVt·s batareya saxlanc sistemində pay sahibi olur",
+      "excerpt": "Viktoriyanın SEC şirkəti Aware Super ilə birlikdə Wodonda yaxınlığındakı 400 MVt gücündə Baranduda batareya sistemində pay əldə etmək üçün 43 milyon Avstraliya dollarınadək sərmayə qoyur.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/victorias-sec-takes-stake-in-1-86gwh-battery-storage-system-in-australia-alongside-aware-super-and-birdwood/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "SEIA Community Solar Access Koalisiyasını birləşdirmək planını elan edir",
+      "excerpt": "İki təşkilat hər bir təşkilatın Direktorlar Şurasının təsdiqindən sonra oktyabrın əvvəlində birləşməyi planlaşdırır, CCSA komandasını, resurslarını və siyasət işini SEIA-nın mövcud əməliyyatlarına inteqrasiya edir.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/16/seia-announces-plan-to-absorb-the-coalition-for-community-solar-access/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "Günəş enerjisi avadanlığı və xidmət təminatçıları regional quraşdırıcılar üçün xərcləri azaltmaq məqsədilə koalisiya yaradırlar",
+      "excerpt": "Strong Tail Solar Alliance adlanan günəş enerjisi maliyyələşdirməsi, aparat və proqram təminatı təminatçıları koalisiyası ABŞ quraşdırıcılarına xərcləri azaltmağa kömək etməyi hədəfləyir ki, Section 25D vergi kreditinin 2025-ci ildə ləğvindən sonra sistem…",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/16/solar-equipment-and-service-providers-form-coalition-to-lower-costs-for-regional-installers/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "Jupiter Power 1,5 QVt enerji saxlanc portfelinə 1,4 milyard ABŞ dolları məbləğində maliyyələşmə təmin edir",
+      "excerpt": "Maliyyələşdirmə paketi Texas və Miçiqan ştatları üzrə on kommunal miqyaslı batareya enerjisi saxlanc layihəsini dəstəkləyir və tərtibatçının cəlb etdiyi ümumi kapitalı 3 milyard ABŞ dollarından çox artırır.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/16/jupiter-power-secures-1-4-billion-in-financing-for-1-5-gw-energy-storage-portfolio/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "BYD qiqavatt miqyaslı batareya saxlanc stansiyaları üçün 62 MVt·s GC Block təqdim edir",
+      "excerpt": "BYD Energy Storage iki-altı saatlıq tətbiqləri və 62 MVt·s-ə qədər tutumu əhatə edən üç konfiqurasiyaya malik standartlaşdırılmış batareya saxlanc qurğusunu istifadəyə verib.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/16/byd-launches-62-mwh-gc-block-for-gigawatt-scale-battery-storage-plants/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "Elevated Materials litum plyonka istehsalı zavodunun tikintisi üçün DOE-dən 50 milyon ABŞ dolları alıb",
+      "excerpt": "Applied Materials spin-out şirkəti nəsil batareyaları üçün ultra nazik litum plyonkalarının yerli istehsalını miqyaslaşdırmaq məqsədilə 500 milyon ABŞ dolları dəyərində DOE mükafat paketinin bir hissəsi olaraq seçilib.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/16/elevated-materials-awarded-50-million-from-doe-to-build-lithium-film-manufacturing-plant/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "Yüksək yanacaq qiymətləri sayəsində əksər amerikalılar indi elektrikli avtomobillər haqqında düşünür",
+      "excerpt": "Elektrikli nəqliyyat vasitələri 5 il əvvəlki ilə müqayisədə, 10, 20 və ya 30 il əvvəli demirəm, qat-qat yaxşıdır. Onların yüzlərlə mil yürüş məsafəsi var və “müqayisə oluna bilən” benzinlə işləyən avtomobillərin qiymətinə bərabərdir. Əslində, sahibkarlığın…",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/16/most-americans-now-thinking-about-electric-cars-thanks-to-high-gas-prices/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "Almaniyadakı IAA Transportation sərgisindən yaxşı və pis xəbərlər",
+      "excerpt": "Bu həftə CleanTechnica Almaniyanın Hannover şəhərində keçirilən illik IAA Transportation ticarət sərgisindəki kommersiya yük maşınları haqqında xəbərləri işıqlandırıb. Bizim ilk hekayəmiz müxtəlif istehsalçılar tərəfindən təklif olunan ən son batareyalı…",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/16/good-news-bad-news-from-iaa-transportation-show-in-germany/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "Nyu-York şəhəri üçün daha 600 səki kənarı elektrikli avtomobil doldurma stansiyası",
+      "excerpt": "Nyu-York şəhərində səki kənarı elektrikli avtomobil doldurma şəbəkəsi genişlənir və şəhərin hazırkı mövcud 88 səki kənarı Level 2 stansiyasına əlavə olaraq 600 yeni Level 2 stansiyasının əlavə edilməsi hədəflənir. The post 600 More Curbside EV Charging…",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/16/curbside-ev-charging-new-york-city-news/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "Avropanın elektrik sütunu",
+      "excerpt": "Batareyaların gələcəyi üçün strategiya Batareyalar Avropanın gələcək enerji sisteminin, sənaye bazasının və müdafiəyə hazırlığının əsas sütunudur. Avropa əsas daxilolmaların demək olar ki, heç birini istehsal etmədiyi halda, onları rekord sürətlə sistemlərə…",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/16/europes-electric-backbone/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "Niyə “e-HEFA”-nın ReFuelEU e-SAF mandatına daxil edilməsinə icazə vermək strateji səhv olardı",
+      "excerpt": "ReFuelEU tənzimləməsinə əsasən, reaktiv yanacaq təchizatçıları 2030-cu ildən başlayaraq sintetik aviasiya yanacağının (e-SAF), yəni yaşıl hidrogenin tutulmuş CO2 ilə birləşdirilməsindən alınan SAF-ın artan payını tələb edən xüsusi sub-mandatla üzləşirlər. Bu…",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/16/why-allowing-e-hefa-to-count-towards-the-refueleu-e-saf-mandate-would-be-a-strategic-mistake/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-16",
+      "title": "Safeguarding the Integrity of EU Synthetic Fuels Targets under ReFuelEU Aviation & FuelEU Maritime",
+      "excerpt": "Director-General Céline Gauer , DG ENER Director Lukasz Kolinski, DG ENER Head of Unit Kitti Nyitrai, DG ENER Director-General Magda Kopczynska, DG MOVE Director-General Kurt Vandenberghe, DG CLIMA Member State Expert Group on Renewable Fuels We, the…",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/16/safeguarding-the-integrity-of-eu-synthetic-fuels-targets-under-refueleu-aviation-fueleu-maritime/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-16",
+      "title": "Whitepaper: bne macht sechs Vorschläge für massentaugliche Direktvermarktung kleiner Photovoltaik-Anlagen",
+      "excerpt": "Im Entwurf der EEG-Novelle ist die Abschaffung der Einspeisevergütung für Photovoltaik-Anlagen vorgesehen. Dafür sollen auch die Kleinanlagen in die Direktvermarktung. Der Bundesverband Neue Energiewirtschaft sieht das als eine große Chance an. Allerdings…",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/16/whitepaper-bne-macht-sechs-vorschlaege-fuer-massentaugliche-direktvermarktung-kleiner-photovoltaik-anlagen/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-16",
+      "title": "Zelestra und Salzgitter Flachstahl unterzeichnen Hybrid-PPA für Photovoltaik und Batteriespeicher",
+      "excerpt": "Der hybride kommerzielle PPA kombiniert 147 Megawatt Photovoltaik mit 237 Megawattstunden Speicherkapazität für die Umstellung auf grünen Stahl.",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/16/zelestra-und-salzgitter-flachstahl-unterzeichnen-hybrid-ppa-fuer-photovoltaik-und-batteriespeicher/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-16",
+      "title": "Over 90% of solar professionals report growing project deployment pipeline in latest PVcase report",
+      "excerpt": "Over 90% of solar industry professionals report a growing project deployment pipeline in 2026, but new projects that are abandoned before completion now account for almost half of all project pipelines.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/over-90-solar-professionals-report-growing-project-deployment-pipeline-pvcase-report/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-16",
+      "title": "Saatvik secures 600MW SECI PV module supply",
+      "excerpt": "Saatvik Green Energy has secured a 600MWp solar PV module supply order from SECI, with delivery scheduled for completion by December 2027.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/saatvik-secures-600mw-seci-pv-module-supply/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-16",
+      "title": "Masdar to expand solar PV and energy storage development in Azerbaijan",
+      "excerpt": "UAE state-run renewables developer Masdar has signed an agreement with renewables developer Azerbaijan Green Energy Company (AGEC) to explore the development of new renewable energy projects in Azerbaijan.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/masdar-to-expand-solar-pv-and-energy-storage-development-in-azerbaijan/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-16",
+      "title": "First Solar to withdraw Section 337 complaint on TOPCon IP, continues US District Court lawsuits",
+      "excerpt": "Thin-film cadmium telluride (CdTe) solar module manufacturer First Solar has adjusted its enforcement of tunnel oxide passivated contact (TOPCon) intellectual property (IP) strategy.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/first-solar-to-withdraw-section-337-complaint-on-topcon-ip-continues-us-district-court-lawsuits/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-16",
+      "title": "Pylontech and Solax Power Release Announcements Disclosing Energy Storage Business Progress",
+      "excerpt": "According to EnergyTrend, on September 15, Solax Power […]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260916-52153.html",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-16",
+      "title": "Investing 1.62 Billion Yuan! CATL Expands Footprint in Renewable Energy, AI, and Embodied Intelligence Sectors",
+      "excerpt": "On September 15, CATL released two announcements disclo […]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260916-52151.html",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-16",
+      "title": "Nearly 1 GW! Five Companies Including JinkoSolar and Trina Solar Secure Successive PV Module Orders",
+      "excerpt": "Recently, the photovoltaic (PV) module market has seen […]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260916-52149.html",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-16",
+      "title": "ENGWE E26 3.0 full suspension e-bike with $343 FREE bundle at new $1,499 low + Eagle electric dirt bike new $899 low, Anker, more",
+      "excerpt": "ENGWE and Anker eufy are dominating our midweek Green Deals. First up is the increased savings on ENGWE’s latest E26 3.0 Dual-Motor Full Suspension All-Terrain e-bike with a FREE $343 bundle at a new $1,499 low , followed by the brand’s Eagle Electric Dirt…",
+      "source": "Electrek",
+      "url": "https://electrek.co/2026/09/16/engwe-e26-3-0-full-suspension-e-bike-eagle-electric-dirt-bike-anker-more/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-16",
+      "title": "‘Sodium-ion still very much on the fringe’: German market sources on technology and procurement",
+      "excerpt": "LFP is the de facto choice for the German BESS market today with sodium-ion still far from bankable, but that doesn’t mean choosing a supplier is necessarily straightforward.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/sodium-ion-still-very-much-on-the-fringe-german-market-sources-on-technology-and-procurement/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-16",
+      "title": "‘A really hard problem’: Gridmatic CCO on the challenges of BESS revenue forecasting, the role of AI and load co-location",
+      "excerpt": "Energy-Storage.news Premium speaks with David Miller, CCO of optimiser Gridmatic, at the 2026 US Battery Asset Management Summit in Garden Grove, California.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/a-really-hard-problem-gridmatic-cco-on-the-challenges-of-bess-revenue-forecasting-the-role-of-ai-and-load-co-location/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-16",
+      "title": "California BESS projects have grid interconnection cost advantage over other US markets, developer says",
+      "excerpt": "Interconnection costs for utility-scale energy storage in California are significantly lower than in other major US markets, with developers also benefiting from network upgrade cost reimbursements unavailable elsewhere, according to a senior executive at Rev…",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/california-bess-projects-have-grid-interconnection-cost-advantage-over-other-us-markets-developer-says/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-16",
+      "title": "Zelestra, Salzgitter Flachstahl sign German solar-plus-storage PPA to power steelmaking",
+      "excerpt": "Zelestra and steelmaker Salzgitter Flachstahl have signed a PPA for a new solar-plus-storage portfolio in Germany.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/zelestra-salzgitter-flachstahl-german-solar-plus-storage-ppa-steelmaking/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-16",
+      "title": "From grid code to grid connection: what makes a grid-forming BESS work in the real world?",
+      "excerpt": "Sinexcel technical director Luke Lu discusses what goes into a successful grid-forming battery energy storage system (BESS) project.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/from-grid-code-to-grid-connection-what-makes-a-grid-forming-bess-work-in-the-real-world/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-16",
+      "title": "Morocco’s first large-scale LFP battery storage system prepares for action",
+      "excerpt": "OCP Green Energy has completed the installation of a 25MW/125MWh battery energy storage system (BESS) in Benguerir, Morocco.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/moroccos-first-large-scale-lfp-battery-storage-system-prepares-for-action/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-16",
+      "title": "FCC inverter ban poses greater threat to US renewables than FEOC compliance, industry experts warn",
+      "excerpt": "Recent moves from the US federal government could prove more damaging to US renewable energy deployment than foreign entity of concern (FEOC) compliance requirements, according to legal and industry experts.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/fcc-inverter-ban-poses-greater-threat-to-us-renewables-than-feoc-compliance-industry-experts-warn/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-16",
+      "title": "Trump’s power equipment ban: US BESS market implications and the supply chain dilemma",
+      "excerpt": "On 26 August, US President Donald Trump banned the import of inverters, transformers and other power equipment citing a potential risk to US grid security, via emergency executive order (EO).",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/trumps-power-equipment-ban-us-bess-market-implications-and-the-supply-chain-dilemma/",
+      "status": "gozleyir"
+    },
+    {
+      "cat": "Azərbaycan",
+      "date": "2026-09-17",
+      "title": "Azərbaycanda külək enerjisi istehsalı 22 dəfəyədək artıb",
+      "excerpt": "",
+      "source": "Trend.az",
+      "url": "https://az.trend.az/business/energy/4225243.html",
+      "status": "redd"
     },
     {
       "cat": "Dünya",

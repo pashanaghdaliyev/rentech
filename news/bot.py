@@ -159,6 +159,7 @@ def gemini_tercume(xeberler: list) -> list:
     unvan = (f"https://generativelanguage.googleapis.com/v1beta/models/"
              f"{GEMINI_MODEL}:generateContent?key={GEMINI_ACAR}")
 
+    print(f"  (model: {GEMINI_MODEL})")
     try:
         istek = urllib.request.Request(
             unvan,
@@ -169,8 +170,16 @@ def gemini_tercume(xeberler: list) -> list:
             data = json.loads(cavab.read().decode("utf-8"))
         metn = data["candidates"][0]["content"]["parts"][0]["text"]
         netice = json.loads(metn)
-    except (urllib.error.URLError, urllib.error.HTTPError, KeyError,
-            IndexError, json.JSONDecodeError, TimeoutError) as xeta:
+    except urllib.error.HTTPError as xeta:
+        cavab_metn = ""
+        try:
+            cavab_metn = xeta.read().decode("utf-8", errors="replace")[:500]
+        except Exception:
+            pass
+        print(f"  (tərcümə alınmadı: HTTP {xeta.code} — {cavab_metn})")
+        return xeberler
+    except (urllib.error.URLError, KeyError, IndexError,
+            json.JSONDecodeError, TimeoutError) as xeta:
         print(f"  (tərcümə alınmadı: {xeta} — mətn ingiliscə qaldı)")
         return xeberler
 

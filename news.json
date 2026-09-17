@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 21:01",
+  "updated": "2026-09-17 21:03",
   "items": [
     {
       "cat": "Dünya",
@@ -315,47 +315,52 @@
     {
       "cat": "ABŞ",
       "date": "2026-09-16",
-      "title": "Safeguarding the Integrity of EU Synthetic Fuels Targets under ReFuelEU Aviation & FuelEU Maritime",
-      "excerpt": "Director-General Céline Gauer , DG ENER Director Lukasz Kolinski, DG ENER Head of Unit Kitti Nyitrai, DG ENER Director-General Magda Kopczynska, DG MOVE Director-General Kurt Vandenberghe, DG CLIMA Member State Expert Group on Renewable Fuels We, the…",
+      "title": "ReFuelEU Aviation və FuelEU Maritime çərçivəsində Aİ-nin sintetik yanacaq hədəflərinin bütövlüyünün qorunması",
+      "excerpt": "Baş direktor Céline Gauer, DG ENER direktoru Lukasz Kolinski, DG ENER şöbə müdiri Kitti Nyitrai, DG ENER baş direktoru Magda Kopczynska, DG MOVE baş direktoru Kurt Vandenberghe, DG CLIMA Bərpa Olunan Yanacaqlar Üzrə Üzv Dövlətlərin Ekspert Qrupu Biz...",
       "source": "CleanTechnica",
       "url": "https://cleantechnica.com/2026/09/16/safeguarding-the-integrity-of-eu-synthetic-fuels-targets-under-refueleu-aviation-fueleu-maritime/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Almaniya",
       "date": "2026-09-16",
-      "title": "Whitepaper: bne macht sechs Vorschläge für massentaugliche Direktvermarktung kleiner Photovoltaik-Anlagen",
-      "excerpt": "Im Entwurf der EEG-Novelle ist die Abschaffung der Einspeisevergütung für Photovoltaik-Anlagen vorgesehen. Dafür sollen auch die Kleinanlagen in die Direktvermarktung. Der Bundesverband Neue Energiewirtschaft sieht das als eine große Chance an. Allerdings…",
+      "title": "Ağ sənəd: bne kiçik fotovoltaik qurğuların kütləvi birbaşa marketinqi üçün altı təklif irəli sürür",
+      "excerpt": "EEG-nin yenilənmiş layihəsində fotovoltaik qurğular üçün şəbəkəyə ötürmə tarifinin ləğvi nəzərdə tutulur. Bunun müqabilində kiçik qurğular da birbaşa marketinqə cəlb edilməlidir. Bundesverband Neue Energiewirtschaft bunu böyük fürsət hesab edir. Lakin...",
       "source": "pv magazine Deutschland",
       "url": "https://www.pv-magazine.de/2026/09/16/whitepaper-bne-macht-sechs-vorschlaege-fuer-massentaugliche-direktvermarktung-kleiner-photovoltaik-anlagen/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Almaniya",
       "date": "2026-09-16",
-      "title": "Zelestra und Salzgitter Flachstahl unterzeichnen Hybrid-PPA für Photovoltaik und Batteriespeicher",
-      "excerpt": "Der hybride kommerzielle PPA kombiniert 147 Megawatt Photovoltaik mit 237 Megawattstunden Speicherkapazität für die Umstellung auf grünen Stahl.",
+      "title": "Zelestra və Salzgitter Flachstahl fotovoltaik və batareya saxlanc sistemləri üçün hibrid PPA imzalayır",
+      "excerpt": "Hibrid kommersiya PPA sazişi yaşıl polad istehsalına keçid üçün 147 meqavat fotovoltaik gücü 237 meqavatsat saxlanc tutumu ilə birləşdirir.",
       "source": "pv magazine Deutschland",
       "url": "https://www.pv-magazine.de/2026/09/16/zelestra-und-salzgitter-flachstahl-unterzeichnen-hybrid-ppa-fuer-photovoltaik-und-batteriespeicher/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Çin",
       "date": "2026-09-16",
-      "title": "Over 90% of solar professionals report growing project deployment pipeline in latest PVcase report",
-      "excerpt": "Over 90% of solar industry professionals report a growing project deployment pipeline in 2026, but new projects that are abandoned before completion now account for almost half of all project pipelines.",
+      "title": "Ən son PVcase hesabatına əsasən, günəş enerjisi mütəxəssislərinin 90%-dən çoxu artan layihə portfeli barədə məlumat verir",
+      "excerpt": "Günəş enerjisi sənayesi mütəxəssislərinin 90%-dən çoxu 2026-cı ildə artan layihə icra xətti bildirir, lakin tamamlanmadan əvvəl dayandırılan yeni layihələr artıq bütün layihə portfellərinin təqribən yarısını təşkil edir.",
       "source": "PV Tech",
       "url": "https://www.pv-tech.org/over-90-solar-professionals-report-growing-project-deployment-pipeline-pvcase-report/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Çin",
       "date": "2026-09-16",
-      "title": "Saatvik secures 600MW SECI PV module supply",
-      "excerpt": "Saatvik Green Energy has secured a 600MWp solar PV module supply order from SECI, with delivery scheduled for completion by December 2027.",
+      "title": "Saatvik 600 MVt gücündə SECI PV modul təchizatını təmin edir",
+      "excerpt": "Saatvik Green Energy şirkəti SECI-dən 600 MVt·p gücündə günəş fotovoltaik modulunun təchizatı sifarişini qazanıb, təslimatın 2027-ci ilin dekabrına qədər tamamlanması nəzərdə tutulub.",
       "source": "PV Tech",
       "url": "https://www.pv-tech.org/saatvik-secures-600mw-seci-pv-module-supply/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Çin",
@@ -369,119 +374,132 @@
     {
       "cat": "Çin",
       "date": "2026-09-16",
-      "title": "First Solar to withdraw Section 337 complaint on TOPCon IP, continues US District Court lawsuits",
-      "excerpt": "Thin-film cadmium telluride (CdTe) solar module manufacturer First Solar has adjusted its enforcement of tunnel oxide passivated contact (TOPCon) intellectual property (IP) strategy.",
+      "title": "First Solar TOPCon İM üzrə 337-ci Bölmə şikayətini geri götürür, ABŞ Rayon Məhkəməsindəki iddialarını davam etdirir",
+      "excerpt": "Nazik təbəqəli kadmium tellurid (CdTe) günəş modulu istehsalçısı First Solar tunel oksidi ilə passivləşdirilmiş kontakt (TOPCon) əqli mülkiyyət (İM) strategiyasının icrasını tənzimləyib.",
       "source": "PV Tech",
       "url": "https://www.pv-tech.org/first-solar-to-withdraw-section-337-complaint-on-topcon-ip-continues-us-district-court-lawsuits/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Çin",
       "date": "2026-09-16",
-      "title": "Pylontech and Solax Power Release Announcements Disclosing Energy Storage Business Progress",
-      "excerpt": "According to EnergyTrend, on September 15, Solax Power […]",
+      "title": "Pylontech və Solax Power Enerji Saxlanc Biznesinin İrəliləyişini Açıqlayan Elanlar Yayımladı",
+      "excerpt": "EnergyTrend-ə görə, sentyabrın 15-də Solax Power […]",
       "source": "EnergyTrend",
       "url": "https://www.energytrend.com/news/20260916-52153.html",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Çin",
       "date": "2026-09-16",
-      "title": "Investing 1.62 Billion Yuan! CATL Expands Footprint in Renewable Energy, AI, and Embodied Intelligence Sectors",
-      "excerpt": "On September 15, CATL released two announcements disclo […]",
+      "title": "1,62 Milyard Yuan Sərmayə! CATL Bərpa Olunan Enerji, Süni İntellekt və Təcəssüm Olunmuş İntellekt Sektorlarında Mövqeyini Genişləndirir",
+      "excerpt": "Sentyabrın 15-də CATL […] açıqlayan iki elan yayımladı",
       "source": "EnergyTrend",
       "url": "https://www.energytrend.com/news/20260916-52151.html",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Çin",
       "date": "2026-09-16",
-      "title": "Nearly 1 GW! Five Companies Including JinkoSolar and Trina Solar Secure Successive PV Module Orders",
-      "excerpt": "Recently, the photovoltaic (PV) module market has seen […]",
+      "title": "Təqribən 1 QVt! JinkoSolar və Trina Solar daxil olmaqla beş şirkət ardıcıl PV modul sifarişləri əldə edir",
+      "excerpt": "Bu yaxınlarda fotovoltaik (PV) modul bazarında […] müşahidə olunub",
       "source": "EnergyTrend",
       "url": "https://www.energytrend.com/news/20260916-52149.html",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Texnologiya",
       "date": "2026-09-16",
-      "title": "ENGWE E26 3.0 full suspension e-bike with $343 FREE bundle at new $1,499 low + Eagle electric dirt bike new $899 low, Anker, more",
-      "excerpt": "ENGWE and Anker eufy are dominating our midweek Green Deals. First up is the increased savings on ENGWE’s latest E26 3.0 Dual-Motor Full Suspension All-Terrain e-bike with a FREE $343 bundle at a new $1,499 low , followed by the brand’s Eagle Electric Dirt…",
+      "title": "ENGWE E26 3.0 tam amortizasiyalı e-velosiped 343 dollarlıq PULSUZ dəstlə yeni 1 499 dollarlıq aşağı qiymətə + Eagle elektrik kird-velosipedi yeni 899 dollarlıq aşağı qiymətə, Anker və s.",
+      "excerpt": "ENGWE və Anker eufy həftə ortası Yaşıl Sövdələşmələrimizdə üstünlük təşkil edir. Birincisi, ENGWE-nin yeni 1 499 dollarlıq aşağı qiymətlə 343 dollarlıq PULSUZ dəst təqdim edən son E26 3.0 İki Mühərrikli Tam Amortizasiyalı All-Terrain e-velosipedində artan…",
       "source": "Electrek",
       "url": "https://electrek.co/2026/09/16/engwe-e26-3-0-full-suspension-e-bike-eagle-electric-dirt-bike-anker-more/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Texnologiya",
       "date": "2026-09-16",
-      "title": "‘Sodium-ion still very much on the fringe’: German market sources on technology and procurement",
-      "excerpt": "LFP is the de facto choice for the German BESS market today with sodium-ion still far from bankable, but that doesn’t mean choosing a supplier is necessarily straightforward.",
+      "title": "“Natrium-ion hələ də kənarda qalır”: Almaniya bazarının nümayəndələri texnologiya və təchizat haqqında",
+      "excerpt": "LFP bu gün Almaniyanın BESS bazarı üçün faktiki seçimdir, natrium-ion isə hələ də maliyyələşdirmək üçün çox uzaqdadır, lakin bu, təchizatçı seçməyin mütləq sadə olduğu anlamına gəlmir.",
       "source": "Energy Storage News",
       "url": "https://www.energy-storage.news/sodium-ion-still-very-much-on-the-fringe-german-market-sources-on-technology-and-procurement/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Texnologiya",
       "date": "2026-09-16",
-      "title": "‘A really hard problem’: Gridmatic CCO on the challenges of BESS revenue forecasting, the role of AI and load co-location",
-      "excerpt": "Energy-Storage.news Premium speaks with David Miller, CCO of optimiser Gridmatic, at the 2026 US Battery Asset Management Summit in Garden Grove, California.",
+      "title": "“Çox çətin problem”: Gridmatic CCO-su BESS gəlir proqnozlaşdırmasının çətinlikləri, süni intellektin rolu və yükün birgə yerləşdirilməsi haqqında",
+      "excerpt": "Energy-Storage.news Premium optimizator Gridmatic-in CCO-su David Miller ilə Kaliforniyanın Garden Grove şəhərində keçirilən 2026 ABŞ Batareya Aktivlərinin İdarə Edilməsi Sammitində müsahibə edir.",
       "source": "Energy Storage News",
       "url": "https://www.energy-storage.news/a-really-hard-problem-gridmatic-cco-on-the-challenges-of-bess-revenue-forecasting-the-role-of-ai-and-load-co-location/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Texnologiya",
       "date": "2026-09-16",
-      "title": "California BESS projects have grid interconnection cost advantage over other US markets, developer says",
-      "excerpt": "Interconnection costs for utility-scale energy storage in California are significantly lower than in other major US markets, with developers also benefiting from network upgrade cost reimbursements unavailable elsewhere, according to a senior executive at Rev…",
+      "title": "Kaliforniyanın BESS layihələri digər ABŞ bazarları ilə müqayisədə şəbəkəyə qoşulma xərcləri üzrə üstünlüyə malikdir, tərtibatçı bildirir",
+      "excerpt": "Rev şirkətinin baş icraçı direktorunun sözlərinə görə, Kaliforniyada kommunal miqyaslı enerji saxlancı üçün şəbəkəyə qoşulma xərcləri digər əsas ABŞ bazarlarına nisbətən xeyli aşağıdır, tərtibatçılar həmçinin başqa heç bir yerdə mövcud olmayan şəbəkənin…",
       "source": "Energy Storage News",
       "url": "https://www.energy-storage.news/california-bess-projects-have-grid-interconnection-cost-advantage-over-other-us-markets-developer-says/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Texnologiya",
       "date": "2026-09-16",
-      "title": "Zelestra, Salzgitter Flachstahl sign German solar-plus-storage PPA to power steelmaking",
-      "excerpt": "Zelestra and steelmaker Salzgitter Flachstahl have signed a PPA for a new solar-plus-storage portfolio in Germany.",
+      "title": "Zelestra və Salzgitter Flachstahl polad istehsalını təmin etmək üçün Almaniyanın günəş-plus-saxlanc PPA sazişini imzalayır",
+      "excerpt": "Zelestra və polad istehsalçısı Salzgitter Flachstahl Almaniyada yeni günəş-plus-saxlanc portfeli üçün PPA imzalayıblar.",
       "source": "Energy Storage News",
       "url": "https://www.energy-storage.news/zelestra-salzgitter-flachstahl-german-solar-plus-storage-ppa-steelmaking/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Texnologiya",
       "date": "2026-09-16",
-      "title": "From grid code to grid connection: what makes a grid-forming BESS work in the real world?",
-      "excerpt": "Sinexcel technical director Luke Lu discusses what goes into a successful grid-forming battery energy storage system (BESS) project.",
+      "title": "Şəbəkə kodundan şəbəkəyə qoşulmaya qədər: real dünya şəraitində şəbəkəni formalaşdıran BESS-i nə işlək edir?",
+      "excerpt": "Sinexcel-in texniki direktoru Luke Lu uğurlu şəbəkəni formalaşdıran batareya enerji saxlanc sistemi (BESS) layihəsinin əsaslarını müzakirə edir.",
       "source": "Energy Storage News",
       "url": "https://www.energy-storage.news/from-grid-code-to-grid-connection-what-makes-a-grid-forming-bess-work-in-the-real-world/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Texnologiya",
       "date": "2026-09-16",
-      "title": "Morocco’s first large-scale LFP battery storage system prepares for action",
-      "excerpt": "OCP Green Energy has completed the installation of a 25MW/125MWh battery energy storage system (BESS) in Benguerir, Morocco.",
+      "title": "Mərakeşin ilk irimiqyaslı LFP batareya saxlanc sistemi fəaliyyətə hazırdır",
+      "excerpt": "OCP Green Energy Mərakeşin Benguerir şəhərində 25 MVt / 125 MVt·s gücündə batareya enerji saxlanc sisteminin (BESS) quraşdırılmasını başa çatdırıb.",
       "source": "Energy Storage News",
       "url": "https://www.energy-storage.news/moroccos-first-large-scale-lfp-battery-storage-system-prepares-for-action/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Texnologiya",
       "date": "2026-09-16",
-      "title": "FCC inverter ban poses greater threat to US renewables than FEOC compliance, industry experts warn",
-      "excerpt": "Recent moves from the US federal government could prove more damaging to US renewable energy deployment than foreign entity of concern (FEOC) compliance requirements, according to legal and industry experts.",
+      "title": "Sənaye mütəxəssisləri xəbərdarlıq edir ki, FCC inverter qadağası ABŞ-nin bərpa olunan enerji mənbələri üçün FEOC uyğunluğundan daha böyük təhlükə yaradır",
+      "excerpt": "Hüquq və sənaye mütəxəssislərinin fikrincə, ABŞ federal hökumətinin son addımları ABŞ-nin bərpa olunan enerji layihələrinin tətbiqinə narahatlıq doğuran xarici qurum (FEOC) uyğunluq tələblərindən daha çox zərər vura bilər.",
       "source": "Energy Storage News",
       "url": "https://www.energy-storage.news/fcc-inverter-ban-poses-greater-threat-to-us-renewables-than-feoc-compliance-industry-experts-warn/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Texnologiya",
       "date": "2026-09-16",
-      "title": "Trump’s power equipment ban: US BESS market implications and the supply chain dilemma",
-      "excerpt": "On 26 August, US President Donald Trump banned the import of inverters, transformers and other power equipment citing a potential risk to US grid security, via emergency executive order (EO).",
+      "title": "Trampın enerji avadanlığı qadağası: ABŞ-nin BESS bazarına təsirləri və təchizat zəncirinin dilemması",
+      "excerpt": "Avqustun 26-da ABŞ Prezidenti Donald Tramp fövqəladə icra sərəncamı (EO) ilə ABŞ şəbəkəsinin təhlükəsizliyinə potensial təhlükə yaratmaqla əlaqədar olaraq inverterlərin, transformatorların və digər enerji avadanlıqlarının idxalını qadağan edib.",
       "source": "Energy Storage News",
       "url": "https://www.energy-storage.news/trumps-power-equipment-ban-us-bess-market-implications-and-the-supply-chain-dilemma/",
-      "status": "gozleyir"
+      "status": "gozleyir",
+      "tercume": true
     },
     {
       "cat": "Azərbaycan",

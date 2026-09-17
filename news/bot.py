@@ -75,7 +75,7 @@ ACAR_SOZLER = [
 ]
 
 MAKS_XEBER = 30            # saxlanılacaq maksimum xəbər sayı
-MAKS_TERCUME = 6           # bir işləmədə tərcümə olunacaq maksimum xəbər
+MAKS_TERCUME = 30          # bir işləmədə tərcümə olunacaq maksimum xəbər
 XULASE_UZUNLUGU = 260
 CIXIS_FAYLI = "news.json"
 

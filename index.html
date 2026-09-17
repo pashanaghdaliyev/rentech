@@ -876,8 +876,10 @@
   /* Əvvəlcə fayldakı ehtiyat siyahı göstərilir — sayt internetsiz də işləyir. */
   buildNewsPage(derc(NEWS));
 
-  /* Bot news.json faylını yeniləyirsə, xəbərlər oradan götürülür. */
-  fetch("news.json", { cache: "no-store" })
+  /* Bot news.json faylını yeniləyirsə, xəbərlər oradan götürülür.
+     ?t=<timestamp> — GitHub Pages CDN-i by-pass edir (10 dəqiqəlik cache),
+     admin panelindən edilən dəyişikliklər dərhal görünsün. */
+  fetch("news.json?t=" + Date.now(), { cache: "no-store" })
     .then(function (cavab) { return cavab.ok ? cavab.json() : null; })
     .then(function (data) {
       if (data && Array.isArray(data.items) && data.items.length) {

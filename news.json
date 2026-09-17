@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 20:59",
+  "updated": "2026-09-17 21:00",
   "items": [
     {
       "cat": "Dünya",
@@ -299,7 +299,7 @@
       "excerpt": "Batareyaların gələcəyi üçün strategiya Batareyalar Avropanın gələcək enerji sisteminin, sənaye bazasının və müdafiəyə hazırlığının əsas sütunudur. Avropa əsas daxilolmaların demək olar ki, heç birini istehsal etmədiyi halda, onları rekord sürətlə sistemlərə…",
       "source": "CleanTechnica",
       "url": "https://cleantechnica.com/2026/09/16/europes-electric-backbone/",
-      "status": "gozleyir",
+      "status": "derc",
       "tercume": true
     },
     {

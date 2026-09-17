@@ -101,7 +101,10 @@ ACAR_SOZLER = [
 
 MAKS_XEBER = 50            # aktiv (derc + gozleyir) maksimum sayı
 REDD_DEDUP_LIMIT = 150     # rədd edilmişlər yalnız dedup üçün saxlanır
-MAKS_TERCUME = 30          # bir işləmədə tərcümə olunacaq maksimum xəbər
+# Bütün aktiv gözləyənlər bir işləmədə tərcümə olunsun — köhnə tərcüməsizlər
+# yeni xəbərlər axını altında ilişib qalmasın. Gemini flash-lite bir batch-də
+# 50 elementi asanlıqla işləyir (~2500 giriş + 2500 çıxış token, cap 8k).
+MAKS_TERCUME = MAKS_XEBER
 XULASE_UZUNLUGU = 260
 CIXIS_FAYLI = "news.json"
 

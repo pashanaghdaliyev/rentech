@@ -290,9 +290,10 @@ def main() -> int:
     hamısı.sort(key=lambda x: x.get("date", ""), reverse=True)
     hamısı = hamısı[:MAKS_XEBER]
 
-    # yalnız son siyahıya düşən xarici dilli və tərcümə olunmamış xəbərləri tərcümə et
+    # son siyahıda tərcümə olunmamış "gozleyir" xəbərləri tərcümə et
+    # (həm yeni xarici xəbərlər, həm də əvvəllər Gemini xətası ilə qalanlar)
     tercume_olunacaq = [x for x in hamısı
-                        if x.get("_dil", x.get("dil", "az")) != "az"
+                        if x.get("status") == "gozleyir"
                         and not x.get("tercume")][:MAKS_TERCUME]
     if tercume_olunacaq:
         print(f"Tərcümə olunur ({len(tercume_olunacaq)}):")

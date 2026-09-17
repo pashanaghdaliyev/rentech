@@ -43,7 +43,8 @@ jobs:
         run: |
           git config user.name  "rentech-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet news.json; then
+          git add news.json
+          if git diff --cached --quiet news.json; then
             echo "Yeni xəbər yoxdur — dəyişiklik edilmədi."
             exit 0
           fi

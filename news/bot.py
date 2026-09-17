@@ -285,18 +285,21 @@ def main() -> int:
 
     print(f"\nYeni xəbər: {len(təzə)}")
 
-    # xarici dildəkiləri tərcümə et
-    tercume_olunacaq = [x for x in təzə if x.get("_dil") != "az"][:MAKS_TERCUME]
+    # əvvəl sırala və MAKS_XEBER limitinə al ki, tərcümə boşa getməsin
+    hamısı = kohne + təzə          # köhnələr öndə → onların vəziyyəti qorunur
+    hamısı.sort(key=lambda x: x.get("date", ""), reverse=True)
+    hamısı = hamısı[:MAKS_XEBER]
+
+    # yalnız son siyahıya düşən xarici dilli və tərcümə olunmamış xəbərləri tərcümə et
+    tercume_olunacaq = [x for x in hamısı
+                        if x.get("_dil", x.get("dil", "az")) != "az"
+                        and not x.get("tercume")][:MAKS_TERCUME]
     if tercume_olunacaq:
         print(f"Tərcümə olunur ({len(tercume_olunacaq)}):")
         gemini_tercume(tercume_olunacaq)
 
-    for x in təzə:
+    for x in hamısı:
         x.pop("_dil", None)
-
-    hamısı = kohne + təzə          # köhnələr öndə → onların vəziyyəti qorunur
-    hamısı.sort(key=lambda x: x.get("date", ""), reverse=True)
-    hamısı = hamısı[:MAKS_XEBER]
 
     gozleyen = sum(1 for x in hamısı if x.get("status") == "gozleyir")
 

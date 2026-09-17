@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 20:56",
+  "updated": "2026-09-17 20:58",
   "items": [
     {
       "cat": "Dünya",
@@ -49,7 +49,7 @@
       "excerpt": "Trump federal NEVI proqramının vəsaitləri ilə ştatların əsas nəqliyyat arteriyaları boyunca yeni ictimai elektrikli avtomobil doldurma stansiyaları tikməsinin qarşısını almağa çalışdı, lakin bacarmadı. The post New Life For EV Charging Stations Trump Tried To…",
       "source": "CleanTechnica",
       "url": "https://cleantechnica.com/2026/09/17/ev-charging-stations-public-nevi-funds-trump/",
-      "status": "gozleyir",
+      "status": "derc",
       "tercume": true
     },
     {

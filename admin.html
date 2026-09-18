@@ -288,7 +288,23 @@
   </section>
 
   <section id="app" hidden>
-
+    <div class="tab-row">
+      <button class="tab-add" id="add-toggle-btn" type="button" title="Linki yapışdır">Linki yapışdır</button>
+      <div class="tabs" id="tabs"></div>
+    </div>
+    <div class="toolbar" id="toolbar">
+      <div class="count" id="count">—</div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="bulk" id="bulk" hidden>
+      <button class="master" id="master-select" type="button">
+        <span class="box"></span>
+        <span id="master-label">Hamısını seç</span>
+      </button>
+      <button class="btn-solid bulk-act" id="bulk-action" type="button" hidden></button>
+      <button class="btn-solid danger bulk-act" id="bulk-hard-delete" type="button" hidden></button>
+    </div>
+    <div class="list" id="list"></div>
     <div class="add-panel" id="add-panel" hidden>
       <div class="lbl">Xəbər linki * — yapışdır, xanalar avtomatik dolacaq</div>
       <div class="url-wrap" id="add-url-wrap">
@@ -326,24 +342,6 @@
         <button class="btn-neutral" id="add-cancel" type="button">Ləğv et</button>
       </div>
     </div>
-
-    <div class="tab-row">
-      <button class="tab-add" id="add-toggle-btn" type="button" title="Linki yapışdır">Linki yapışdır</button>
-      <div class="tabs" id="tabs"></div>
-    </div>
-    <div class="toolbar">
-      <div class="count" id="count">—</div>
-      <div class="filters" id="filters"></div>
-    </div>
-    <div class="bulk" id="bulk" hidden>
-      <button class="master" id="master-select" type="button">
-        <span class="box"></span>
-        <span id="master-label">Hamısını seç</span>
-      </button>
-      <button class="btn-solid bulk-act" id="bulk-action" type="button" hidden></button>
-      <button class="btn-solid danger bulk-act" id="bulk-hard-delete" type="button" hidden></button>
-    </div>
-    <div class="list" id="list"></div>
   </section>
 
 </main>
@@ -383,6 +381,7 @@
   var addForeign = $("add-foreign");
   var addSaveBtn = $("add-save");
   var addCancelBtn = $("add-cancel");
+  var toolbarEl = $("toolbar");
   var lastFetchedUrl = "";     // eyni URL üçün ikinci fetch etmə
 
   var STATUS_TABS = [
@@ -399,6 +398,7 @@
     filter: "Bütün",     // kateqoriya süzgəci: "Bütün" | "ABŞ" | ...
     editingUrl: null,    // hazırda redaktə olunan xəbərin url-i
     selected: {},        // {url: true} — seçilmiş xəbərlər (yalnız cari tab-da)
+    mode: "list",        // "list" (adi görünüş) | "add" (link əlavəsi formu)
   };
 
   // Tab dəyişəndə seçim təmizlənir
@@ -513,7 +513,9 @@
       b.className = "tab" + (state.statusTab === t.id ? " active" : "");
       b.innerHTML = t.label + " <span class=\"n\">" + n + "</span>";
       b.addEventListener("click", function(){
-        if (state.statusTab === t.id) return;
+        // Add formu açıqdırsa, tab basanda geri list-ə keçir
+        if (state.mode === "add") state.mode = "list";
+        if (state.statusTab === t.id) { render(); return; }
         state.statusTab = t.id;
         state.filter = "Bütün";
         state.editingUrl = null;
@@ -716,6 +718,17 @@
 
   function render(){
     renderTabs();
+    var isAdd = state.mode === "add";
+    addPanel.hidden = !isAdd;
+    toolbarEl.style.display = isAdd ? "none" : "";
+    listBox.style.display = isAdd ? "none" : "";
+    if (isAdd) bulkBox.hidden = true;
+    addToggleBtn.classList.toggle("on", isAdd);
+    if (isAdd) {
+      countBox.textContent = "";
+      document.title = "RenTech admin";
+      return;
+    }
     renderFilters();
     renderList();
     updateTitleAndBadge();
@@ -915,9 +928,12 @@
   }
 
   function toggleAddPanel(){
-    addPanel.hidden = !addPanel.hidden;
-    addToggleBtn.classList.toggle("on", !addPanel.hidden);
-    if (!addPanel.hidden) {
+    if (state.mode === "add") {
+      state.mode = "list";
+      render();
+    } else {
+      state.mode = "add";
+      render();
       setTimeout(function(){ addUrl.focus(); }, 50);
     }
   }
@@ -1038,8 +1054,8 @@
     }, "telefondan əl ilə əlavə: " + url).then(function(){
       toast("Gözləyənlərə əlavə olundu");
       resetAddForm();
-      addPanel.hidden = true;
       addSaveBtn.disabled = false;
+      state.mode = "list";
       state.statusTab = "gozleyir";
       state.filter = "Bütün";
       state.selected = {};
@@ -1112,8 +1128,8 @@
   addSaveBtn.addEventListener("click", addManual);
   addCancelBtn.addEventListener("click", function(){
     resetAddForm();
-    addPanel.hidden = true;
-    addToggleBtn.classList.remove("on");
+    state.mode = "list";
+    render();
   });
   // Link yapışdıranda dərhal avtomatik yığ
   addUrl.addEventListener("paste", function(){

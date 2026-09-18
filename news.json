@@ -1,7 +1,18 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-18 12:50",
+  "updated": "2026-09-18 13:32",
   "items": [
+    {
+      "cat": "Azərbaycan",
+      "date": "2026-09-18",
+      "title": "İlham Əliyev “Qobustan” Günəş Elektrik Stansiyasının açılışında iştirak edib » Azərbaycan Prezidentinin Rəsmi internet səhifəsi",
+      "excerpt": "Azərbaycan Respublikasının Prezidenti İlham Əliyev sentyabrın 16-da paytaxtın Qaradağ rayonunda 100 MVt gücündə “Qobustan” Günəş Elektrik Stansiyasının açılışında iştirak edib.",
+      "source": "president.az",
+      "url": "https://president.az/az/articles/view/73512",
+      "status": "gozleyir",
+      "added": "manual",
+      "tercume": true
+    },
     {
       "cat": "Dünya",
       "date": "2026-09-18",

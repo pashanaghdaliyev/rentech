@@ -96,7 +96,17 @@
   .filter-chip.active{background:var(--brand);color:#fff;border-color:var(--brand);}
 
   /* ---------- əl ilə xəbər əlavəsi ---------- */
-  .add-toggle{display:flex;justify-content:flex-end;margin:12px 0 0;}
+  .tab-row{
+    display:flex;gap:6px;margin:16px 0 12px;align-items:stretch;
+  }
+  .tab-row .tabs{margin:0;flex:1;}
+  .tab-add{
+    background:var(--brand);color:#fff;border:0;border-radius:12px;
+    padding:0 16px;font-size:22px;font-weight:800;line-height:1;cursor:pointer;
+    flex:none;transition:background .12s;
+  }
+  .tab-add:hover{background:var(--brand-dark);}
+  .tab-add.on{background:var(--brand-dark);box-shadow:inset 0 2px 4px rgba(0,0,0,.15);}
   .add-panel{
     background:#fff;border:1px solid var(--line-strong);border-radius:14px;
     padding:16px;margin:12px 0;display:flex;flex-direction:column;gap:8px;
@@ -125,6 +135,14 @@
   .add-panel .add-actions button{
     flex:1;padding:10px 12px;border-radius:10px;font-weight:700;font-size:14px;
   }
+  .add-panel .url-wrap{position:relative;}
+  .add-panel .url-wrap .status{
+    position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    font-size:12px;color:var(--ink-mute);pointer-events:none;
+  }
+  .add-panel .url-wrap.busy .status{color:var(--brand);}
+  .add-panel .url-wrap.busy input{padding-right:96px;}
+  .add-panel .url-wrap.err input{border-color:var(--danger);}
 
   /* ---------- status tabs ---------- */
   .tabs{
@@ -271,12 +289,12 @@
 
   <section id="app" hidden>
 
-    <div class="add-toggle">
-      <button class="btn-ghost" id="add-toggle-btn" type="button">+ Link yapışdır</button>
-    </div>
     <div class="add-panel" id="add-panel" hidden>
-      <div class="lbl">Xəbər linki *</div>
-      <input type="url" id="add-url" placeholder="https://…" spellcheck="false" autocomplete="off">
+      <div class="lbl">Xəbər linki * — yapışdır, xanalar avtomatik dolacaq</div>
+      <div class="url-wrap" id="add-url-wrap">
+        <input type="url" id="add-url" placeholder="https://…" spellcheck="false" autocomplete="off">
+        <span class="status" id="add-url-status"></span>
+      </div>
       <div class="lbl">Başlıq *</div>
       <input type="text" id="add-title" placeholder="Xəbərin başlığı" autocomplete="off">
       <div class="lbl">Qısa xülasə (istəyə görə)</div>
@@ -309,7 +327,10 @@
       </div>
     </div>
 
-    <div class="tabs" id="tabs"></div>
+    <div class="tab-row">
+      <button class="tab-add" id="add-toggle-btn" type="button" title="Link yapışdır" aria-label="Link yapışdır">+</button>
+      <div class="tabs" id="tabs"></div>
+    </div>
     <div class="toolbar">
       <div class="count" id="count">—</div>
       <div class="filters" id="filters"></div>
@@ -353,6 +374,8 @@
   var addPanel = $("add-panel");
   var addToggleBtn = $("add-toggle-btn");
   var addUrl = $("add-url");
+  var addUrlWrap = $("add-url-wrap");
+  var addUrlStatus = $("add-url-status");
   var addTitle = $("add-title");
   var addExcerpt = $("add-excerpt");
   var addSource = $("add-source");
@@ -360,6 +383,7 @@
   var addForeign = $("add-foreign");
   var addSaveBtn = $("add-save");
   var addCancelBtn = $("add-cancel");
+  var lastFetchedUrl = "";     // eyni URL üçün ikinci fetch etmə
 
   var STATUS_TABS = [
     { id: "gozleyir", label: "Gözləyən" },
@@ -885,13 +909,80 @@
     addSource.value = "";
     addCat.value = "Azərbaycan";
     addForeign.checked = false;
+    lastFetchedUrl = "";
+    addUrlWrap.classList.remove("busy", "err");
+    addUrlStatus.textContent = "";
   }
 
   function toggleAddPanel(){
     addPanel.hidden = !addPanel.hidden;
+    addToggleBtn.classList.toggle("on", !addPanel.hidden);
     if (!addPanel.hidden) {
       setTimeout(function(){ addUrl.focus(); }, 50);
     }
+  }
+
+  // Microlink API — link → {title, description, publisher, lang, date}
+  // Free tier: 50 sorğu/gün; xəta baş versə formu əl ilə doldurmaq olur.
+  function fetchMetadata(url){
+    var api = "https://api.microlink.io/?url=" + encodeURIComponent(url);
+    return fetch(api).then(function(r){
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    }).then(function(j){
+      if (j.status !== "success" || !j.data) {
+        throw new Error(j.message || "metadata boşdur");
+      }
+      return j.data;
+    });
+  }
+
+  function tryAutofill(){
+    var url = addUrl.value.trim();
+    if (!url || !/^https?:\/\//i.test(url)) return;
+    if (url === lastFetchedUrl) return;   // eyni URL — təkrar sorğu etmə
+    lastFetchedUrl = url;
+
+    addUrlWrap.classList.remove("err");
+    addUrlWrap.classList.add("busy");
+    addUrlStatus.textContent = "…yığılır";
+
+    fetchMetadata(url).then(function(d){
+      addUrlWrap.classList.remove("busy");
+      addUrlStatus.textContent = "✓";
+      setTimeout(function(){ addUrlStatus.textContent = ""; }, 1500);
+
+      // Xanaları avtomatik doldur — istifadəçi bir şey yazıbsa, üstündən keçmə
+      if (d.title && !addTitle.value.trim()) addTitle.value = d.title;
+      if (d.description && !addExcerpt.value.trim()) addExcerpt.value = d.description;
+      if (d.publisher && !addSource.value.trim()) {
+        addSource.value = d.publisher;
+      } else if (!addSource.value.trim()) {
+        try { addSource.value = new URL(url).hostname.replace(/^www\./, ""); }
+        catch (e) {}
+      }
+
+      // Dil aşkarı: microlink `lang` sahəsi + host uzantısı
+      var host = "";
+      try { host = new URL(url).hostname.toLowerCase(); } catch (e) {}
+      var lang = (d.lang || "").toLowerCase();
+      var isAz = lang === "az" || host.endsWith(".az");
+      // Kateqoriya avtomatik seçim — yalnız istifadəçi hələ dəyişməyibsə
+      if (isAz) {
+        addCat.value = "Azərbaycan";
+        addForeign.checked = false;
+      } else {
+        // xarici sayt → Dünya (istifadəçi ABŞ/Almaniya/Çin altındakı olsa əl ilə seçər)
+        if (addCat.value === "Azərbaycan") addCat.value = "Dünya";
+        addForeign.checked = true;
+      }
+      toast("Xanalar dolduruldu");
+    }).catch(function(err){
+      addUrlWrap.classList.remove("busy");
+      addUrlWrap.classList.add("err");
+      addUrlStatus.textContent = "?";
+      toast("Metadata alınmadı: " + (err.message || "xəta") + " · əl ilə doldur", true);
+    });
   }
 
   function addManual(){
@@ -1022,7 +1113,18 @@
   addCancelBtn.addEventListener("click", function(){
     resetAddForm();
     addPanel.hidden = true;
+    addToggleBtn.classList.remove("on");
   });
+  // Link yapışdıranda dərhal avtomatik yığ
+  addUrl.addEventListener("paste", function(){
+    setTimeout(tryAutofill, 30);   // paste event, value hələ yenilənməyib
+  });
+  // Enter → avtomatik yığ
+  addUrl.addEventListener("keydown", function(e){
+    if (e.key === "Enter") { e.preventDefault(); tryAutofill(); }
+  });
+  // Fokusdan çıxanda da yığ
+  addUrl.addEventListener("blur", tryAutofill);
 
   // ---------- boot ----------
   var saved = null;

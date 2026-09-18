@@ -44,8 +44,12 @@ MENBELER = [
     {"url": "https://az.trend.az/feeds/index.rss", "ad": "Trend.az",
      "kateqoriya": "Azərbaycan", "suzgec": True, "dil": "az"},
 
-    # Dövlət informasiya agentliyi — prezident və dövlət təbirləri üçün əsas mənbə
-    {"url": "https://azertag.az/rss", "ad": "AZƏRTAC",
+    # APA — Azərbaycan news agency, dövlət yönlü xəbərlər (prezident, sərəncam, nazirlik)
+    {"url": "https://apa.az/rss", "ad": "APA",
+     "kateqoriya": "Azərbaycan", "suzgec": True, "dil": "az"},
+
+    # Müsavat — gündəlik gazet
+    {"url": "https://musavat.com/rss.xml", "ad": "Müsavat",
      "kateqoriya": "Azərbaycan", "suzgec": True, "dil": "az"},
 
     # Dünya — sənaye və bazar

@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+﻿﻿#!/usr/bin/env python3
 """
 RenTech xəbər botu
 ------------------
@@ -314,7 +314,8 @@ def lenti_oxu(menbe: dict) -> list:
         if menbe["suzgec"] and not uygundur(baslıq, xulase, menbe):
             continue
 
-        netice.append({
+        status = "derc" if menbe.get("dil", "az") == "az" else "gozleyir"
+        yeni = {
             "cat": menbe["kateqoriya"],
             "date": tarix_al(giris),
             "title": baslıq,
@@ -322,9 +323,14 @@ def lenti_oxu(menbe: dict) -> list:
             "source": menbe["ad"],
             "url": link,
             # az mənbə → dərhal saytda; xarici mənbə → təsdiq gözləyir
-            "status": "derc" if menbe.get("dil", "az") == "az" else "gozleyir",
+            "status": status,
             "_dil": menbe.get("dil", "az"),
-        })
+        }
+        # Auto-dərc olunan AZ mənbəyi üçün dərc tarixini indi qeyd et —
+        # site və admin dərc siyahısını bu vaxta görə sıralayır.
+        if status == "derc":
+            yeni["dercDate"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        netice.append(yeni)
 
     print(f"{len(netice)} uyğun xəbər")
     return netice
@@ -415,8 +421,14 @@ def main() -> int:
     aktiv = [x for x in hamısı if x.get("status") != "redd"]
     redd  = [x for x in hamısı if x.get("status") == "redd"]
 
-    aktiv.sort(key=lambda x: x.get("date", ""), reverse=True)
-    redd.sort(key=lambda x: x.get("date", ""), reverse=True)
+    # Sıralama açarı: dərc olunmuş üçün `dercDate` (ISO təm ilə), yoxdursa `date`.
+    # Belə ki, admin yeni təsdiqlədiyi xəbər siyahının başına düşür — mənbə
+    # tarixindən asılı olmayaraq.
+    def _sirala_acar(x):
+        return x.get("dercDate") or x.get("date", "")
+
+    aktiv.sort(key=_sirala_acar, reverse=True)
+    redd.sort(key=_sirala_acar, reverse=True)
 
     aktiv = aktiv[:MAKS_XEBER]
     redd  = redd[:REDD_DEDUP_LIMIT]

@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-18 12:45",
+  "updated": "2026-09-18 12:50",
   "items": [
     {
       "cat": "Dünya",
@@ -343,6 +343,25 @@
       "tercume": true
     },
     {
+      "cat": "Azərbaycan",
+      "date": "2026-09-18",
+      "title": "“PAŞA Bank” Naxçıvanda günəş enerjisi layihəsinə 8,5 mln. manat ayırıb",
+      "excerpt": "",
+      "source": "APA",
+      "url": "https://apa.az/finance/pasa-bank-naxcivanda-gunes-enerjisi-layihesine-85-mln-manat-ayirib-997212",
+      "status": "derc"
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-18",
+      "title": "Quraq avqust ayı Şimali Amerikanın GHI göstəricilərinin fərqlənməsi fonunda Dallasda çirklənmə itkilərini 2%-ə yaxınlaşdırır",
+      "excerpt": "DNV şirkəti olan Solcast «pv magazine» üçün hazırladığı yeni həftəlik hesabatında bildirir ki, ziddiyyətli hava şəraiti fonunda avqust ayında günəş şüalanması Böyük Göllər ətrafında azalsa da, Sakit okeanın şimal-qərbində, ABŞ-ın mərkəzi-cənub hissəsində və…",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/18/dry-august-pushes-dallas-soiling-losses-towards-2-as-north-american-ghi-diverges/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
       "cat": "ABŞ",
       "date": "2026-09-17",
       "title": "Trump-ın məhv etməyə çalışdığı elektrikli avtomobil doldurma stansiyalarına yeni həyat",
@@ -479,26 +498,6 @@
       "excerpt": "Alpex Solar Utar-Pradeş ştatının Mathura şəhərində 2,2 QVt gücündə TOPCon G12R günəş batareyası istehsal müəssisəsini təntənəli şəkildə açıb.",
       "source": "PV Tech",
       "url": "https://www.pv-tech.org/alpex-solar-commissions-2-2gw-solar-cell-plant-in-uttar-pradesh/",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Çin",
-      "date": "2026-09-17",
-      "title": "Encavis İtaliyanın 315 MVt günəş fotovoltaik portfeli üçün maliyyələşməni bağladı",
-      "excerpt": "Almaniyanın IPP şirkəti Encavis İtaliyadakı 351 MVt günəş fotovoltaik portfeli üçün maliyyələşmə paketini yekunlaşdırıb.",
-      "source": "PV Tech",
-      "url": "https://www.pv-tech.org/encavis-closes-funds-for-315mw-italian-solar-pv-portfolio/",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Çin",
-      "date": "2026-09-17",
-      "title": "İspaniya güc bazarı yaradacağını açıqlayır, 19,5 milyard ABŞ dolları dəyərində şəbəkə infrastrukturu sərmayəsini elan edir",
-      "excerpt": "İspaniya “təchizat təhlükəsizliyi”ni təmin etmək məqsədilə milli elektrik sistemi üçün güc bazarı yaratmaq planlarını elan edib.",
-      "source": "PV Tech",
-      "url": "https://www.pv-tech.org/spain-launch-capacity-market-us19-5-billion-grid-infrastructure-investment/",
       "status": "gozleyir",
       "tercume": true
     }

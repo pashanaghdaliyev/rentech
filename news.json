@@ -1,15 +1,145 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-17 21:06",
+  "updated": "2026-09-18 08:35",
   "items": [
     {
       "cat": "Dünya",
-      "date": "2026-09-17",
-      "title": "Alpex Solar Hindistanda 2,2 QVt gücündə TOPCon element fabrikinin açılışını edib",
-      "excerpt": "Alpex Solar şaquli inteqrasiya olunmuş istehsal əməliyyatlarını genişləndirərək Uttar Pradeşdə G12R TOPCon fotovoltaik element fabrikinin açılışını edib. Mənbə: Alpex Solar inaugurates 2.2 GW TOPCon cell factory in India, pv magazine Global .",
+      "date": "2026-09-18",
+      "title": "SMA Almaniyada yüksək güc tətbiqləri üçün 60 QVt gücündə inverter fabriki açır",
+      "excerpt": "SMA Almaniyanın Kassel şəhəri yaxınlığında illik 60 QVt-dan çox istehsal gücünə malik inverter fabriki açıb. Yüksək səviyyədə avtomatlaşdırılmış müəssisə fotovoltaik, batareya saxlanc sistemləri, hibrid və power-to-gas üçün kommunal miqyaslı inverterlər və…",
       "source": "pv magazine",
-      "url": "https://www.pv-magazine.com/2026/09/17/alpex-solar-inaugurates-2-2-gw-topcon-cell-manufacturing-facility-in-uttar-pradesh/",
-      "status": "redd",
+      "url": "https://www.pv-magazine.com/2026/09/18/2026-09-18-sma-opens-60-gw-factory-in-germany-for-high-power-applications/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "İsti və quraq iqlimdə 30 ildən sonra Arco günəş modulları hələ də ilkin gücünün təxminən yarısını təmin edir",
+      "excerpt": "Əlcəzairli tədqiqatçılar müəyyən ediblər ki, açıq havada üç onillik keçirdikdən sonra köhnəlmiş 64 ədəd Arco Solar modulu orijinal 43 Vt nominal gücünün orta hesabla 53%-ni qoruyub saxlayıb. Qiymətləndirmə əhəmiyyətli güc dəyişkənliyi, ümumi rəng dəyişikliyi…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/after-30-years-in-hot-arid-climate-arco-solar-modules-still-deliver-about-half-their-original-power/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Banqladeş günəş avadanlıqlarının idxal vergilərini 1%-ə endirib",
+      "excerpt": "Banqladeş bərpa olunan enerji layihələrini dəstəkləmək üçün günəş avadanlıqlarının idxalına tətbiq olunan vergi yükünü 180 gün müddətinə 17%-dən 1%-ə endirib. Bu tədbirin layihə xərclərini azaldacağı və ölkənin növbəti dövrə qədər damüstü günəş sistemləri…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/bangladesh-cuts-solar-equipment-import-taxes-to-1/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Avstraliyanın şəbəkə operatoru enerji faydalarını kirayəçilərlə bölüşmək üçün C&I damüstü günəş təşəbbüsünü sınaqdan keçirir",
+      "excerpt": "Ausgrid kommersiya və sənaye təyinatlı damüstü günəş enerjisi artıqlarını qonşuluqdakı kirayəçilər və mənzil sakinləri kimi günəş enerjisinə çıxışı olmayan istehlakçılarla bölüşmək imkanına çevirmək üçün sınaq layihəsinə başlayır...",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/ausgrid-trials-ci-rooftop-solar-initiative-to-share-energy-benefits-with-renters/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Sistem məsuliyyətinin üzə götürülməsi",
+      "excerpt": "Almaniyadakı konsorsium paylayıcı şəbəkə səviyyəsində irimiqyaslı batareya saxlanc sistemlərini birləşdirmək üçün şəbəkəqurucu inverterlərin istifadəsini sınaqdan keçirir. Əgər bərpa olunan mənbələr istənilən sistemin əsas sütununa çevriləcəksə, belə…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/taking-system-responsibility/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-18",
+      "title": "Kia EV9-a tətbiq edilən endirimlər onu inanılmaz dərəcədə ucuzlaşdırır",
+      "excerpt": "Kia EV9 bazarda mövcud olan azsaylı üç sıra oturacaqlı elektrik avtomobillərindən biridir. Olduqca böyükdür və avtomobilin qiymətinin kifayət qədər əlçatan olmasına baxmayaraq, salonu və texnologiyası çox gözəl və yüksək keyfiyyətlidir. Lakin görünür, bu…",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/17/discounts-on-kia-ev9-give-it-ridiculous-price/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-18",
+      "title": "Elektrik şəbəkəsində süni intellekt: \"Biz hələ 'əvəzləmə' mərhələsindən çox uzağıq\"",
+      "excerpt": "Süni intellekt getdikcə şəbəkə əməliyyatlarına daxil olur. Lakin elektrik şəbəkəsi kimi kritik infrastrukturda o, nə qədər irəli gedə bilər və getməsinə icazə verilir? Amprion-un sistem inkişafı üzrə aktiv meneceri Tomas Dederix pv magazine-ə müsahibəsində…",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/18/ki-im-stromnetz-wir-sind-noch-lange-nicht-beim-replace/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-18",
+      "title": "Bizi Altmaier-Knick 2.0 təhlükəsi gözləyirmi?",
+      "excerpt": "pvXchange-dən Martin Şaxinger hesab edir ki, EEG 2027 və şəbəkə paketinə dair qanun layihələrində heç nə dəyişməzsə, Almaniyanı günəş enerjisi sektorunu yeni iflas dalğası təhlükəsi gözləyir.",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/18/droht-uns-ein-altmaier-knick-2-0/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "Anza Power Yeni Zelandiyada Helios Energy şirkətindən 205 MVtac tikintiyə hazır günəş stansiyalarını əldə edib",
+      "excerpt": "Anza Power Yeni Zelandiyada Helios Energy-dən 110 MVtac Karioi və 95 MVtac Ongaonga fotovoltaik günəş stansiyalarını satın alıb.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/anza-power-acquires-205mwac-construction-ready-solar-plants-from-helios-energy-in-new-zealand/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "Ümumi həcm 206 QVt·s: EVE Energy şirkəti Fluence ilə 5 illik enerji saxlanc batareyalarının tədarükü sazişi imzalayıb",
+      "excerpt": "EnergyTrend-in məlumatına görə, sentyabrın 17-də EVE Energy [...]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260918-52169.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "Ümumi investisiya 370 milyon RMB-ni ötür! LONGi və Great Power daxil olmaqla altı müəssisə ardıcıl olaraq yeni fotovoltaik saxlanc şirkətləri təsis edir",
+      "excerpt": "EnergyTrend-in məlumatına görə, bu yaxınlarda altı müəssisə — o cümlədən [...]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260918-52167.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "Tongwei: Xaricdə modul satışları təxminən 40% təşkil edir",
+      "excerpt": "Sentyabrın 11-də gəlir hesabatı brifinqi zamanı Tongwei C [...]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260918-52165.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "5,5 QVt·s-dan çox! Envision Energy və LONGi Green Energy daxil olmaqla 8 şirkət tərəfindən təmin edilmiş enerji saxlanc sifarişləri və layihələri",
+      "excerpt": "Son zamanlar yerli enerji saxlanc şirkətləri davamlı olaraq [...]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260918-52163.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-18",
+      "title": "Avstraliyanın NSW tenderi bütün 2-ci Tur layihələrinin istismara verilməsi ilə 3 QVt·s batareya saxlancı təmin edir",
+      "excerpt": "Avstraliyanın Yeni Cənubi Uels ştatı üçün ASL-in 2023-cü il sabitləşdirmə tenderi çərçivəsində seçilmiş bütün BESS və tələbatın idarə edilməsi layihələri artıq istismardadır.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/australias-nsw-firming-tender-delivers-3gwh-of-battery-storage-as-all-round-2-projects-go-operational/",
+      "status": "gozleyir",
       "tercume": true
     },
     {
@@ -90,16 +220,6 @@
       "source": "EnergyTrend",
       "url": "https://www.energytrend.com/news/20260917-52159.html",
       "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Çin",
-      "date": "2026-09-17",
-      "title": "Hithium və BYD şəbəkəqurucu enerji saxlancına və natrium-ion enerji saxlancına yönəlmiş yeni məhsullar təqdim edir",
-      "excerpt": "EnergyTrend-ə əsasən, BYD və Hithium […] təqdim ediblər",
-      "source": "EnergyTrend",
-      "url": "https://www.energytrend.com/news/20260917-52157.html",
-      "status": "redd",
       "tercume": true
     },
     {
@@ -365,15 +485,6 @@
     {
       "cat": "Çin",
       "date": "2026-09-16",
-      "title": "Masdar to expand solar PV and energy storage development in Azerbaijan",
-      "excerpt": "UAE state-run renewables developer Masdar has signed an agreement with renewables developer Azerbaijan Green Energy Company (AGEC) to explore the development of new renewable energy projects in Azerbaijan.",
-      "source": "PV Tech",
-      "url": "https://www.pv-tech.org/masdar-to-expand-solar-pv-and-energy-storage-development-in-azerbaijan/",
-      "status": "redd"
-    },
-    {
-      "cat": "Çin",
-      "date": "2026-09-16",
       "title": "First Solar TOPCon İM üzrə 337-ci Bölmə şikayətini geri götürür, ABŞ Rayon Məhkəməsindəki iddialarını davam etdirir",
       "excerpt": "Nazik təbəqəli kadmium tellurid (CdTe) günəş modulu istehsalçısı First Solar tunel oksidi ilə passivləşdirilmiş kontakt (TOPCon) əqli mülkiyyət (İM) strategiyasının icrasını tənzimləyib.",
       "source": "PV Tech",
@@ -392,113 +503,23 @@
       "tercume": true
     },
     {
-      "cat": "Çin",
-      "date": "2026-09-16",
-      "title": "1,62 Milyard Yuan Sərmayə! CATL Bərpa Olunan Enerji, Süni İntellekt və Təcəssüm Olunmuş İntellekt Sektorlarında Mövqeyini Genişləndirir",
-      "excerpt": "Sentyabrın 15-də CATL […] açıqlayan iki elan yayımladı",
-      "source": "EnergyTrend",
-      "url": "https://www.energytrend.com/news/20260916-52151.html",
-      "status": "gozleyir",
+      "cat": "Dünya",
+      "date": "2026-09-17",
+      "title": "Alpex Solar Hindistanda 2,2 QVt gücündə TOPCon element fabrikinin açılışını edib",
+      "excerpt": "Alpex Solar şaquli inteqrasiya olunmuş istehsal əməliyyatlarını genişləndirərək Uttar Pradeşdə G12R TOPCon fotovoltaik element fabrikinin açılışını edib. Mənbə: Alpex Solar inaugurates 2.2 GW TOPCon cell factory in India, pv magazine Global .",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/17/alpex-solar-inaugurates-2-2-gw-topcon-cell-manufacturing-facility-in-uttar-pradesh/",
+      "status": "redd",
       "tercume": true
     },
     {
       "cat": "Çin",
-      "date": "2026-09-16",
-      "title": "Təqribən 1 QVt! JinkoSolar və Trina Solar daxil olmaqla beş şirkət ardıcıl PV modul sifarişləri əldə edir",
-      "excerpt": "Bu yaxınlarda fotovoltaik (PV) modul bazarında […] müşahidə olunub",
+      "date": "2026-09-17",
+      "title": "Hithium və BYD şəbəkəqurucu enerji saxlancına və natrium-ion enerji saxlancına yönəlmiş yeni məhsullar təqdim edir",
+      "excerpt": "EnergyTrend-ə əsasən, BYD və Hithium […] təqdim ediblər",
       "source": "EnergyTrend",
-      "url": "https://www.energytrend.com/news/20260916-52149.html",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Texnologiya",
-      "date": "2026-09-16",
-      "title": "ENGWE E26 3.0 tam amortizasiyalı e-velosiped 343 dollarlıq PULSUZ dəstlə yeni 1 499 dollarlıq aşağı qiymətə + Eagle elektrik kird-velosipedi yeni 899 dollarlıq aşağı qiymətə, Anker və s.",
-      "excerpt": "ENGWE və Anker eufy həftə ortası Yaşıl Sövdələşmələrimizdə üstünlük təşkil edir. Birincisi, ENGWE-nin yeni 1 499 dollarlıq aşağı qiymətlə 343 dollarlıq PULSUZ dəst təqdim edən son E26 3.0 İki Mühərrikli Tam Amortizasiyalı All-Terrain e-velosipedində artan…",
-      "source": "Electrek",
-      "url": "https://electrek.co/2026/09/16/engwe-e26-3-0-full-suspension-e-bike-eagle-electric-dirt-bike-anker-more/",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Texnologiya",
-      "date": "2026-09-16",
-      "title": "“Natrium-ion hələ də kənarda qalır”: Almaniya bazarının nümayəndələri texnologiya və təchizat haqqında",
-      "excerpt": "LFP bu gün Almaniyanın BESS bazarı üçün faktiki seçimdir, natrium-ion isə hələ də maliyyələşdirmək üçün çox uzaqdadır, lakin bu, təchizatçı seçməyin mütləq sadə olduğu anlamına gəlmir.",
-      "source": "Energy Storage News",
-      "url": "https://www.energy-storage.news/sodium-ion-still-very-much-on-the-fringe-german-market-sources-on-technology-and-procurement/",
-      "status": "derc",
-      "tercume": true
-    },
-    {
-      "cat": "Texnologiya",
-      "date": "2026-09-16",
-      "title": "“Çox çətin problem”: Gridmatic CCO-su BESS gəlir proqnozlaşdırmasının çətinlikləri, süni intellektin rolu və yükün birgə yerləşdirilməsi haqqında",
-      "excerpt": "Energy-Storage.news Premium optimizator Gridmatic-in CCO-su David Miller ilə Kaliforniyanın Garden Grove şəhərində keçirilən 2026 ABŞ Batareya Aktivlərinin İdarə Edilməsi Sammitində müsahibə edir.",
-      "source": "Energy Storage News",
-      "url": "https://www.energy-storage.news/a-really-hard-problem-gridmatic-cco-on-the-challenges-of-bess-revenue-forecasting-the-role-of-ai-and-load-co-location/",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Texnologiya",
-      "date": "2026-09-16",
-      "title": "Kaliforniyanın BESS layihələri digər ABŞ bazarları ilə müqayisədə şəbəkəyə qoşulma xərcləri üzrə üstünlüyə malikdir, tərtibatçı bildirir",
-      "excerpt": "Rev şirkətinin baş icraçı direktorunun sözlərinə görə, Kaliforniyada kommunal miqyaslı enerji saxlancı üçün şəbəkəyə qoşulma xərcləri digər əsas ABŞ bazarlarına nisbətən xeyli aşağıdır, tərtibatçılar həmçinin başqa heç bir yerdə mövcud olmayan şəbəkənin…",
-      "source": "Energy Storage News",
-      "url": "https://www.energy-storage.news/california-bess-projects-have-grid-interconnection-cost-advantage-over-other-us-markets-developer-says/",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Texnologiya",
-      "date": "2026-09-16",
-      "title": "Zelestra və Salzgitter Flachstahl polad istehsalını təmin etmək üçün Almaniyanın günəş-plus-saxlanc PPA sazişini imzalayır",
-      "excerpt": "Zelestra və polad istehsalçısı Salzgitter Flachstahl Almaniyada yeni günəş-plus-saxlanc portfeli üçün PPA imzalayıblar.",
-      "source": "Energy Storage News",
-      "url": "https://www.energy-storage.news/zelestra-salzgitter-flachstahl-german-solar-plus-storage-ppa-steelmaking/",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Texnologiya",
-      "date": "2026-09-16",
-      "title": "Şəbəkə kodundan şəbəkəyə qoşulmaya qədər: real dünya şəraitində şəbəkəni formalaşdıran BESS-i nə işlək edir?",
-      "excerpt": "Sinexcel-in texniki direktoru Luke Lu uğurlu şəbəkəni formalaşdıran batareya enerji saxlanc sistemi (BESS) layihəsinin əsaslarını müzakirə edir.",
-      "source": "Energy Storage News",
-      "url": "https://www.energy-storage.news/from-grid-code-to-grid-connection-what-makes-a-grid-forming-bess-work-in-the-real-world/",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Texnologiya",
-      "date": "2026-09-16",
-      "title": "Mərakeşin ilk irimiqyaslı LFP batareya saxlanc sistemi fəaliyyətə hazırdır",
-      "excerpt": "OCP Green Energy Mərakeşin Benguerir şəhərində 25 MVt / 125 MVt·s gücündə batareya enerji saxlanc sisteminin (BESS) quraşdırılmasını başa çatdırıb.",
-      "source": "Energy Storage News",
-      "url": "https://www.energy-storage.news/moroccos-first-large-scale-lfp-battery-storage-system-prepares-for-action/",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Texnologiya",
-      "date": "2026-09-16",
-      "title": "Sənaye mütəxəssisləri xəbərdarlıq edir ki, FCC inverter qadağası ABŞ-nin bərpa olunan enerji mənbələri üçün FEOC uyğunluğundan daha böyük təhlükə yaradır",
-      "excerpt": "Hüquq və sənaye mütəxəssislərinin fikrincə, ABŞ federal hökumətinin son addımları ABŞ-nin bərpa olunan enerji layihələrinin tətbiqinə narahatlıq doğuran xarici qurum (FEOC) uyğunluq tələblərindən daha çox zərər vura bilər.",
-      "source": "Energy Storage News",
-      "url": "https://www.energy-storage.news/fcc-inverter-ban-poses-greater-threat-to-us-renewables-than-feoc-compliance-industry-experts-warn/",
-      "status": "gozleyir",
-      "tercume": true
-    },
-    {
-      "cat": "Texnologiya",
-      "date": "2026-09-16",
-      "title": "Trampın enerji avadanlığı qadağası: ABŞ-nin BESS bazarına təsirləri və təchizat zəncirinin dilemması",
-      "excerpt": "Avqustun 26-da ABŞ Prezidenti Donald Tramp fövqəladə icra sərəncamı (EO) ilə ABŞ şəbəkəsinin təhlükəsizliyinə potensial təhlükə yaratmaqla əlaqədar olaraq inverterlərin, transformatorların və digər enerji avadanlıqlarının idxalını qadağan edib.",
-      "source": "Energy Storage News",
-      "url": "https://www.energy-storage.news/trumps-power-equipment-ban-us-bess-market-implications-and-the-supply-chain-dilemma/",
-      "status": "gozleyir",
+      "url": "https://www.energytrend.com/news/20260917-52157.html",
+      "status": "redd",
       "tercume": true
     },
     {
@@ -789,6 +810,15 @@
       "url": "https://www.pv-tech.org/seia-ccsa-merge-trade-body-represent-every-segment-us-solar/",
       "status": "redd",
       "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-16",
+      "title": "Masdar to expand solar PV and energy storage development in Azerbaijan",
+      "excerpt": "UAE state-run renewables developer Masdar has signed an agreement with renewables developer Azerbaijan Green Energy Company (AGEC) to explore the development of new renewable energy projects in Azerbaijan.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/masdar-to-expand-solar-pv-and-energy-storage-development-in-azerbaijan/",
+      "status": "redd"
     }
   ]
 }

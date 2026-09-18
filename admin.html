@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="az">
 <head>
 <meta charset="utf-8">
@@ -111,6 +111,7 @@
   /* ---------- bulk toolbar (seçim əsaslı) ---------- */
   .bulk{
     display:flex;gap:8px;margin-bottom:12px;align-items:stretch;
+    flex-wrap:wrap;
   }
   .bulk button{
     font-size:14px;padding:10px 14px;font-weight:700;border-radius:10px;
@@ -249,6 +250,7 @@
         <span id="master-label">Hamısını seç</span>
       </button>
       <button class="btn-solid bulk-act" id="bulk-action" type="button" hidden></button>
+      <button class="btn-solid danger bulk-act" id="bulk-hard-delete" type="button" hidden></button>
     </div>
     <div class="list" id="list"></div>
   </section>
@@ -525,11 +527,14 @@
     if (state.statusTab === "gozleyir") {
       actions.appendChild(mkBtn("btn-approve", "Dərc et", function(){ approve(x.url, card); }));
       actions.appendChild(mkBtn("btn-reject",  "Rədd et", function(){ reject(x.url, card); }));
+      actions.appendChild(mkBtn("btn-solid danger", "Tamamilə sil", function(){ hardDelete(x.url, card); }));
     } else if (state.statusTab === "derc") {
       actions.appendChild(mkBtn("btn-edit",   "Redaktə et", function(){ startEdit(x.url); }));
       actions.appendChild(mkBtn("btn-reject", "Saytdan sil", function(){ removeFromSite(x.url, card); }));
+      actions.appendChild(mkBtn("btn-solid danger", "Tamamilə sil", function(){ hardDelete(x.url, card); }));
     } else { // redd
       actions.appendChild(mkBtn("btn-restore", "Bərpa et (saytda göstər)", function(){ restore(x.url, card); }));
+      actions.appendChild(mkBtn("btn-solid danger", "Tamamilə sil", function(){ hardDelete(x.url, card); }));
     }
     return actions;
   }
@@ -626,6 +631,22 @@
     return setStatus(url, "redd", "telefondan saytdan sil: " + url, "Saytdan silindi", card);
   }
 
+  function hardDelete(url, card){
+    if (!confirm("Bu xəbəri news.json-dan tamamilə silim? Geri qaytarıla bilməz.")) return;
+    if (card) card.classList.add("busy");
+    return updateItems(function(items){
+      for (var i = items.length - 1; i >= 0; i--) {
+        if (items[i].url === url) items.splice(i, 1);
+      }
+    }, "telefondan tamamilə sil: " + url).then(function(){
+      toast("Tamamilə silindi");
+      render();
+    }).catch(function(err){
+      if (card) card.classList.remove("busy");
+      toast(err.message || "Xəta baş verdi", true);
+    });
+  }
+
   function restore(url, card){
     return setStatus(url, "derc", "telefondan bərpa: " + url, "Saytda göstərilir", card);
   }
@@ -693,13 +714,17 @@
       ? selCount + " / " + shown.length + " seçilib"
       : "Hamısını seç";
 
+    var hardBtn = $("bulk-hard-delete");
     if (selCount > 0) {
       bulkActionBtn.hidden = false;
       bulkActionBtn.textContent = TAB_BULK_LABEL[state.statusTab](selCount);
       bulkActionBtn.className = "btn-solid bulk-act" +
         (state.statusTab === "derc" ? " danger" : "");
+      hardBtn.hidden = false;
+      hardBtn.textContent = "Tamamilə sil (" + selCount + ")";
     } else {
       bulkActionBtn.hidden = true;
+      hardBtn.hidden = true;
     }
   }
 
@@ -722,6 +747,26 @@
       }
     }, "telefondan " + commitMsg + " (" + urls.length + " xəbər)").then(function(){
       toast(urls.length + " xəbər " + successMsg);
+      state.selected = {};
+      render();
+    }).catch(function(err){
+      toast(err.message || "Xəta baş verdi", true);
+    });
+  }
+
+  function bulkHardDelete(){
+    var urls = selectedUrls();
+    if (!urls.length) return;
+    if (!confirm(urls.length + " xəbəri news.json-dan tamamilə silim? Geri qaytarıla bilməz.")) return;
+    var set = {};
+    urls.forEach(function(u){ set[u] = true; });
+
+    updateItems(function(items){
+      for (var i = items.length - 1; i >= 0; i--) {
+        if (set[items[i].url]) items.splice(i, 1);
+      }
+    }, "telefondan bulk tamamilə sil (" + urls.length + " xəbər)").then(function(){
+      toast(urls.length + " xəbər tamamilə silindi");
       state.selected = {};
       render();
     }).catch(function(err){
@@ -786,6 +831,7 @@
   $("refresh-btn").addEventListener("click", loadAll);
   masterBtn.addEventListener("click", toggleMaster);
   bulkActionBtn.addEventListener("click", bulkAction);
+  $("bulk-hard-delete").addEventListener("click", bulkHardDelete);
 
   // ---------- boot ----------
   var saved = null;

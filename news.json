@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-18 08:35",
+  "updated": "2026-09-18 08:36",
   "items": [
     {
       "cat": "Dünya",
@@ -19,7 +19,7 @@
       "excerpt": "Əlcəzairli tədqiqatçılar müəyyən ediblər ki, açıq havada üç onillik keçirdikdən sonra köhnəlmiş 64 ədəd Arco Solar modulu orijinal 43 Vt nominal gücünün orta hesabla 53%-ni qoruyub saxlayıb. Qiymətləndirmə əhəmiyyətli güc dəyişkənliyi, ümumi rəng dəyişikliyi…",
       "source": "pv magazine",
       "url": "https://www.pv-magazine.com/2026/09/18/after-30-years-in-hot-arid-climate-arco-solar-modules-still-deliver-about-half-their-original-power/",
-      "status": "gozleyir",
+      "status": "derc",
       "tercume": true
     },
     {

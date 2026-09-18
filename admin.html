@@ -96,17 +96,13 @@
   .filter-chip.active{background:var(--brand);color:#fff;border-color:var(--brand);}
 
   /* ---------- əl ilə xəbər əlavəsi ---------- */
-  .tab-row{
-    display:flex;gap:6px;margin:16px 0 12px;align-items:stretch;
+  .head-add{
+    background:var(--brand);color:#fff;border:0;border-radius:10px;
+    padding:8px 12px;font-size:13px;font-weight:700;line-height:1.2;cursor:pointer;
+    letter-spacing:.02em;white-space:nowrap;transition:background .12s;
   }
-  .tab-row .tabs{margin:0;flex:1;}
-  .tab-add{
-    background:var(--brand);color:#fff;border:0;border-radius:12px;
-    padding:9px 14px;font-size:13px;font-weight:700;line-height:1.2;cursor:pointer;
-    flex:none;transition:background .12s;letter-spacing:.02em;white-space:nowrap;
-  }
-  .tab-add:hover{background:var(--brand-dark);}
-  .tab-add.on{background:var(--brand-dark);box-shadow:inset 0 2px 4px rgba(0,0,0,.15);}
+  .head-add:hover{background:var(--brand-dark);}
+  .head-add.on{background:var(--brand-dark);box-shadow:inset 0 2px 4px rgba(0,0,0,.15);}
   .add-panel{
     background:#fff;border:1px solid var(--line-strong);border-radius:14px;
     padding:16px;margin:12px 0;display:flex;flex-direction:column;gap:8px;
@@ -264,6 +260,7 @@
       <span>RenTech admin</span>
     </a>
     <div class="head-actions" id="head-actions" hidden>
+      <button class="btn-solid head-add" id="add-toggle-btn" type="button" title="Linki yapışdır">+ Link</button>
       <button class="icon-btn" id="refresh-btn" title="Yenilə">↻</button>
       <button class="icon-btn" id="logout-btn" title="Token-ı sil">Çıxış</button>
     </div>
@@ -288,10 +285,7 @@
   </section>
 
   <section id="app" hidden>
-    <div class="tab-row">
-      <button class="tab-add" id="add-toggle-btn" type="button" title="Linki yapışdır">Linki yapışdır</button>
-      <div class="tabs" id="tabs"></div>
-    </div>
+    <div class="tabs" id="tabs"></div>
     <div class="toolbar" id="toolbar">
       <div class="count" id="count">—</div>
       <div class="filters" id="filters"></div>

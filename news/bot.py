@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 RenTech xəbər botu
 ------------------
@@ -42,6 +42,10 @@ MENBELER = [
      "kateqoriya": "Azərbaycan", "suzgec": True, "dil": "az"},
 
     {"url": "https://az.trend.az/feeds/index.rss", "ad": "Trend.az",
+     "kateqoriya": "Azərbaycan", "suzgec": True, "dil": "az"},
+
+    # Dövlət informasiya agentliyi — prezident və dövlət təbirləri üçün əsas mənbə
+    {"url": "https://azertag.az/rss", "ad": "AZƏRTAC",
      "kateqoriya": "Azərbaycan", "suzgec": True, "dil": "az"},
 
     # Dünya — sənaye və bazar
@@ -88,7 +92,13 @@ ACAR_SOZLER = [
     "enerji səmərəliliyi", "hidrogen", "yaşıl hidrogen", "batareya",
     "enerji anbarı", "elektromobil", "elektrik avtomobil", "elektroliz",
     "perovskit", "mikro şəbəkə", "ağıllı şəbəkə", "iqlim",
-    "socar green", "masdar", "azərişıq",
+    "socar green", "masdar", "azərişıq", "azərenerji",
+    # Azərbaycan dövlət təşəbbüsləri və layihələr (topoqrafik/institusional)
+    "beoea", "bərpa olunan enerji üzrə agentlik",
+    "yaşıl enerji zonası", "yaşıl dəhliz", "yaşıl enerji hövzəsi",
+    "xızı-abşeron", "xızı abşeron", "bilasuvar günəş",
+    "neftçala günəş", "zəngilan yaşıl", "qarabağ yaşıl",
+    "cop29", "cop 29", "azərbaycan-mərkəzi asiya",
     # İngiliscə
     "solar", "photovoltaic", "renewable", "wind power", "wind farm",
     "battery", "battery storage", "energy storage", "grid-scale",
@@ -97,6 +107,28 @@ ACAR_SOZLER = [
     " ev ", "microgrid", "smart grid",
     # Almanca
     "solarmodul", "energiewende", "wasserstoff", "batterie",
+]
+
+# AZ mənbələri üçün iki-səviyyəli süzgəc:
+# yalnız ACAR_SOZLER kifayət etməyəndə, dövlət açarı + enerji konteksti axtarılır.
+# Bu, "Prezident … günəş stansiyası açdı" tipli xəbərləri tutur, "Prezident …
+# görüş keçirdi" tipli enerji-dən uzaq xəbərləri isə buraxmır.
+DOVLET_ACARLARI = [
+    "prezident", "ilham əliyev", "əliyev",
+    "sərəncam", "fərman",
+    "nazirlər kabineti", "hökumət qərarı",
+    "energetika naziri", "energetika nazirliyi",
+    "iqtisadiyyat naziri", "iqtisadiyyat nazirliyi",
+    "ekologiya naziri", "ekologiya və təbii sərvətlər",
+    "dövlət başçısı", "dövlət neft şirkəti",
+    "socar", "azərişıq", "azərenerji",
+]
+
+ENERJI_KONTEKST = [
+    "enerji", "elektrik", "günəş", "külək", "hidrogen",
+    "batareya", "yaşıl", "bərpa", "alternativ", "iqlim",
+    "gigavat", "megavat", "mvt", "qvt", "kvt·s",
+    "stansiya", "generasiya", "şəbəkə",
 ]
 
 MAKS_XEBER = 50            # aktiv (derc + gozleyir) maksimum sayı
@@ -145,9 +177,17 @@ def tarix_al(giris) -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
-def uygundur(baslıq: str, xulase: str) -> bool:
+def uygundur(baslıq: str, xulase: str, menbe: dict | None = None) -> bool:
     metn = (baslıq + " " + xulase).lower()
-    return any(söz in metn for söz in ACAR_SOZLER)
+    if any(söz in metn for söz in ACAR_SOZLER):
+        return True
+    # AZ mənbələri üçün genişləndirilmiş süzgəc:
+    # dövlət/prezident açarı VƏ enerji konteksti birlikdə keçirsə, xəbər tutulur.
+    if menbe and menbe.get("dil") == "az":
+        if (any(söz in metn for söz in DOVLET_ACARLARI)
+                and any(söz in metn for söz in ENERJI_KONTEKST)):
+            return True
+    return False
 
 
 def normal_baslıq(b: str) -> str:
@@ -267,7 +307,7 @@ def lenti_oxu(menbe: dict) -> list:
             continue
 
         xulase = temiz_metn(giris.get("summary") or giris.get("description") or "")
-        if menbe["suzgec"] and not uygundur(baslıq, xulase):
+        if menbe["suzgec"] and not uygundur(baslıq, xulase, menbe):
             continue
 
         netice.append({

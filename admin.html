@@ -1,4 +1,4 @@
-﻿<!doctype html>
+﻿﻿<!doctype html>
 <html lang="az">
 <head>
 <meta charset="utf-8">
@@ -94,6 +94,37 @@
     border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;
   }
   .filter-chip.active{background:var(--brand);color:#fff;border-color:var(--brand);}
+
+  /* ---------- əl ilə xəbər əlavəsi ---------- */
+  .add-toggle{display:flex;justify-content:flex-end;margin:12px 0 0;}
+  .add-panel{
+    background:#fff;border:1px solid var(--line-strong);border-radius:14px;
+    padding:16px;margin:12px 0;display:flex;flex-direction:column;gap:8px;
+  }
+  .add-panel .lbl{
+    font-size:11px;font-weight:700;color:var(--ink-mute);
+    letter-spacing:.03em;text-transform:uppercase;margin-top:4px;
+  }
+  .add-panel input, .add-panel textarea, .add-panel select{
+    width:100%;padding:10px 12px;font-size:14px;font-family:inherit;
+    border:1px solid var(--line-strong);border-radius:10px;
+    background:#fff;color:var(--ink);
+  }
+  .add-panel textarea{min-height:70px;resize:vertical;}
+  .add-panel input:focus, .add-panel textarea:focus, .add-panel select:focus{
+    outline:none;border-color:var(--brand);
+  }
+  .add-panel .row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  @media (max-width:480px){.add-panel .row-2{grid-template-columns:1fr;}}
+  .add-panel .check-inline{
+    display:flex;gap:8px;font-size:13px;color:var(--ink-soft);
+    align-items:flex-start;margin-top:6px;text-transform:none;letter-spacing:0;
+  }
+  .add-panel .check-inline input{width:auto;margin:3px 0 0;}
+  .add-panel .add-actions{display:flex;gap:8px;margin-top:8px;}
+  .add-panel .add-actions button{
+    flex:1;padding:10px 12px;border-radius:10px;font-weight:700;font-size:14px;
+  }
 
   /* ---------- status tabs ---------- */
   .tabs{
@@ -239,6 +270,45 @@
   </section>
 
   <section id="app" hidden>
+
+    <div class="add-toggle">
+      <button class="btn-ghost" id="add-toggle-btn" type="button">+ Link yapışdır</button>
+    </div>
+    <div class="add-panel" id="add-panel" hidden>
+      <div class="lbl">Xəbər linki *</div>
+      <input type="url" id="add-url" placeholder="https://…" spellcheck="false" autocomplete="off">
+      <div class="lbl">Başlıq *</div>
+      <input type="text" id="add-title" placeholder="Xəbərin başlığı" autocomplete="off">
+      <div class="lbl">Qısa xülasə (istəyə görə)</div>
+      <textarea id="add-excerpt" placeholder="1-2 cümlə" spellcheck="false"></textarea>
+      <div class="row-2">
+        <div>
+          <div class="lbl">Kateqoriya</div>
+          <select id="add-cat">
+            <option>Azərbaycan</option>
+            <option>Dünya</option>
+            <option>ABŞ</option>
+            <option>Almaniya</option>
+            <option>Çin</option>
+            <option>Texnologiya</option>
+            <option>Bazar</option>
+          </select>
+        </div>
+        <div>
+          <div class="lbl">Mənbə</div>
+          <input type="text" id="add-source" placeholder="məs. apa.az" autocomplete="off">
+        </div>
+      </div>
+      <label class="check-inline">
+        <input type="checkbox" id="add-foreign">
+        <span>Xarici dildədir — botun növbəti işə salınmasında Azərbaycan dilinə tərcümə edilsin</span>
+      </label>
+      <div class="add-actions">
+        <button class="btn-approve" id="add-save" type="button">Gözləyənlərə əlavə et</button>
+        <button class="btn-neutral" id="add-cancel" type="button">Ləğv et</button>
+      </div>
+    </div>
+
     <div class="tabs" id="tabs"></div>
     <div class="toolbar">
       <div class="count" id="count">—</div>
@@ -280,6 +350,16 @@
   var masterLabel = $("master-label");
   var bulkActionBtn = $("bulk-action");
   var headActions = $("head-actions");
+  var addPanel = $("add-panel");
+  var addToggleBtn = $("add-toggle-btn");
+  var addUrl = $("add-url");
+  var addTitle = $("add-title");
+  var addExcerpt = $("add-excerpt");
+  var addSource = $("add-source");
+  var addCat = $("add-cat");
+  var addForeign = $("add-foreign");
+  var addSaveBtn = $("add-save");
+  var addCancelBtn = $("add-cancel");
 
   var STATUS_TABS = [
     { id: "gozleyir", label: "Gözləyən" },
@@ -436,8 +516,21 @@
 
   function filtered(){
     var p = currentList();
-    if (state.filter === "Bütün") return p;
-    return p.filter(function(x){ return x.cat === state.filter; });
+    if (state.filter !== "Bütün") {
+      p = p.filter(function(x){ return x.cat === state.filter; });
+    }
+    // Dərc olunmuş tab: son dərc olunanlar başda (dercDate mövcuddursa),
+    // əks halda mənbə tarixinə görə. Digər tabları toxunmadan buraxırıq.
+    if (state.statusTab === "derc") {
+      p = p.slice().sort(function(a, b){
+        var ka = a.dercDate || a.date || "";
+        var kb = b.dercDate || b.date || "";
+        if (ka < kb) return 1;
+        if (ka > kb) return -1;
+        return 0;
+      });
+    }
+    return p;
   }
 
   function emptyMessage(){
@@ -608,7 +701,13 @@
   function setStatus(url, newStatus, msg, successToast, card){
     if (card) card.classList.add("busy");
     return updateItems(function(items){
-      for (var i=0; i<items.length; i++) if (items[i].url === url) items[i].status = newStatus;
+      for (var i=0; i<items.length; i++) if (items[i].url === url) {
+        items[i].status = newStatus;
+        // Dərc olunanda vaxt möhürü qoy — sırala açarı budur.
+        if (newStatus === "derc") {
+          items[i].dercDate = new Date().toISOString();
+        }
+      }
     }, msg).then(function(){
       toast(successToast);
       render();
@@ -741,9 +840,13 @@
     var set = {};
     urls.forEach(function(u){ set[u] = true; });
 
+    var indi = new Date().toISOString();
     updateItems(function(items){
       for (var i=0; i<items.length; i++) {
-        if (set[items[i].url]) items[i].status = newStatus;
+        if (set[items[i].url]) {
+          items[i].status = newStatus;
+          if (newStatus === "derc") items[i].dercDate = indi;
+        }
       }
     }, "telefondan " + commitMsg + " (" + urls.length + " xəbər)").then(function(){
       toast(urls.length + " xəbər " + successMsg);
@@ -770,6 +873,88 @@
       state.selected = {};
       render();
     }).catch(function(err){
+      toast(err.message || "Xəta baş verdi", true);
+    });
+  }
+
+  // ---------- əl ilə xəbər əlavəsi ----------
+  function resetAddForm(){
+    addUrl.value = "";
+    addTitle.value = "";
+    addExcerpt.value = "";
+    addSource.value = "";
+    addCat.value = "Azərbaycan";
+    addForeign.checked = false;
+  }
+
+  function toggleAddPanel(){
+    addPanel.hidden = !addPanel.hidden;
+    if (!addPanel.hidden) {
+      setTimeout(function(){ addUrl.focus(); }, 50);
+    }
+  }
+
+  function addManual(){
+    var url = addUrl.value.trim();
+    var title = addTitle.value.trim();
+    var excerpt = addExcerpt.value.trim();
+    var source = addSource.value.trim();
+    var cat = addCat.value;
+    var foreign = addForeign.checked;
+
+    if (!url) { toast("Link boş ola bilməz", true); addUrl.focus(); return; }
+    if (!title) { toast("Başlıq boş ola bilməz", true); addTitle.focus(); return; }
+    // yalnız http/https qəbul et
+    if (!/^https?:\/\//i.test(url)) {
+      toast("Link http:// və ya https:// ilə başlamalıdır", true);
+      addUrl.focus();
+      return;
+    }
+
+    if (!source) {
+      try {
+        source = new URL(url).hostname.replace(/^www\./, "");
+      } catch (e) {
+        source = "əl ilə";
+      }
+    }
+
+    // Duplikat yoxlanışı
+    for (var i = 0; i < state.items.length; i++) {
+      if (state.items[i].url === url) {
+        toast("Bu link artıq mövcuddur", true);
+        return;
+      }
+    }
+
+    var yeni = {
+      cat: cat,
+      date: new Date().toISOString().slice(0, 10),
+      title: title,
+      excerpt: excerpt,
+      source: source,
+      url: url,
+      status: "gozleyir",
+      added: "manual"
+    };
+    // Xarici dildə deyilsə, tərcümə flag-ini qoy ki, bot yenidən Gemini-yə göndərməsin.
+    // Xarici dildədirsə (foreign=true), flag qoymuruq — bot növbəti işə salınmada tərcümə edəcək.
+    if (!foreign) yeni.tercume = true;
+
+    addSaveBtn.disabled = true;
+    updateItems(function(items){
+      items.unshift(yeni);
+    }, "telefondan əl ilə əlavə: " + url).then(function(){
+      toast("Gözləyənlərə əlavə olundu");
+      resetAddForm();
+      addPanel.hidden = true;
+      addSaveBtn.disabled = false;
+      state.statusTab = "gozleyir";
+      state.filter = "Bütün";
+      state.selected = {};
+      render();
+    }).catch(function(err){
+      addSaveBtn.disabled = false;
       toast(err.message || "Xəta baş verdi", true);
     });
   }
@@ -832,6 +1017,12 @@
   masterBtn.addEventListener("click", toggleMaster);
   bulkActionBtn.addEventListener("click", bulkAction);
   $("bulk-hard-delete").addEventListener("click", bulkHardDelete);
+  addToggleBtn.addEventListener("click", toggleAddPanel);
+  addSaveBtn.addEventListener("click", addManual);
+  addCancelBtn.addEventListener("click", function(){
+    resetAddForm();
+    addPanel.hidden = true;
+  });
 
   // ---------- boot ----------
   var saved = null;

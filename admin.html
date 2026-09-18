@@ -20,6 +20,8 @@
     --font:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   }
   *{box-sizing:border-box;}
+  /* hidden atributu display:flex/grid ilə vuruşmasın deyə güclü prioritetlə tətbiq et */
+  [hidden]{display:none !important;}
   html,body{height:100%;}
   body{
     margin:0;background:var(--paper-dim);color:var(--ink);

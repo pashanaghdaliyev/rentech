@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-18 12:37",
+  "updated": "2026-09-18 12:45",
   "items": [
     {
       "cat": "Dünya",
@@ -23,6 +23,326 @@
       "tercume": true
     },
     {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "EVE Energy ABŞ-nin Fluence saxlanc təchizatçısı ilə 206 QVt·s batareya çərçivə sazişi imzaladı",
+      "excerpt": "Beşillik sazişə 2027-ci il üçün 16 QVt·s öhdəlik götürülmüş tədarük və bundan sonra 190 QVt·s rezerv edilmiş güc daxildir. The post EVE Energy signs 206 GWh battery framework with US storage supplier Fluence appeared first on pv magazine Global .",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/eve-energy-signs-206-gwh-battery-framework-with-us-storage-supplier-fluence/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Hidrogen axını: Sinqapur tədqiqatçıları çirklənmiş dəniz suyundan H2 istehsalı üçün süni yarpaq təqdim etdilər",
+      "excerpt": "Digər xəbərlərdə, Power to Hydrogen Antverpendə yaşıl hidrogen istehsalına başladı, Dongfeng isə Hannoverdə üç hidrogen mühərrikli kommersiya vasitəsini təqdim etdi. Bundan əlavə, Danimarka Aİ-nin ilk tammiqyaslı CO₂ saxlanc məntəqəsini açdı və H2 Mobility…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/the-hydrogen-stream-singapore-researchers-present-artificial-leaf-for-h2-production-from-contaminated-seawater/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Fransanın kənd təsərrüfatı fotovoltaik sınaqları su itkisini azaldır, qarğıdalı məhsuldarlığını 19,6% artırır",
+      "excerpt": "TSE-nin Fransadakı kənd təsərrüfatı fotovoltaik sınaqları nəzarət sahəsindəkinin 96%-ə qədər arpa məhsuldarlığını qeydə aldı və mövsümi evapotranspirasiyanı 20% azaldıb. Ayrı bir ərazidə, qeyri-adi dərəcədə isti və quraq şəraitdə çətiraltı qarğıdalı…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/french-agrivoltaic-trials-cut-water-loss-lift-maize-yields-by-19-6/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Johnson Controls 122 C çıxış gücünə malik sənaye istilik nasosunu təqdim etdi",
+      "excerpt": "Sabroe HitemHP soyuducu agent kimibutan və ya izobutandan istifadə edir və 100 kVt ilə 1 MVt arasında istilik gücü təmin edir. Johnson Controls bildirir ki, birtəpəli sistem nominal gücünün 18%-i qədər aşağı yüklərdə işləyə bilər. The post Johnson Controls…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/johnson-controls-unveils-industrial-heat-pump-with-122-c-output/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Google və esVolta pilot layihəsi bərpa olunan enerji kreditlərini “vaxt üzrə” dəyişmək üçün batareya saxlancından istifadə edir",
+      "excerpt": "LevelTen Energy, esVolta və Quintrace günəş enerjisi artıqlığını batareyalarda toplamaq və Google-un elektrik enerjisinə tələbatı təmiz enerji təchizatını üstələdikdə saatlıq təsdiqlənmiş bərpa olunan kreditlərlə birlikdə buraxmaq üsulunu sınaqdan keçiriblər…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/google-esvolta-pilot-uses-battery-storage-to-time-shift-renewable-energy-credits/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Dizayn üzrə inklüzivlik: PV innovasiyalarının ehtiyac duyduğu rəhbərlik davranışları",
+      "excerpt": "Women in Solar+ Europe bu həftə EU PVSEC 2026-dakı seminardan və WIP ilə birgə təşkil olunmuş tədbirdən sonra PV tədqiqatları və sənayesində innovasiyanı, psixoloji təhlükəsizliyi və əməkdaşlığı gücləndirmək üçün lazım olan rəhbərlik davranışları barədə…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/inclusion-by-design-the-leadership-behaviours-pv-innovation-needs/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Quraq avqust ayı Şimali Amerikanın GHI göstəriciləri fərqləndikcə Dallasın çirklənmə itkisini 2%-ə yaxınlaşdırır",
+      "excerpt": "pv magazine üçün yeni həftəlik yeniləmədə DNV şirkəti olan Solcast bildirir ki, qarşıdurma yaradan hava şəraiti fonunda avqust ayında günəş şüalanması Böyük Göllər ətrafında azalsa da, Sakit Okeanın Şimal-Qərbində, ABŞ-ın cənub-mərkəzi hissəsində və Meksikada…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/dry-august-pushes-dallas-soiling-losses-towards-2-as-north-american-ghi-diverges/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Çin PV Sənayesi İcmalı: CEEC 15 QVt modul tədarükü elan etdi",
+      "excerpt": "China Energy Engineering Corp. TOPCon, HJT və BC texnologiyalarını əhatə edən 15 QVt-lıq modul tenderinə başladı, China South-to-North Water Diversion Group isə 1.3 QVt üçün iddiaçıları seçdi, burada BC modulları TOPCon ilə müqayisədə 8% üstünlüyə malikdir…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/chinese-pv-industry-brief-ceec-launches-15-gw-module-procurement/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "Çox aşağı dəyərli damüstü günəş enerjisi məişət enerji xərclərini kəskin azaldır – Hissə 3: Afrika Ölkələri",
+      "excerpt": "Afrika qitəsində 54 ölkə var. Damüstü fotovoltaik günəş enerjisi bəzi Afrika ölkələrində sürətlə böyüyür, lakin istehlak ölkələr üzrə çox qeyri-bərabərdir və bütün millətlər üzrə hərtərəfli ölçülmür. Aydın olur ki, Cənubi Afrika xeyli irəlidədir…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/very-low-cost-rooftop-solar-slashes-domestic-energy-cost-part-3-african-countries/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Dünya",
+      "date": "2026-09-18",
+      "title": "İtaliyanın inverter istehsalçısı Santerno istehsalı bərpa etməyə hazırlaşır",
+      "excerpt": "LEA Renergy şirkəti Enertronica Santerno-nu 6 milyon avroya əldə edib və indi inverter istehsalını yenidən başlatmağa hazırdır. Qrup 2030-cu ilə qədər 40 milyon avro gəlir hədəfləyir. The post Italian inverter manufacturer Santerno set to resume production…",
+      "source": "pv magazine",
+      "url": "https://www.pv-magazine.com/2026/09/18/italian-inverter-manufacturer-santerno-set-to-resume-production/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-18",
+      "title": "Kommunal miqyaslı layihə icmalı: Yuta günəş enerjisi, Texas texnologiya enerjisi, Kaliforniya mikroşəbəkələri və saxlancı, eləcə də Massaçusets icma günəş enerjisi",
+      "excerpt": "300 MVt-lıq səhra qurğularından korporativ PPA-lara və icma səviyyəsində dayanıqlığa qədər, tərtibatçılar və kommunal xidmətlər ABŞ-da əsas günəş və saxlanc mərhələlərini irəlilədir.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/18/utility-scale-project-roundup-utah-solar-texas-tech-power-california-microgrids-and-storage-and-massachusetts-community-solar/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-18",
+      "title": "Çin TOPCon günəş batareyalarının qiymətləri ixrac alışı zəiflədikcə və vafer xərcləri ucuzlaşdıqca üçüncü həftədir ki, enir",
+      "excerpt": "pv magazine üçün yeni həftəlik yeniləmədə Dow Jones şirkəti olan OPIS qlobal PV sənayesində əsas qiymət tendensiyalarına qısa nəzər salır.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/18/china-topcon-solar-cell-prices-fall-for-third-week-as-export-buying-fades-and-wafer-costs-ease/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-18",
+      "title": "Google-un dəstəklədiyi pilot layihə batareya saxlancı üçün ilk ekoloji sertifikat gəlir axınını açır",
+      "excerpt": "Quintrace, esVolta və LevelTen Energy tərəfindən həyata keçirilən 9,2 QVt·s-lıq nümayiş batareyaların qranulyar karbonsuz enerji sertifikatlarının vaxtını dəyişə biləcəyini sübut edərək, korporativ 24/7 uyğunlaşması üçün yeni kommersiya modeli təklif edir.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/18/google-backed-pilot-unlocks-first-environmental-certificate-revenue-stream-for-battery-storage/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-18",
+      "title": "Kia EV9 üzrə endirimlər onu inanılmaz qiymətə təklif edir",
+      "excerpt": "Kia EV9 bazarda mövcud olan azsaylı üçsıralı elektrik avtomobillərindən biridir. O, olduqca böyükdür və avtomobilin qiyməti kifayət qədər münasib olmasına baxmayaraq, interyeri və texnologiyası çox gözəl və yüksək keyfiyyətlidir. Lakin, görünür, bu, kifayət…",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/17/discounts-on-kia-ev9-give-it-ridiculous-price/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-18",
+      "title": "PVT modulları bazarı böyüyür",
+      "excerpt": "PVT modullarının satış həcmi 2020-ci ildən bəri durmadan artır. 2025-ci ildə AEE Intec kollektor sahəsinin satışında yenidən 13 faiz artım qeydə alaraq 25 293 kvadratmetr təşkil etdiyini bildirir.",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/18/markt-fuer-pvt-module-waechst/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-18",
+      "title": "Britaniya tənzimləyici qurumu şəbəkə bağlantısı növbəsini qısaltmaq üçün batareya saxlancına rüsumlar tətbiq etməyi planlaşdırır",
+      "excerpt": "Britaniyanın şəbəkə bağlantısı növbəsindəki həddindən artıq gücləri daha da azaltmaq üçün batareya saxlanc sistemləri ilə bağlı maliyyə öhdəliyi təsdiqlənmək üzrədir. Şəbəkəyə qoşulma prosedurlarında son islahat səylərinə baxmayaraq, bu…",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/18/britische-regulierungsbehoerde-plant-gebuehren-fuer-batteriespeicher-zur-verkuerzung-der-warteliste-fuer-netzanschluesse/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-18",
+      "title": "Birbaşa xəttlə bağlı AİƏ-nin qərarı məhəllə və İcarəçi elektrik enerjisi layihələrinə kömək edə bilər",
+      "excerpt": "Avropa İttifaqı Ədalət Məhkəməsi iki latviyalı şirkət ilə dövlət tənzimləyici qurumu arasındakı müങ്ങനെni həll etməli idi. Söhbət bir neçə müştəriyə bir xətt vasitəsilə birbaşa təchizatdan, həmçinin özünü təminetmə konsepsiyasından gedirdi. Qərar ola bilər ki…",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/18/eugh-urteil-zur-direktleitung-koennte-quartiers-und-mieterstromprojekten-helfen/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-18",
+      "title": "Elektrik şəbəkəsində Süni İntellekt: “Biz hələ ‘Replace’ mərhələsindən çox uzaqdayıq”",
+      "excerpt": "Süni intellekt getdikcə şəbəkə əməliyyatlarına daxil olur. Lakin elektrik şəbəkəsi kimi kritik infrastruktura gəldikdə o, nə qədər irəli gedə bilər və getməsinə icazə verilir? Amprion-un sistem inkişafı üzrə aktiv meneceri Tomas Dederixs pv magazine-ə…",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/18/ki-im-stromnetz-wir-sind-noch-lange-nicht-beim-replace/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-18",
+      "title": "Bizi Altmaier çöküşü 2.0 təhlükəsi gözləyirmi?",
+      "excerpt": "EEG 2027 və şəbəkə paketi ilə bağlı qanun layihələrində heç nə dəyişməzsə, Almaniyanın günəş enerjisi sənayesini yeni iflas dalğası gözləyir, pvXchange-dən Martin Şaxinger hesab edir.",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/18/droht-uns-ein-altmaier-knick-2-0/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "EDF Yutada 394 MVt gücündə günəş fotovoltaik stansiyası üzrə maliyyələşməni yekunlaşdırdı",
+      "excerpt": "Fransanın EDF kommunal xidmət şirkətinin bərpa olunan enerji törəmə müəssisəsi olan EDF power solutions North America ABŞ-ın Yuta ştatında 394 MVt gücündə günəş fotovoltaik layihəsi üzrə maliyyələşməni başa çatdırıb.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/edf-reaches-financial-close-on-394mw-solar-pv-plant-in-utah/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "SMA Solar Almaniyada 92 milyon ABŞ dolları dəyərində Qiqavat Fabriki açdı",
+      "excerpt": "SMA Almaniyanın Niestetal şəhərində kommunal miqyaslı enerji texnologiyaları üçün istehsal gücünü genişləndirərək yeni Qiqavat Fabriki açdı.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/sma-solar-opens-us92-million-gigawatt-factory-in-germany/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "Actis 2 QVt portfelini hədəfləyən Meksika bərpa olunan enerji platforması yaradır",
+      "excerpt": "Bərpa olunan enerji infrastrukturu üzrə investor Actis Meksikanın bərpa olunan enerji platforması olan Yeltica Energy şirkətini təsis edib.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/actis-creates-mexican-renewables-platform-targeting-2gw-portfolio/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "Həftənin PV Diaqramı: Çinə modul daşımalarının 2026-cı ildə azalacağı gözlənilir",
+      "excerpt": "Bu həftənin PV Diaqramı ölkə/region üzrə proqnozlaşdırılan qlobal PV modul daşımalarının bölgüsünə nəzər salır.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/pv-chart-of-the-week-module-shipments-china-expected-fall-2026/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "Anza Power Yeni Zelandiyada Helios Energy şirkətindən 205 MVtac tikintiyə hazır günəş stansiyalarını əldə etdi",
+      "excerpt": "Anza Power Yeni Zelandiyada Helios Energy-dən 110 MVtac Karioi və 95 MVtac Ongaonga günəş fotovoltaik elektrik stansiyalarını satın alıb.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/anza-power-acquires-205mwac-construction-ready-solar-plants-from-helios-energy-in-new-zealand/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "Ümumi həcm 206 QVt·s: EVE Energy Fluence ilə 5 illik enerji saxlanc batareyası tədarükü sazişi imzaladı",
+      "excerpt": "EnergyTrend-in məlumatına görə, sentyabrın 17-də EVE Energy i […]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260918-52169.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "Ümumi investisiya 370 milyon RMB-ni ötür! LONGi və Great Power daxil olmaqla altı müəssisə ardıcıl olaraq yeni PV saxlanc şirkətləri yaradır",
+      "excerpt": "EnergyTrend-in məlumatına görə, bu yaxınlarda altı müəssisə — in […]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260918-52167.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-18",
+      "title": "5,5 QVt·s-dan çox! Envision Energy və LONGi Green Energy daxil olmaqla 8 şirkət tərəfindən təmin edilmiş enerji saxlanc sifarişləri və layihələri",
+      "excerpt": "Son vaxtlar yerli enerji saxlanc şirkətləri davam edir […]",
+      "source": "EnergyTrend",
+      "url": "https://www.energytrend.com/news/20260918-52163.html",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-18",
+      "title": "ABŞ İCMALI: Eos 87 milyon ABŞ dolları məbləğində DOE krediti alır, FlexGen və Lightshift 16 layihəyə qədər genişlənir, Georgia Power 128 MVt gücündə qurğunu işə salır",
+      "excerpt": "Bu ABŞ xəbərləri icmalında Eos DOE kreditindən avans aldığını, FlexGen və Lighshift-in 16 BESS layihəsi üzrə tərəfdaşlıq etdiyini və Georgia Power-ın 128 MVt-lıq BESS-i işə saldığını bildirir.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/us-roundup-eos-draws-us87-million-doe-loan-flexgen-lightshift-expand-to-16-projects-georgia-power-energises-128mw-facility/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-18",
+      "title": "Jupiter Power 10 ABŞ BESS layihəsi üzrə ümumi 3,8 QVt·s gücündə 1,4 milyard ABŞ dolları dəyərində maliyyələşməni bağladı",
+      "excerpt": "ABŞ-ın batareya enerji saxlanc sistemi (BESS) tərtibatçısı və operatoru Jupiter Power ümumi 3,600 MVt·s tutuma malik 10 ABŞ BESS layihəsini dəstəkləyən 1,4 milyard ABŞ dolları dəyərində maliyyələşməni başa çatdırıb. Sentyabrın 16-da elan edilən Jupiter…",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/jupiter-power-closes-us1-4-billion-financing-for-10-us-bess-projects-totalling-3-8gwh/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-18",
+      "title": "BESS Sənayesinin Gündəmi: Almaniya Enerji Saxlanc Sammitindən əsas nəticələr",
+      "excerpt": "FCA-lar, ətalət, güc bazarı (CM), Aİ-nin Çinə qarşı məhdudiyyətləri və bir çox diqqətəlayiq sistem inteqratorunun gələcəyi daxil olmaqla, bu həftə Almaniya Enerji Saxlanc Sammitindən əldə etdiyimiz əsas nəticələrin icmalı.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/bess-industry-buzz-energy-storage-summit-germany-takeaways/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-18",
+      "title": "ABŞ Beynəlxalq İnkişaf Maliyyə Korporasiyası Ukraynanın BESS portfelini dəstəkləyir",
+      "excerpt": "ABŞ Ukraynadakı mövcud 400 MVt·s batareya enerji saxlanc sistemi (BESS) portfelinə maliyyə dəstəyi verəcəyini vəd edib.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/us-international-development-finance-corporation-supports-ukraine-bess-portfolio/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Texnologiya",
+      "date": "2026-09-18",
+      "title": "Avstraliyanın NSW təsbitetmə tenderi bütün 2-ci Tur layihələri əməliyyat rejiminə keçdikcə 3 QVt·s batareya saxlancı təmin edir",
+      "excerpt": "Avstraliyanın Yeni Cənubi Uels ştatı üçün ASL-in 2023-cü il təsbitetmə tenderi çərçivəsində seçilmiş bütün BESS və tələb cavab layihələri artıq əməliyyat fəaliyyətindədir.",
+      "source": "Energy Storage News",
+      "url": "https://www.energy-storage.news/australias-nsw-firming-tender-delivers-3gwh-of-battery-storage-as-all-round-2-projects-go-operational/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
       "cat": "ABŞ",
       "date": "2026-09-17",
       "title": "Trump-ın məhv etməyə çalışdığı elektrikli avtomobil doldurma stansiyalarına yeni həyat",
@@ -34,12 +354,152 @@
     },
     {
       "cat": "ABŞ",
-      "date": "2026-09-16",
-      "title": "Yüksək yanacaq qiymətləri sayəsində əksər amerikalılar indi elektrikli avtomobillər haqqında düşünür",
-      "excerpt": "Elektrikli nəqliyyat vasitələri 5 il əvvəlki ilə müqayisədə, 10, 20 və ya 30 il əvvəli demirəm, qat-qat yaxşıdır. Onların yüzlərlə mil yürüş məsafəsi var və “müqayisə oluna bilən” benzinlə işləyən avtomobillərin qiymətinə bərabərdir. Əslində, sahibkarlığın…",
+      "date": "2026-09-17",
+      "title": "Qlobal yaşayış məntəqələri saxlanc bazarı 2026-cı ildə 46,1 QVt·s-a çatmaqdadır",
+      "excerpt": "InfoLink Consulting Avropa, Okeaniya və Asiyanın rəhbərliyi ilə 2026-cı ildə qlobal yaşayış məntəqələri enerji saxlanc güc artımlarının 46,1 QVt·s-a çatacağını gözləyir. Fox ESS, Sigenergy və Deye 2026-cı ilin birinci yarısında daşınma həcminə görə aparıcı üç…",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/17/global-residential-storage-market-to-hit-46-1-gwh-in-2026/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "First Solar TOPCon patent şikayətini geri götürdü",
+      "excerpt": "Nazik təbəqə istehsalçısı yeni 232-ci Bölmə idxal məhdudiyyətlərindən sonra USITC qarşısında 337-ci Bölmə üzrə müraciətini geri götürdü, yerli və xarici istehsalçılara qarşı federal məhkəmə patent döyüşləri isə davam edir.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/17/first-solar-drops-topcon-patent-complaint/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "FlexGen və Lightshift Energy Virciniya və Yeni İngiltərədə 80 MVt batareya təmin etmək üçün birləşir",
+      "excerpt": "İki şirkət artıq 25 MVt/85 MVt·s-dan çox olan altı layihəni təslim etmək üçün tərəfdaşlıq edib və PJM və ISO-NE şəbəkələrindəki on qarşıdakı layihədə əlavə 55 MVt/200 MVt·s həyata keçirməyi planlaşdırır.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/17/flexgen-and-lightshift-energy-team-up-to-deliver-80-mw-of-batteries-in-virginia-and-new-england/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "Simmetriyanı pozan molekulyar strategiya çevrilmiş perovski günəş batareyasının səmərəliliyini 26,32%-ə çatdırır",
+      "excerpt": "Tədqiqatçılar çevrilmiş perovski günəş batareyalarında SAM örtüyünü və interfeys keyfiyyətini yaxşılaşdırmaq üçün simmetriyanı pozan birgə yığımdan istifadə edərək 26,32% səmərəlilik və 25,67% təsdiqlənmiş nəticə əldə ediblər. Kapsulalaşdırılmış qurğu ilkin…",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/17/symmetry-breaking-molecular-strategy-pushes-inverted-perovskite-solar-cell-efficiency-to-26-32/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "Hitachi Energy Missisipi transformator fabriki üçün 528 milyon dollar ayırır",
+      "excerpt": "ABŞ-da transformatorlar üçün tədarük müddəti iki ili keçdiyi bir vaxtda, bu müəssisə şirkətin ciddi kommunal avadanlıq çatışmazlığını aradan qaldırmaq üçün 1,5 milyard dollarlıq ABŞ istehsalat genişləndirmə proqramının bir hissəsi kimi yaradılır.",
+      "source": "pv magazine USA",
+      "url": "https://pv-magazine-usa.com/2026/09/17/hitachi-energy-commits-528-million-for-mississippi-transformer-factory/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "Stellantis BOW Avtonom Çatdırılmanı Növbəti Səviyyəyə Qaldırır",
+      "excerpt": "HANNOVER, Almaniya — IAA Transportation 2026-dakı bir çox elektrik avtomobili arasında Stellantis BOW-nu gözdən yayındırmaq çətindir. O, kiçikdir, yaşıldır və adi çatdırılma furqonuna bənzəmir. Kabinəsi və sürücü oturacağı yoxdur. Yük yeri dörd hissənin…",
       "source": "CleanTechnica",
-      "url": "https://cleantechnica.com/2026/09/16/most-americans-now-thinking-about-electric-cars-thanks-to-high-gas-prices/",
-      "status": "derc",
+      "url": "https://cleantechnica.com/2026/09/17/stellantis-bow-takes-autonomous-delivery-to-the-next-level/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "ABŞ",
+      "date": "2026-09-17",
+      "title": "Günəş Enerjisi Sənayesi Assosiasiyası İcma Günəş Enerjisinə Giriş Koalisiyası ilə birləşərək ölkə üzrə bütün Günəş və Saxlanc Sənayesi üçün Təbliğatı Gücləndirir",
+      "excerpt": "VAŞİNQTON D.C. — Günəş Enerjisi Sənayesi Assosiasiyası (SEIA) və İcma Günəş Enerjisinə Giriş Koalisiyası (CCSA) bu gün hər iki təşkilatın Direktorlar Şurasının təsdiqindən sonra onların birləşəcəyini elan etdilər. Qüvvəyə minir...",
+      "source": "CleanTechnica",
+      "url": "https://cleantechnica.com/2026/09/16/solar-energy-industries-association-to-combine-with-coalition-for-community-solar-access-strengthening-advocacy-for-entire-solar-storage-industry-across-the-country/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-17",
+      "title": "Bərpa olunan enerji 24/7: „Müasir iqtisadiyyat elektrikləşdirilmiş iqtisadiyyatdır“",
+      "excerpt": "Həftənin 7 günü, 24 saat bərpa olunan enerji – bir çoxları bunu hələ də mamont tapşırığı, çağırış, dönüş kimi sözlərlə əlaqələndirir. Bunların hamısı tamamilə səhv deyil, lakin əsas məqamı gizlədir: Enerji eksperti Tim Meyer enerjiyə keçid haqqında danışır…",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/17/renewables-24-7-eine-moderne-volkswirtschaft-ist-eine-elektrifizierte/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-17",
+      "title": "69 meqavat fotovoltaik və 76,5 meqavat-saat saxlanca malik hibrid elektrik stansiyası şəbəkəyə qoşulur",
+      "excerpt": "Təqribən dörd illik planlaşdırma və inkişafdan sonra layihə təntənəli şəkildə istismara verilmək üzrədir. 76,5 meqavat-saat tutumlu batareya saxlancı əvvəlcə tamamilə yaşıl elektrik enerjisi saxlancı kimi idarə olunmalıdır, çünki Eon Edis əvvəlcədən söz…",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/17/hybridkraftwerk-mit-69-megawatt-photovoltaik-und-765-megawattstunden-speicher-geht-ans-netz/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-17",
+      "title": "Nomos 20 milyon avro maliyyələşmə təmin edir",
+      "excerpt": "Berlin mənşəli startap Almaniyada və Avropada milyonlarla ev təsərrüfatını enerji bazarı ilə birləşdirmək istəyir. Əsas diqqət avtomatlaşdırma və agent əsaslı süni intellekt vasitəsilə tapşırıqların öhdəsindən gələ bilən biznes əməliyyatlarının idarə edilməsi…",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/17/nomos-sichert-sich-20-millionen-euro-an-finanzierung/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-17",
+      "title": "Eon 2027-ci ildən etibarən əlavə olunan enerji tədarükü bonusu ilə fotovoltaik tam paket təklif edir",
+      "excerpt": "Enerji konserni ildə 570 avroya qədər bonus və ağıllı günəş enerjisi istifadəsindən qənaət vəd edir. Bu, 10 kilovatlıq fotovoltaik sistemə, saxlanca, elektrik avtomobilinə və istilik nasosuna malik ev təsərrüfatlarına şamil olunur. Sabit əlavə tədarük bonusu…",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/17/eon-bietet-ab-2027-photovoltaik-komplettpaket-mit-einspeisebonus-an/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Almaniya",
+      "date": "2026-09-17",
+      "title": "SMA Almaniyada 80 milyon avro dəyərində Qiqavat Fabriki açır",
+      "excerpt": "İstehsalını genişləndirməklə şirkət etibarlı enerji infrastrukturuna artan tələbata cavab verir. Tam gücü ilə işlədikdə zavodun illik istehsal gücü 60 giqavatdan çox olur.",
+      "source": "pv magazine Deutschland",
+      "url": "https://www.pv-magazine.de/2026/09/17/sma-eroeffnet-80-millionen-euro-teure-gigawatt-factory-in-deutschland/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-17",
+      "title": "Alpex Solar Utar-Pradeşdə 2,2 QVt gücündə günəş batareyası zavodunu istismara verdi",
+      "excerpt": "Alpex Solar Utar-Pradeş ştatının Mathura şəhərində 2,2 QVt gücündə TOPCon G12R günəş batareyası istehsal müəssisəsini təntənəli şəkildə açıb.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/alpex-solar-commissions-2-2gw-solar-cell-plant-in-uttar-pradesh/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-17",
+      "title": "Encavis İtaliyanın 315 MVt günəş fotovoltaik portfeli üçün maliyyələşməni bağladı",
+      "excerpt": "Almaniyanın IPP şirkəti Encavis İtaliyadakı 351 MVt günəş fotovoltaik portfeli üçün maliyyələşmə paketini yekunlaşdırıb.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/encavis-closes-funds-for-315mw-italian-solar-pv-portfolio/",
+      "status": "gozleyir",
+      "tercume": true
+    },
+    {
+      "cat": "Çin",
+      "date": "2026-09-17",
+      "title": "İspaniya güc bazarı yaradacağını açıqlayır, 19,5 milyard ABŞ dolları dəyərində şəbəkə infrastrukturu sərmayəsini elan edir",
+      "excerpt": "İspaniya “təchizat təhlükəsizliyi”ni təmin etmək məqsədilə milli elektrik sistemi üçün güc bazarı yaratmaq planlarını elan edib.",
+      "source": "PV Tech",
+      "url": "https://www.pv-tech.org/spain-launch-capacity-market-us19-5-billion-grid-infrastructure-investment/",
+      "status": "gozleyir",
       "tercume": true
     }
   ]

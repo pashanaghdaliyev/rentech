@@ -1,6 +1,6 @@
 {
   "_qeyd": "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli. Xarici xəbəri saytda göstərmək üçün mətni yoxla və 'gozleyir' sözünü 'derc' ilə əvəz et.",
-  "updated": "2026-09-18 08:36",
+  "updated": "2026-09-18 08:38",
   "items": [
     {
       "cat": "Dünya",
@@ -119,7 +119,7 @@
       "excerpt": "Sentyabrın 11-də gəlir hesabatı brifinqi zamanı Tongwei C [...]",
       "source": "EnergyTrend",
       "url": "https://www.energytrend.com/news/20260918-52165.html",
-      "status": "gozleyir",
+      "status": "derc",
       "tercume": true
     },
     {

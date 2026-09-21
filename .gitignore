@@ -1,0 +1,11 @@
+# Cloudflare Worker
+worker/node_modules/
+worker/.wrangler/
+worker/.dev.vars
+worker/dist/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store

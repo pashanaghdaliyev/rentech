@@ -272,15 +272,14 @@
 <main class="wrap">
 
   <section class="login" id="login" hidden>
-    <h2>GitHub token daxil et</h2>
-    <p>Xəbərləri təsdiqləmək üçün fine-grained GitHub token lazımdır. Token bu telefondan çıxmır — yalnız localStorage-da saxlanılır.</p>
+    <h2>Admin token daxil et</h2>
+    <p>Xəbərləri təsdiqləmək üçün admin token lazımdır. Token bu telefondan çıxmır — yalnız localStorage-da saxlanılır.</p>
     <ol>
-      <li>Aç: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Fine-grained tokens</a></li>
-      <li>Repository access: <code>Only select repositories</code> → <code>pashanaghdaliyev/rentech</code></li>
-      <li>Permissions: <code>Contents</code> → <code>Read and write</code></li>
-      <li>Generate → token-ı kopyala → aşağıya yapışdır</li>
+      <li>Cloudflare dashboard → <code>rentech</code> Pages layihəsi → <b>Settings → Environment variables</b></li>
+      <li>Ora əlavə etdiyin <code>ADMIN_TOKEN</code> dəyəri aşağıya yapışdırılır</li>
+      <li>Token uzun random sətirdir (məs. 32+ hərf/rəqəm). İtirsən, dashboard-dan yenidən oxumaq/dəyişmək olar.</li>
     </ol>
-    <input type="password" id="token-input" placeholder="github_pat_..." autocomplete="off" spellcheck="false">
+    <input type="password" id="token-input" placeholder="admin token..." autocomplete="off" spellcheck="false">
     <div class="row">
       <button class="btn-solid" id="save-token">Yadda saxla</button>
     </div>
@@ -348,10 +347,9 @@
 (function(){
   "use strict";
 
-  var REPO_OWNER = "pashanaghdaliyev";
-  var REPO_NAME = "rentech";
-  var NEWS_PATH = "news.json";
-  var API_BASE = "https://api.github.com";
+  // Cloudflare Pages Function endpoint — eyni origin-dən çağırılır
+  var API_ENDPOINT = "/api/news";
+  var TOKEN_KEY = "rentech_admin_token";
 
   var $ = function(id){ return document.getElementById(id); };
   var login = $("login");
@@ -388,8 +386,8 @@
 
   var state = {
     token: "",
-    items: [],           // bütün xəbərlər (news.json-dan)
-    sha: "",             // GitHub Contents API üçün cari sha
+    items: [],           // bütün xəbərlər
+    meta: null,          // KV-dən gələn _qeyd və s.
     statusTab: "gozleyir", // hansı status göstərilir
     filter: "Bütün",     // kateqoriya süzgəci: "Bütün" | "ABŞ" | ...
     editingUrl: null,    // hazırda redaktə olunan xəbərin url-i
@@ -415,86 +413,58 @@
     toastTimer = setTimeout(function(){ el.classList.remove("show"); }, 2600);
   }
 
-  // ---------- base64 (utf-8 safe) ----------
-  function encB64(str){
-    var bytes = new TextEncoder().encode(str);
-    var bin = "";
-    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-    return btoa(bin);
-  }
-  function decB64(b64){
-    var bin = atob(b64.replace(/\s/g, ""));
-    var bytes = new Uint8Array(bin.length);
-    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    return new TextDecoder("utf-8").decode(bytes);
-  }
-
-  // ---------- GitHub API ----------
+  // ---------- Cloudflare API ----------
   function apiGetNews(){
-    return fetch(API_BASE + "/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + NEWS_PATH, {
-      headers: {
-        "Authorization": "Bearer " + state.token,
-        "Accept": "application/vnd.github+json",
-      },
-      cache: "no-store",
-    }).then(function(r){
-      if (!r.ok) throw new Error("news.json oxunmadı: HTTP " + r.status);
+    return fetch(API_ENDPOINT, { cache: "no-store" }).then(function(r){
+      if (!r.ok) throw new Error("news oxunmadı: HTTP " + r.status);
       return r.json();
     }).then(function(data){
-      state.sha = data.sha;
-      var parsed = JSON.parse(decB64(data.content));
-      state.items = parsed.items || [];
-      state._meta = { _qeyd: parsed._qeyd, updated: parsed.updated };
+      state.items = data.items || [];
+      state.meta = { _qeyd: data._qeyd, updated: data.updated };
       return state.items;
     });
   }
 
-  function apiPutNews(msg){
+  function apiPutNews(_msg){
+    // _msg parametri əvvəllər git commit mesajı üçün istifadə olunurdu;
+    // Cloudflare KV-də commit yoxdur, sadəcə saxlanılır. İmza qorunub ki, çağıran kod dəyişməsin.
     var payload = {
-      _qeyd: state._meta && state._meta._qeyd,
+      _qeyd: state.meta && state.meta._qeyd,
       updated: new Date().toISOString().slice(0,16).replace("T"," "),
       items: state.items,
     };
-    return fetch(API_BASE + "/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + NEWS_PATH, {
+    return fetch(API_ENDPOINT, {
       method: "PUT",
       headers: {
         "Authorization": "Bearer " + state.token,
-        "Accept": "application/vnd.github+json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        message: msg,
-        content: encB64(JSON.stringify(payload, null, 2) + "\n"),
-        sha: state.sha,
-      }),
+      body: JSON.stringify(payload),
     }).then(function(r){
-      if (r.status === 409 || r.status === 422) {
-        var err = new Error("sha_conflict");
+      if (r.status === 401 || r.status === 403) {
+        var err = new Error("auth_failed");
         err.code = r.status;
         throw err;
       }
-      if (!r.ok) throw new Error("PUT alınmadı: HTTP " + r.status);
+      if (!r.ok) return r.text().then(function(t){ throw new Error("PUT alınmadı: HTTP " + r.status + " — " + t.slice(0,120)); });
       return r.json();
-    }).then(function(data){
-      state.sha = data.content.sha;
-      return data;
     });
   }
 
-  // Retry-li yazma: sha uyğunsuzluqda yenidən oxu və mutate-i təkrarla
+  // Optimistic yazma — botun cron-u eyni anda dəyişməyibsə, yenidən oxumaq lazım deyil.
+  // Xəta olsa (məs. auth), yuxarı qatın toast göstərməsi üçün throw edir.
   function updateItems(mutator, commitMsg){
-    var cehd = 0;
-    function attempt(){
-      cehd++;
-      mutator(state.items);
-      return apiPutNews(commitMsg).catch(function(err){
-        if (err.message === "sha_conflict" && cehd < 3) {
-          return apiGetNews().then(attempt);
-        }
-        throw err;
-      });
+    mutator(state.items);
+    return apiPutNews(commitMsg);
+  }
+
+  // Yazı zamanı xəta — auth problemidirsə istifadəçini login-ə göndər, digər xətalar üçün toast
+  function showWriteError(err){
+    if (err && err.message === "auth_failed") {
+      handleAuthFail();
+      return;
     }
-    return attempt();
+    toast((err && err.message) || "Xəta baş verdi", true);
   }
 
   // ---------- render ----------
@@ -746,7 +716,7 @@
       render();
     }).catch(function(err){
       if (card) card.classList.remove("busy");
-      toast(err.message || "Xəta baş verdi", true);
+      showWriteError(err);
     });
   }
 
@@ -775,7 +745,7 @@
       render();
     }).catch(function(err){
       if (card) card.classList.remove("busy");
-      toast(err.message || "Xəta baş verdi", true);
+      showWriteError(err);
     });
   }
 
@@ -805,7 +775,7 @@
       render();
     }).catch(function(err){
       if (card) card.classList.remove("busy");
-      toast(err.message || "Xəta baş verdi", true);
+      showWriteError(err);
     });
   }
 
@@ -886,7 +856,7 @@
       state.selected = {};
       render();
     }).catch(function(err){
-      toast(err.message || "Xəta baş verdi", true);
+      showWriteError(err);
     });
   }
 
@@ -906,7 +876,7 @@
       state.selected = {};
       render();
     }).catch(function(err){
-      toast(err.message || "Xəta baş verdi", true);
+      showWriteError(err);
     });
   }
 
@@ -1058,7 +1028,7 @@
       render();
     }).catch(function(err){
       addSaveBtn.disabled = false;
-      toast(err.message || "Xəta baş verdi", true);
+      showWriteError(err);
     });
   }
 
@@ -1084,23 +1054,23 @@
       showApp();
       render();
     }).catch(function(err){
-      var msg = String(err.message || err);
-      if (msg.indexOf("401") >= 0 || msg.indexOf("403") >= 0) {
-        toast("Token qəbul olunmadı. Yenidən daxil et.", true);
-        localStorage.removeItem("rentech_pat");
-        state.token = "";
-        showLogin();
-      } else {
-        toast(msg, true);
-      }
+      toast(String(err.message || err), true);
     });
+  }
+
+  // Yazı əməliyyatının auth xətası — token yanlışdır və ya dəyişib
+  function handleAuthFail(){
+    toast("Admin token qəbul olunmadı. Yenidən daxil et.", true);
+    localStorage.removeItem(TOKEN_KEY);
+    state.token = "";
+    showLogin();
   }
 
   $("save-token").addEventListener("click", function(){
     var v = $("token-input").value.trim();
     if (!v) { toast("Token boşdur", true); return; }
     state.token = v;
-    localStorage.setItem("rentech_pat", v);
+    localStorage.setItem(TOKEN_KEY, v);
     loadAll();
   });
 
@@ -1110,7 +1080,7 @@
 
   $("logout-btn").addEventListener("click", function(){
     if (!confirm("Token silinsin?")) return;
-    localStorage.removeItem("rentech_pat");
+    localStorage.removeItem(TOKEN_KEY);
     state.token = "";
     state.items = [];
     showLogin();
@@ -1140,7 +1110,7 @@
 
   // ---------- boot ----------
   var saved = null;
-  try { saved = localStorage.getItem("rentech_pat"); } catch (e) {}
+  try { saved = localStorage.getItem(TOKEN_KEY); } catch (e) {}
   if (saved) {
     state.token = saved;
     loadAll();

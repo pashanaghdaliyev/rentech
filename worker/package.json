@@ -1,0 +1,19 @@
+{
+  "name": "rentech-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RenTech xəbər botu — Cloudflare Worker (cron every 3h)",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "typescript": "^5.6.0",
+    "wrangler": "^3.90.0"
+  }
+}

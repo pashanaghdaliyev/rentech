@@ -1,0 +1,31 @@
+name = "rentech-bot"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+# Cron trigger — bot.py-dəki qrafikin eynisi
+# Bakı vaxtı (UTC+4) ilə 08:00, 12:00, 19:00 → UTC-də 04:00, 08:00, 15:00
+[triggers]
+crons = ["0 4,8,15 * * *"]
+
+# KV bind — Pages Function ilə eyni namespace-ə bağlanır
+# id-ni Cloudflare dashboard-dan KV yaradandan sonra bura yaz
+[[kv_namespaces]]
+binding = "NEWS_KV"
+id = "PLACEHOLDER_KV_NAMESPACE_ID"
+
+# Secrets (dashboard-dan və ya `wrangler secret put ...` ilə əlavə olunur):
+#   GEMINI_API_KEY   — tərcümə üçün (məcburi əgər xarici mənbələr işlətsən)
+#   NTFY_TOPIC       — telefon push-u (istəyə görə)
+#   ADMIN_TOKEN      — manual /run endpoint üçün (istəyə görə)
+#
+# Variables (dashboard, ya bu fayl):
+#   GEMINI_MODEL     — default "gemini-flash-lite-latest"
+#   NTFY_SERVER      — default "https://ntfy.sh"
+#   ADMIN_URL        — default "https://rentech.az/admin.html"
+[vars]
+GEMINI_MODEL = "gemini-flash-lite-latest"
+NTFY_SERVER = "https://ntfy.sh"
+ADMIN_URL = "https://rentech.az/admin.html"
+
+[observability]
+enabled = true

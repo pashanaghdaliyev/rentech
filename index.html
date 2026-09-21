@@ -969,17 +969,16 @@
   /* Əvvəlcə fayldakı ehtiyat siyahı göstərilir — sayt internetsiz də işləyir. */
   buildNewsPage(derc(NEWS));
 
-  /* Bot news.json faylını yeniləyirsə, xəbərlər oradan götürülür.
-     ?t=<timestamp> — GitHub Pages CDN-i by-pass edir (10 dəqiqəlik cache),
+  /* Bot Cloudflare KV-yə yazır, /api/news bunu qaytarır.
      admin panelindən edilən dəyişikliklər dərhal görünsün. */
-  fetch("news.json?t=" + Date.now(), { cache: "no-store" })
+  fetch("/api/news", { cache: "no-store" })
     .then(function (cavab) { return cavab.ok ? cavab.json() : null; })
     .then(function (data) {
       if (data && Array.isArray(data.items) && data.items.length) {
         buildNewsPage(derc(data.items));
       }
     })
-    .catch(function () { /* fayl yoxdursa ehtiyat siyahı qalır */ });
+    .catch(function () { /* API yoxdursa ehtiyat siyahı qalır */ });
 
   /* ---------- DƏRSLƏR ---------- */
   var LESSONS = [

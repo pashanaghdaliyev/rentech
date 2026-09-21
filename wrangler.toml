@@ -7,8 +7,9 @@ compatibility_date = "2026-09-01"
 [assets]
 directory = "./"
 binding = "ASSETS"
-# /api/* və /run həmişə Worker-ə gedir; digər yollar əvvəlcə asset yoxlanır
-run_worker_first = ["/api/*", "/run"]
+# Bütün istəklər əvvəlcə Worker-ə düşür; Worker özü /api/* və /run-u tutur,
+# qalanlarını env.ASSETS.fetch(request) ilə static asset kimi qaytarır.
+run_worker_first = true
 
 # Cron trigger — bot hər 3 saatda işləyir
 # UTC-də 04:00, 08:00, 15:00 → Bakı vaxtı (UTC+4) 08:00, 12:00, 19:00

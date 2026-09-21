@@ -108,15 +108,27 @@ interface NewsFile {
   items: Xeber[];
 }
 
+// Cloudflare Secrets Store bindings — `.get()` ilə oxunur
+interface SecretRef { get(): Promise<string | null> }
+
 export interface Env {
   NEWS_KV: KVNamespace;
   ASSETS: Fetcher;
-  GEMINI_API_KEY: string;
-  ADMIN_TOKEN: string;
+  GEMINI_API_KEY: SecretRef;
+  ADMIN_TOKEN: SecretRef;
+  NTFY_TOPIC?: SecretRef;
   GEMINI_MODEL?: string;
-  NTFY_TOPIC?: string;
   NTFY_SERVER?: string;
   ADMIN_URL?: string;
+}
+
+async function secret(ref: SecretRef | undefined): Promise<string> {
+  if (!ref) return "";
+  try {
+    return (await ref.get()) || "";
+  } catch {
+    return "";
+  }
 }
 
 // ───────────────────────── KÖMƏKÇİLƏR ──────────────────────────
@@ -288,7 +300,8 @@ Tərcümə ediləcək xəbərlər:
 
 async function geminiTercume(xeberler: Xeber[], env: Env): Promise<void> {
   if (!xeberler.length) return;
-  if (!env.GEMINI_API_KEY) {
+  const apiKey = await secret(env.GEMINI_API_KEY);
+  if (!apiKey) {
     console.log("  (GEMINI_API_KEY yoxdur — tərcümə edilmədi)");
     return;
   }
@@ -299,7 +312,7 @@ async function geminiTercume(xeberler: Xeber[], env: Env): Promise<void> {
     contents: [{ parts: [{ text: TERCUME_TAPSIRIGI + JSON.stringify(giris, null, 1) }] }],
     generationConfig: { temperature: 0.2, responseMimeType: "application/json" },
   };
-  const unvan = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`;
+  const unvan = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   let netice: any = null;
   for (let cehd = 1; cehd <= 3; cehd++) {
@@ -351,7 +364,9 @@ async function geminiTercume(xeberler: Xeber[], env: Env): Promise<void> {
 // ─────────────────────────── ntfy ──────────────────────────
 
 async function ntfyGonder(yeniGozleyen: Xeber[], env: Env): Promise<void> {
-  if (!env.NTFY_TOPIC || !yeniGozleyen.length) return;
+  if (!yeniGozleyen.length) return;
+  const topic = await secret(env.NTFY_TOPIC);
+  if (!topic) return;
 
   const server = env.NTFY_SERVER || "https://ntfy.sh";
   const adminUrl = env.ADMIN_URL || "https://rentech.az/admin.html";
@@ -376,7 +391,7 @@ async function ntfyGonder(yeniGozleyen: Xeber[], env: Env): Promise<void> {
   if (say > 3) setirler.push(`...və ${say - 3} xəbər daha`);
 
   const yuk = {
-    topic: env.NTFY_TOPIC,
+    topic,
     title: `RenTech: ${say} yeni xəbər`,
     message: setirler.join("\n"),
     click: adminUrl,
@@ -517,11 +532,12 @@ function jsonResp(data: unknown, status = 200): Response {
   });
 }
 
-function checkAdmin(request: Request, env: Env): boolean {
-  if (!env.ADMIN_TOKEN) return false;
+async function checkAdmin(request: Request, env: Env): Promise<boolean> {
+  const adminToken = await secret(env.ADMIN_TOKEN);
+  if (!adminToken) return false;
   const auth = request.headers.get("authorization") || "";
   const token = auth.replace(/^Bearer\s+/i, "").trim();
-  return Boolean(token) && token === env.ADMIN_TOKEN;
+  return Boolean(token) && token === adminToken;
 }
 
 async function apiGetNews(env: Env, request: Request): Promise<Response> {
@@ -553,7 +569,7 @@ async function apiGetNews(env: Env, request: Request): Promise<Response> {
 }
 
 async function apiPutNews(env: Env, request: Request): Promise<Response> {
-  if (!checkAdmin(request, env)) return jsonResp({ error: "unauthorized" }, 401);
+  if (!(await checkAdmin(request, env))) return jsonResp({ error: "unauthorized" }, 401);
   let body: any;
   try {
     body = await request.json();
@@ -599,7 +615,7 @@ export default {
 
     // Manual bot trigger
     if (url.pathname === "/run" && request.method === "POST") {
-      if (!checkAdmin(request, env)) return jsonResp({ error: "unauthorized" }, 401);
+      if (!(await checkAdmin(request, env))) return jsonResp({ error: "unauthorized" }, 401);
       await botIsle(env, url.origin);
       return jsonResp({ ok: true });
     }

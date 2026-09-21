@@ -1,8 +1,8 @@
-# Cloudflare Worker
-worker/node_modules/
-worker/.wrangler/
-worker/.dev.vars
-worker/dist/
+# Cloudflare / Node
+node_modules/
+.wrangler/
+.dev.vars
+dist/
 
 # Editor
 .vscode/

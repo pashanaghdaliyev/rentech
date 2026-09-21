@@ -1,8 +1,8 @@
 {
-  "name": "rentech-bot",
+  "name": "rentech",
   "version": "1.0.0",
   "private": true,
-  "description": "RenTech xəbər botu — Cloudflare Worker (cron every 3h)",
+  "description": "RenTech — Cloudflare Worker with static assets (site + admin API + bot cron)",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",

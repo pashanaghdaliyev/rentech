@@ -1,12 +1,15 @@
 /**
- * RenTech xəbər botu — Cloudflare Worker
- * --------------------------------------
- * Cron trigger vasitəsilə hər 3 saatda RSS lentlərini oxuyur, günəş və bərpa
- * olunan enerji ilə bağlı yeni xəbərləri seçir, xarici dildəkiləri Gemini ilə
- * Azərbaycan dilinə tərcümə edir və KV-yə yazır. Sayt və admin PWA KV-dən
- * `news.json` açarını oxuyur.
+ * RenTech — vahid Cloudflare Worker
+ * ---------------------------------
+ * Bir Worker həm site (static assets), həm API (/api/news), həm də bot (cron)
+ * mesuliyyətini daşıyır.
  *
- * bot.py-nin birbaşa köçürməsidir — məntiq eyni, dil dəyişib.
+ *   GET  /api/news    → KV-dəki news.json, public
+ *   PUT  /api/news    → admin bearer token ilə news.json-u yeniləyir
+ *   POST /run         → admin token ilə botu əl ilə işə salır
+ *   * (digər yollar)  → env.ASSETS-dən static fayl (index.html, admin.html və s.)
+ *
+ * Cron trigger hər 3 saatda botu işə salır (0 4,8,15 UTC = Bakı 08,12,19).
  */
 
 import { XMLParser } from "fast-xml-parser";
@@ -100,7 +103,6 @@ interface Xeber {
 }
 
 interface NewsFile {
-  _qeyt?: string;
   _qeyd?: string;
   updated: string;
   items: Xeber[];
@@ -108,7 +110,9 @@ interface NewsFile {
 
 export interface Env {
   NEWS_KV: KVNamespace;
+  ASSETS: Fetcher;
   GEMINI_API_KEY: string;
+  ADMIN_TOKEN: string;
   GEMINI_MODEL?: string;
   NTFY_TOPIC?: string;
   NTFY_SERVER?: string;
@@ -180,11 +184,8 @@ const xmlParser = new XMLParser({
 });
 
 function itemleriCix(parsed: any): any[] {
-  // RSS 2.0
   if (parsed?.rss?.channel?.item) return parsed.rss.channel.item;
-  // Atom
   if (parsed?.feed?.entry) return parsed.feed.entry;
-  // RDF (rare)
   if (parsed?.["rdf:RDF"]?.item) return parsed["rdf:RDF"].item;
   return [];
 }
@@ -201,9 +202,7 @@ function metnAl(deyer: any): string {
 }
 
 function linkAl(giris: any): string {
-  // RSS: <link>url</link>
   if (typeof giris.link === "string") return giris.link.trim();
-  // Atom: <link href="..." />
   if (giris.link && typeof giris.link === "object") {
     if (Array.isArray(giris.link)) {
       const alt = giris.link.find((l: any) => l["@_rel"] === "alternate" || !l["@_rel"]);
@@ -397,38 +396,36 @@ async function ntfyGonder(yeniGozleyen: Xeber[], env: Env): Promise<void> {
   }
 }
 
-// ─────────────────────────── ƏSAS ──────────────────────────
+// ─────────────────────────── ƏSAS BOT ──────────────────────────
 
-async function kohnəniYuklə(env: Env): Promise<Xeber[]> {
+async function kohnəniYuklə(env: Env, origin?: string): Promise<Xeber[]> {
   const xam = await env.NEWS_KV.get(KV_KEY);
   if (xam) {
     try {
       const data = JSON.parse(xam) as NewsFile;
       return data.items || [];
     } catch {
-      // xarab JSON — aşağıda static seed-ə düş
+      // xarab JSON — aşağıda seed
     }
   }
-  // KV boşdur (ilk işə salma) — sayta getmiş news.json-dan seed et ki, dedup yaddaşı olsun
+  // KV boşdur (ilk işə salma) — static news.json-dan seed et
   try {
-    const adminUrl = env.ADMIN_URL || "https://rentech.az/admin.html";
-    const origin = new URL(adminUrl).origin;
-    const cavab = await fetch(`${origin}/news.json`, { cf: { cacheTtl: 0 } });
-    if (cavab.ok) {
-      const data = (await cavab.json()) as NewsFile;
-      console.log(`  (KV boş idi — ${data.items?.length || 0} xəbər static news.json-dan seed olundu)`);
-      return data.items || [];
+    if (origin) {
+      const cavab = await fetch(`${origin}/news.json`, { cf: { cacheTtl: 0 } });
+      if (cavab.ok) {
+        const data = (await cavab.json()) as NewsFile;
+        console.log(`  (KV boş idi — ${data.items?.length || 0} xəbər static news.json-dan seed olundu)`);
+        return data.items || [];
+      }
     }
-  } catch {
-    // seed alınmadı — boş başla
-  }
+  } catch {}
   return [];
 }
 
-async function botIsle(env: Env): Promise<void> {
+async function botIsle(env: Env, origin?: string): Promise<void> {
   console.log("RenTech xəbər botu işə düşdü");
 
-  const kohne = await kohnəniYuklə(env);
+  const kohne = await kohnəniYuklə(env, origin);
   const kohneLinkler = new Set(kohne.map((x) => x.url));
   const kohneBasliqlar = new Set(kohne.map((x) => normalBaslıq(x.title || "")));
 
@@ -500,27 +497,114 @@ async function botIsle(env: Env): Promise<void> {
   }
 }
 
+// ─────────────────────── API HANDLERS ─────────────────────────
+
+const CORS: Record<string, string> = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET,PUT,POST,OPTIONS",
+  "Access-Control-Allow-Headers": "Authorization,Content-Type",
+  "Access-Control-Max-Age": "86400",
+};
+
+function jsonResp(data: unknown, status = 200): Response {
+  return new Response(JSON.stringify(data, null, 2), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      ...CORS,
+    },
+  });
+}
+
+function checkAdmin(request: Request, env: Env): boolean {
+  if (!env.ADMIN_TOKEN) return false;
+  const auth = request.headers.get("authorization") || "";
+  const token = auth.replace(/^Bearer\s+/i, "").trim();
+  return Boolean(token) && token === env.ADMIN_TOKEN;
+}
+
+async function apiGetNews(env: Env, request: Request): Promise<Response> {
+  const xam = await env.NEWS_KV.get(KV_KEY);
+  if (xam) {
+    try {
+      const data = JSON.parse(xam);
+      return jsonResp(data);
+    } catch {
+      // xarab — aşağıda seed
+    }
+  }
+  // KV hələ boşdur — /news.json-dan qayıt
+  try {
+    const url = new URL(request.url);
+    url.pathname = "/news.json";
+    const assetResp = await env.ASSETS.fetch(new Request(url.toString()));
+    if (assetResp.ok) {
+      const data = await assetResp.json();
+      return jsonResp(data);
+    }
+  } catch {}
+  return jsonResp({
+    _qeyd:
+      "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli.",
+    updated: new Date().toISOString().slice(0, 16).replace("T", " "),
+    items: [],
+  });
+}
+
+async function apiPutNews(env: Env, request: Request): Promise<Response> {
+  if (!checkAdmin(request, env)) return jsonResp({ error: "unauthorized" }, 401);
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResp({ error: "keçərsiz JSON" }, 400);
+  }
+  if (!body || typeof body !== "object" || !Array.isArray(body.items)) {
+    return jsonResp({ error: "`items` massivi tələb olunur" }, 400);
+  }
+  for (const x of body.items) {
+    if (!x || typeof x !== "object") return jsonResp({ error: "xəbər elementi obyekt deyil" }, 400);
+    if (typeof x.url !== "string" || !x.url) return jsonResp({ error: "url boşdur" }, 400);
+    if (typeof x.title !== "string") return jsonResp({ error: "title mətn deyil" }, 400);
+  }
+  body.updated = new Date().toISOString().slice(0, 16).replace("T", " ");
+  await env.NEWS_KV.put(KV_KEY, JSON.stringify(body, null, 2));
+  return jsonResp({ ok: true, count: body.items.length, updated: body.updated });
+}
+
 // ─────────────────────── WORKER HANDLER ───────────────────────
 
 export default {
   async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
-    ctx.waitUntil(botIsle(env));
+    // Cron zamanı origin bilinmir — env.ADMIN_URL-dən götür
+    const adminUrl = env.ADMIN_URL || "https://rentech.az/admin.html";
+    let origin: string | undefined;
+    try {
+      origin = new URL(adminUrl).origin;
+    } catch {}
+    ctx.waitUntil(botIsle(env, origin));
   },
 
-  // Manual trigger üçün fetch handler — POST /run həm Authorization: Bearer <ADMIN_TOKEN>
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
-    if (url.pathname === "/run" && request.method === "POST") {
-      const auth = request.headers.get("authorization") || "";
-      const token = auth.replace(/^Bearer\s+/i, "");
-      // ADMIN_TOKEN secret istəyə görə — yoxdursa, endpoint bağlıdır
-      const admin = (env as any).ADMIN_TOKEN as string | undefined;
-      if (!admin || token !== admin) {
-        return new Response("unauthorized", { status: 401 });
-      }
-      await botIsle(env);
-      return new Response("ok", { status: 200 });
+
+    // API /api/news
+    if (url.pathname === "/api/news") {
+      if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+      if (request.method === "GET") return apiGetNews(env, request);
+      if (request.method === "PUT") return apiPutNews(env, request);
+      return jsonResp({ error: "method not allowed" }, 405);
     }
-    return new Response("rentech bot worker", { status: 200 });
+
+    // Manual bot trigger
+    if (url.pathname === "/run" && request.method === "POST") {
+      if (!checkAdmin(request, env)) return jsonResp({ error: "unauthorized" }, 401);
+      await botIsle(env, url.origin);
+      return jsonResp({ ok: true });
+    }
+
+    // Digər hər şey — static asset
+    return env.ASSETS.fetch(request);
   },
 };

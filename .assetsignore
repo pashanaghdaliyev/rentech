@@ -1,0 +1,13 @@
+src/
+node_modules/
+.wrangler/
+package.json
+package-lock.json
+tsconfig.json
+wrangler.toml
+.gitignore
+.assetsignore
+.git/
+.github/
+OXU-MENI.md
+CNAME

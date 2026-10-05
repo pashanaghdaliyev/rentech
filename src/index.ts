@@ -316,6 +316,8 @@ UYĞUNDUR — xəbərin ƏSAS mövzusu bunlardan biridirsə:
   təlim proqramları, peşə sertifikatları, şəbəkəyə qoşulma qaydaları — enerji, PV,
   saxlama, elektrik təhlükəsizliyi və ya elektromobil sahəsinə aiddirsə
   (tibb, aviasiya, media, süni intellekt etikası kimi başqa sahələrin standartları — uyğun deyil)
+- enerji obyektlərində (günəş, külək, saxlama stansiyaları və s.) yanğın, qəza, təbii fəlakət
+  zərəri və təhlükəsizlik hadisələri — mühəndislər üçün faydalıdır
 
 UYĞUN DEYİL:
 - atom (nüvə) enerjisi və atom elektrik stansiyaları
@@ -323,6 +325,7 @@ UYĞUN DEYİL:
 - ümumi siyasət, diplomatiya, hərbi mövzular, cinayət, qəza, sağlamlıq, idman, mədəniyyət,
   şou-biznes, süni intellekt və İT — enerji ilə birbaşa bağlı deyilsə
 - adi avtomobil bazarı, rüsumlar, ticarət — xəbər açıq şəkildə elektromobillərdən bəhs etmirsə
+- endirim, kupon, satış təklifi, məhsul reklamı tipli xəbərlər (məs. "$700 off", "aşağı qiymətə")
 - dövlət rəsmilərini, nazirlikləri və ya hökuməti tənqid edən, ittiham edən, onlara qarşı
   çıxan xəbərlər — xüsusilə Azərbaycanla bağlı olanlar
 - "enerji", "şəbəkə", "ev" kimi sözlər yalnız təsadüfən keçirsə (məs. "sosial şəbəkə", "Ağ Ev")

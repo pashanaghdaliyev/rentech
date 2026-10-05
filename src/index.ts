@@ -26,6 +26,9 @@ interface Menbe {
   kateqoriya: string;
   suzgec: boolean;
   dil: "az" | "en" | "de";
+  // Google News RSS vasitəsilə oxunur (sayt öz lentini botlara bağlayıb):
+  // başlığın sonundakı " - <ad>" silinir, təsvir yalnız başlığı təkrarladığı üçün atılır
+  googleNews?: boolean;
 }
 
 const MENBELER: Menbe[] = [
@@ -35,7 +38,8 @@ const MENBELER: Menbe[] = [
   { url: "https://musavat.com/rss.xml", ad: "Müsavat", kateqoriya: "Azərbaycan", suzgec: true, dil: "az" },
   { url: "https://www.pv-magazine.com/feed/", ad: "pv magazine", kateqoriya: "Dünya", suzgec: false, dil: "en" },
   { url: "https://www.pv-magazine-usa.com/feed/", ad: "pv magazine USA", kateqoriya: "ABŞ", suzgec: false, dil: "en" },
-  { url: "https://cleantechnica.com/feed/", ad: "CleanTechnica", kateqoriya: "ABŞ", suzgec: true, dil: "en" },
+  // cleantechnica.com/feed/ Cloudflare bot qoruması ilə 403 qaytarır
+  { url: "https://news.google.com/rss/search?q=site:cleantechnica.com+when:7d&hl=en-US&gl=US&ceid=US:en", ad: "CleanTechnica", kateqoriya: "ABŞ", suzgec: true, dil: "en", googleNews: true },
   { url: "https://www.pv-magazine.de/feed/", ad: "pv magazine Deutschland", kateqoriya: "Almaniya", suzgec: false, dil: "de" },
   { url: "https://www.pv-tech.org/feed/", ad: "PV Tech", kateqoriya: "Çin", suzgec: false, dil: "en" },
   { url: "https://www.energytrend.com/rss.xml", ad: "EnergyTrend", kateqoriya: "Çin", suzgec: false, dil: "en" },
@@ -212,6 +216,9 @@ const xmlParser = new XMLParser({
   attributeNamePrefix: "@_",
   cdataPropName: "__cdata",
   isArray: (name) => name === "item" || name === "entry",
+  // Standart limit (1000 entity) MIT News kimi uzun lentlərdə aşılır. Limitlər
+  // qalır (iç-içə genişlənmə və ölçü), sadəcə adi &amp; / &#8217; sayı üçün geniş.
+  processEntities: { enabled: true, maxTotalExpansions: 50000, maxExpandedLength: 2000000 },
 });
 
 function itemleriCix(parsed: any): any[] {
@@ -264,13 +271,19 @@ async function lentiOxu(menbe: Menbe): Promise<Xeber[]> {
 
     const netice: Xeber[] = [];
     for (const giris of items) {
-      const baslıq = temizMetn(metnAl(giris.title));
+      let baslıq = temizMetn(metnAl(giris.title));
+      if (menbe.googleNews) {
+        const sonluq = ` - ${menbe.ad}`;
+        if (baslıq.endsWith(sonluq)) baslıq = baslıq.slice(0, -sonluq.length).trim();
+      }
       const link = linkAl(giris);
       if (!baslıq || !link) continue;
 
-      const xulase = temizMetn(
-        metnAl(giris.description ?? giris.summary ?? giris.content ?? giris["content:encoded"] ?? ""),
-      );
+      const xulase = menbe.googleNews
+        ? ""
+        : temizMetn(
+            metnAl(giris.description ?? giris.summary ?? giris.content ?? giris["content:encoded"] ?? ""),
+          );
       if (menbe.suzgec && !uygundur(baslıq, xulase, menbe)) continue;
 
       // Status müvəqqətidir — son qərarı botIsle() Gemini yoxlamasından sonra verir

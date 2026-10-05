@@ -26,9 +26,9 @@ interface Menbe {
   kateqoriya: string;
   suzgec: boolean;
   dil: "az" | "en" | "de";
-  // Google News RSS vasitəsilə oxunur (sayt öz lentini botlara bağlayıb):
-  // başlığın sonundakı " - <ad>" silinir, təsvir yalnız başlığı təkrarladığı üçün atılır
-  googleNews?: boolean;
+  // Bing News RSS vasitəsilə oxunur (sayt öz lentini botlara bağlayıb).
+  // Bing linkləri yönləndirmədir — orijinal URL "url" parametrindən çıxarılır.
+  bingNews?: boolean;
 }
 
 const MENBELER: Menbe[] = [
@@ -38,8 +38,8 @@ const MENBELER: Menbe[] = [
   { url: "https://musavat.com/rss.xml", ad: "Müsavat", kateqoriya: "Azərbaycan", suzgec: true, dil: "az" },
   { url: "https://www.pv-magazine.com/feed/", ad: "pv magazine", kateqoriya: "Dünya", suzgec: false, dil: "en" },
   { url: "https://www.pv-magazine-usa.com/feed/", ad: "pv magazine USA", kateqoriya: "ABŞ", suzgec: false, dil: "en" },
-  // cleantechnica.com/feed/ Cloudflare bot qoruması ilə 403 qaytarır
-  { url: "https://news.google.com/rss/search?q=site:cleantechnica.com+when:7d&hl=en-US&gl=US&ceid=US:en", ad: "CleanTechnica", kateqoriya: "ABŞ", suzgec: true, dil: "en", googleNews: true },
+  // cleantechnica.com/feed/ Cloudflare bot qoruması ilə 403 qaytarır; Google News isə Workers IP-lərinə 503
+  { url: "https://www.bing.com/news/search?q=site%3acleantechnica.com&format=rss", ad: "CleanTechnica", kateqoriya: "ABŞ", suzgec: true, dil: "en", bingNews: true },
   { url: "https://www.pv-magazine.de/feed/", ad: "pv magazine Deutschland", kateqoriya: "Almaniya", suzgec: false, dil: "de" },
   { url: "https://www.pv-tech.org/feed/", ad: "PV Tech", kateqoriya: "Çin", suzgec: false, dil: "en" },
   { url: "https://www.energytrend.com/rss.xml", ad: "EnergyTrend", kateqoriya: "Çin", suzgec: false, dil: "en" },
@@ -271,19 +271,18 @@ async function lentiOxu(menbe: Menbe): Promise<Xeber[]> {
 
     const netice: Xeber[] = [];
     for (const giris of items) {
-      let baslıq = temizMetn(metnAl(giris.title));
-      if (menbe.googleNews) {
-        const sonluq = ` - ${menbe.ad}`;
-        if (baslıq.endsWith(sonluq)) baslıq = baslıq.slice(0, -sonluq.length).trim();
+      const baslıq = temizMetn(metnAl(giris.title));
+      let link = linkAl(giris);
+      if (menbe.bingNews && link) {
+        try {
+          link = new URL(link).searchParams.get("url") || link;
+        } catch {}
       }
-      const link = linkAl(giris);
       if (!baslıq || !link) continue;
 
-      const xulase = menbe.googleNews
-        ? ""
-        : temizMetn(
-            metnAl(giris.description ?? giris.summary ?? giris.content ?? giris["content:encoded"] ?? ""),
-          );
+      const xulase = temizMetn(
+        metnAl(giris.description ?? giris.summary ?? giris.content ?? giris["content:encoded"] ?? ""),
+      );
       if (menbe.suzgec && !uygundur(baslıq, xulase, menbe)) continue;
 
       // Status müvəqqətidir — son qərarı botIsle() Gemini yoxlamasından sonra verir
@@ -351,7 +350,8 @@ Tərcümə qaydaları:
 - Şirkət, ölkə və layihə adlarını tərcümə etmə.
 - Rəqəmləri dəyişmə; onluq ayırıcı vergüldür (25,5%).
 - Başlıq qısa və xəbər dilində olsun; əlavə şərh yazma.
-- Mətn artıq Azərbaycan dilindədirsə (lang: "az"), title və excerpt-i olduğu kimi qaytar.
+- title və excerpt HƏMİŞƏ Azərbaycan dilində olmalıdır: lang "az" deyilsə mütləq tərcümə et,
+  orijinal dildə saxlama. lang "az"-dırsa, olduğu kimi qaytar.
 
 Cavabı YALNIZ JSON massivi kimi qaytar:
 [{"i": 0, "uygun": true, "sebeb": "...", "title": "...", "excerpt": "..."}]
@@ -370,7 +370,7 @@ const YOXLAMA_SXEMI = {
       title: { type: "STRING" },
       excerpt: { type: "STRING" },
     },
-    required: ["i", "uygun", "sebeb"],
+    required: ["i", "uygun", "sebeb", "title", "excerpt"],
   },
 };
 
@@ -463,6 +463,23 @@ async function geminiYoxla(xeberler: Xeber[], env: Env): Promise<(Qerar | null)[
     const qrup = xeberler.slice(bas, bas + YOXLAMA_QRUPU);
     const qerarlar = await geminiQrup(qrup, apiKey, model);
     hamisi.push(...(qerarlar || qrup.map(() => null)));
+  }
+
+  // Uyğun sayılıb, amma tərcümə olunmayan xarici xəbərlər üçün bir dəfə də cəhd et
+  const tercumesiz = xeberler
+    .map((x, n) => n)
+    .filter((n) => {
+      const q = hamisi[n];
+      const xarici = (xeberler[n]._dil || "en") !== "az" && !xeberler[n].tercume;
+      return q && q.uygun && xarici && (!q.title || q.title === xeberler[n].title);
+    })
+    .slice(0, YOXLAMA_QRUPU);
+  if (tercumesiz.length) {
+    console.log(`  ${tercumesiz.length} xəbər tərcümə olunmayıb — yenidən cəhd`);
+    const ikinci = await geminiQrup(tercumesiz.map((n) => xeberler[n]), apiKey, model);
+    ikinci?.forEach((q, k) => {
+      if (q && q.uygun) hamisi[tercumesiz[k]] = q;
+    });
   }
   const say = hamisi.filter(Boolean).length;
   console.log(`  ${say}/${xeberler.length} xəbər üçün qərar alındı`);

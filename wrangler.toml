@@ -16,12 +16,29 @@ run_worker_first = true
 [triggers]
 crons = ["0 4,8,15 * * *"]
 
-# KV binding — Cloudflare dashboard-dan namespace ID-si əlavə et
-# (Settings → Bindings → KV → NEWS_KV → rentech-news)
-# Bu yeri boş qoyub dashboard-dan bind etmək daha rahatdır — nümunə:
-# [[kv_namespaces]]
-# binding = "NEWS_KV"
-# id = "abc123..."
+# Bağlantılar (bindings) MÜTLƏQ burada olmalıdır: Workers Builds hər commit-də
+# `wrangler deploy` işlədir və bu faylda olmayan dashboard bağlantılarını silir.
+
+# KV — xəbərlər (key: news.json)
+[[kv_namespaces]]
+binding = "NEWS_KV"
+id = "2536c3320cbc491fa989c9dfe5c3dcb5"   # rentech-news
+
+# Secrets Store (default_secrets_store) — kodda env.NAME.get() ilə oxunur
+[[secrets_store_secrets]]
+binding = "ADMIN_TOKEN"
+store_id = "c389412c1eff4bd2834bc269174b5c3d"
+secret_name = "ADMIN_TOKEN"
+
+[[secrets_store_secrets]]
+binding = "GEMINI_API_KEY"
+store_id = "c389412c1eff4bd2834bc269174b5c3d"
+secret_name = "GEMINI_API_KEY"
+
+[[secrets_store_secrets]]
+binding = "NTFY_TOPIC"
+store_id = "c389412c1eff4bd2834bc269174b5c3d"
+secret_name = "NTFY_TOPIC"
 
 # Variables (public, dashboard-dan da dəyişmək olur)
 [vars]
@@ -29,7 +46,7 @@ GEMINI_MODEL = "gemini-flash-lite-latest"
 NTFY_SERVER = "https://ntfy.sh"
 ADMIN_URL = "https://rentech.az/admin.html"
 
-# Secrets (dashboard-dan Settings → Variables and Secrets → Add):
+# Secret dəyərləri Secrets Store-dadır (yuxarıdakı [[secrets_store_secrets]]):
 #   ADMIN_TOKEN      — admin.html paneli üçün auth
 #   GEMINI_API_KEY   — tərcümə üçün
 #   NTFY_TOPIC       — telefon push-u

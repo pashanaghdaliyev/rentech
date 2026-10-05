@@ -313,6 +313,9 @@
     margin-top:16px;border-left:4px solid var(--sun);background:var(--sun-soft);
     border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.65;color:var(--ink-soft);
   }
+  .lesson-fig{margin:14px 0 18px;background:var(--paper-dim);border:1px solid var(--line);border-radius:12px;padding:12px;}
+  .lesson-fig svg{display:block;width:100%;height:auto;max-height:280px;font-family:var(--font);}
+  .lesson-fig figcaption{margin-top:8px;font-size:13px;line-height:1.5;color:var(--ink-mute);text-align:center;}
   .lesson .no{
     display:inline-flex;flex:none;width:36px;height:36px;align-items:center;justify-content:center;
     border-radius:12px;background:var(--brand-soft);color:var(--brand);
@@ -1020,6 +1023,298 @@
         <h3>Azərbaycan şəraitində</h3>
         <p>Hesablamalarda “<b>pik günəş saatı</b>” anlayışından istifadə olunur: günün ərzində alınan ümumi enerjinin 1 000 Vt/m² gücündə neçə saata bərabər olduğunu göstərir. Saytdakı hesablayıcılarda standart olaraq <b>4,5 saat</b> götürülür.</p>
         <p>Öz ünvanınız üçün dəqiq rəqəmi Global Solar Atlas xəritəsindən baxa bilərsiniz — nəticə bölgəyə və dam istiqamətinə görə dəyişir.</p>
+      `
+    },
+    {
+      title: "Günəş paneli necə elektrik yaradır?",
+      intro: "Fotondan cərəyana qədər: prosesin addım-addım izahı.",
+      body: `
+        <p>Bu dərsdə günəş işığının paneldə elektrikə necə çevrildiyini ardıcıl addımlarla izləyirik: işığın təbiətindən başlayaraq lampanı yandıran cərəyana qədər.</p>
+
+        <h3>1. Günəş işığı nədir</h3>
+        <p>Günəş işığı Günəşdən bizə çatan <b>enerjidir</b> və onun iki “siması” var.</p>
+        <ul>
+          <li><b>Dalğa kimi yayılır.</b> Suya atılan daşdan dalğalar yayıldığı kimi, işıq da dalğa şəklində yayılır, sadəcə çox sürətli və çox kiçik dalğalarla. Uzun dalğaları göz <b>qırmızı</b>, qısa dalğaları isə <b>göy və bənövşəyi</b> kimi görür. Göy qurşağı günəş işığının rənglərə ayrılmasıdır.</li>
+          <li>Gözün görmədiyi dalğalar da var: <b>infraqırmızı</b> (istilik kimi hiss olunur) və <b>ultrabənövşəyi</b> (dərini qaraldan).</li>
+          <li><b>Enerji paylarından ibarətdir.</b> Eyni zamanda işıq kiçik enerji paylarından — <b>fotonlardan</b> ibarətdir. Dalğa nə qədər qısadırsa, fotonun enerjisi bir o qədər böyükdür.</li>
+        </ul>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 640 220" role="img" aria-label="Uzun qırmızı və qısa bənövşəyi dalğa, fotonlar və göy qurşağı">
+            <g font-size="17" fill="#54665D">
+              <text x="20" y="24">Uzun dalğa (qırmızı) — zəif foton</text>
+              <text x="20" y="108">Qısa dalğa (bənövşəyi) — güclü foton</text>
+              <text x="190" y="200">← fotonlar</text>
+              <text x="520" y="40" text-anchor="middle">Göy qurşağı</text>
+            </g>
+            <path d="M20 62 q27.5 -40 55 0 t55 0 t55 0 t55 0 t55 0 t55 0" fill="none" stroke="#EF4444" stroke-width="5"/>
+            <path d="M20 140 q11 -22 22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0" fill="none" stroke="#8B5CF6" stroke-width="5"/>
+            <g fill="#E4A93B" stroke="#C2861F" stroke-width="2">
+              <circle cx="30" cy="194" r="9"/><circle cx="68" cy="194" r="9"/><circle cx="106" cy="194" r="9"/><circle cx="144" cy="194" r="9"/>
+            </g>
+            <g fill="none" stroke-width="9">
+              <path d="M420 190 A100 100 0 0 1 620 190" stroke="#EF4444"/>
+              <path d="M429 190 A91 91 0 0 1 611 190" stroke="#F97316"/>
+              <path d="M438 190 A82 82 0 0 1 602 190" stroke="#FACC15"/>
+              <path d="M447 190 A73 73 0 0 1 593 190" stroke="#22C55E"/>
+              <path d="M456 190 A64 64 0 0 1 584 190" stroke="#3B82F6"/>
+              <path d="M465 190 A55 55 0 0 1 575 190" stroke="#8B5CF6"/>
+            </g>
+          </svg>
+          <figcaption>İşıq həm dalğa, həm də foton kimi davranır.</figcaption>
+        </figure>
+        <p class="lesson-note">İşığın eyni anda həm dalğa, həm də zərrəcik kimi davranması fizikanın ən maraqlı faktlarından biridir. Günəş panelinin işini başa düşmək üçün onu <b>foton</b> kimi təsəvvür etmək daha rahatdır.</p>
+
+        <h3>2. Atom və elektron</h3>
+        <p>Bütün maddələr <b>atomlardan</b> qurulub. Atomun mərkəzində nüvə yerləşir, ətrafında isə daha kiçik hissəciklər — <b>elektronlar</b> hərəkət edir. Elektrik cərəyanı məhz elektronların hərəkətidir.</p>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 440 200" role="img" aria-label="Atom: nüvə və onun ətrafında fırlanan elektronlar">
+            <g fill="none" stroke="#60A5FA" stroke-width="3">
+              <ellipse cx="170" cy="100" rx="105" ry="36"/>
+              <ellipse cx="170" cy="100" rx="105" ry="36" transform="rotate(60 170 100)"/>
+              <ellipse cx="170" cy="100" rx="105" ry="36" transform="rotate(-60 170 100)"/>
+            </g>
+            <circle cx="170" cy="100" r="20" fill="#E4A93B"/>
+            <g fill="#2563EB">
+              <circle cx="275" cy="100" r="9"/>
+              <circle cx="275" cy="100" r="9" transform="rotate(60 170 100)"/>
+              <circle cx="65" cy="100" r="9" transform="rotate(-60 170 100)"/>
+            </g>
+            <g font-size="17">
+              <circle cx="320" cy="82" r="8" fill="#E4A93B"/><text x="336" y="88" fill="#54665D">nüvə</text>
+              <circle cx="320" cy="116" r="8" fill="#2563EB"/><text x="336" y="122" fill="#54665D">elektron</text>
+            </g>
+          </svg>
+          <figcaption>Atomun sadələşdirilmiş modeli.</figcaption>
+        </figure>
+
+        <h3>3. Panel hansı materialdan hazırlanır</h3>
+        <p>Ən çox <b>silisium</b> istifadə olunur. Silisium <b>qumdan</b> alınır, ucuzdur və onilliklər boyu xarab olmur. Evlərin damındakı panellərin demək olar ki, hamısı silisiumdandır. Digər materiallar:</p>
+        <ul>
+          <li><b>Kadmium tellurid (CdTe)</b> — nazik təbəqəli panellər üçün</li>
+          <li><b>CIGS</b> (mis, indium, qallium, selen) — əyilə bilən, yüngül panellər; çanta və çadır kimi səthlərə yapışdırmaq olar</li>
+          <li><b>Qallium arsenid (GaAs)</b> — çox yüksək səmərəli, lakin bahalı; kosmik peyklərdə və Mars robotlarında istifadə olunur</li>
+          <li><b>Perovskit</b> — yeni material, hələ tədqiq olunur, gələcəkdə daha ucuz panellər vəd edir</li>
+        </ul>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 640 180" role="img" aria-label="Qumdan silisium panelə, nazik əyilən panel və kosmik peyk">
+            <path d="M20 125 Q75 45 130 125 Z" fill="#F2CC6B"/>
+            <g fill="#C2861F"><circle cx="62" cy="100" r="3"/><circle cx="85" cy="92" r="3"/><circle cx="92" cy="112" r="3"/><circle cx="70" cy="116" r="3"/></g>
+            <path d="M145 92 h32 m-10 -9 l10 9 l-10 9" fill="none" stroke="#8A998F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="200" y="80" width="100" height="45" fill="#FBE7A1" stroke="#A16207" stroke-width="2"/>
+            <polygon points="188,82 250,36 312,82" fill="#B91C1C"/>
+            <polygon points="226,72 244,52 270,52 252,72" fill="#1E3A8A" stroke="#93C5FD" stroke-width="1.5"/>
+            <rect x="240" y="98" width="20" height="27" fill="#92400E"/>
+            <path d="M345 95 q32 -45 64 0 t64 0" fill="none" stroke="#334155" stroke-width="14" stroke-linecap="round"/>
+            <path d="M345 95 q32 -45 64 0 t64 0" fill="none" stroke="#64748B" stroke-width="10" stroke-dasharray="3 5"/>
+            <rect x="500" y="78" width="42" height="24" fill="#1E3A8A"/>
+            <rect x="550" y="72" width="24" height="36" rx="5" fill="#CBD5E1" stroke="#475569" stroke-width="2"/>
+            <rect x="582" y="78" width="42" height="24" fill="#1E3A8A"/>
+            <path d="M542 90 h8 M574 90 h8" stroke="#475569" stroke-width="3"/>
+            <g font-size="22" fill="#54665D" text-anchor="middle">
+              <text x="75" y="166">Qum</text>
+              <text x="250" y="166">Silisium panel</text>
+              <text x="409" y="166">Nazik panel</text>
+              <text x="562" y="166">Kosmik peyk</text>
+            </g>
+          </svg>
+          <figcaption>Material panelin harada və necə istifadə olunacağını müəyyən edir.</figcaption>
+        </figure>
+        <p class="lesson-note">Bütün bu materialların ortaq cəhəti: <b>işıq düşəndə onların elektronları asanlıqla yerindən qopur.</b></p>
+
+        <h3>4. Silisiuma niyə qatqı vurulur</h3>
+        <p>Hər silisium atomunun <b>4 valent elektronu</b> var: o, bu dörd “əllə” qonşu atomlarla möhkəm rabitə qurur və bütün əllər məşğul olur. Təmiz silisiumda sərbəst elektron demək olar ki, yoxdur, ona görə də kristala az miqdarda başqa element — <b>qatqı</b> əlavə edilir.</p>
+        <ul>
+          <li><b>Fosfor (n-tip qat).</b> Fosforun 5 valent elektronu var. Dördü qonşularla rabitə qurur, <b>beşinci elektron artıq qalır</b> və kristalda sərbəst hərəkət edir. Bu qat “elektronu çox olan” qatdır.</li>
+          <li><b>Bor (p-tip qat).</b> Borun cəmi 3 valent elektronu var. Qonşulardan biri rabitə qurmaq istəyir, amma cüt tapmır və orada <b>boş yer — deşik</b> qalır. Bu qat “elektronu çatmayan” qatdır.</li>
+        </ul>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 640 230" role="img" aria-label="Silisium, fosfor və bor atomlarının qonşularla rabitəsi">
+            <g transform="translate(110 100)">
+              <g stroke="#475569" stroke-width="5"><line x1="0" y1="0" x2="0" y2="-62"/><line x1="0" y1="0" x2="70" y2="0"/><line x1="0" y1="0" x2="0" y2="62"/><line x1="0" y1="0" x2="-70" y2="0"/></g>
+              <g fill="#CBD5E1" stroke="#475569" stroke-width="2"><circle cx="0" cy="-62" r="16"/><circle cx="70" cy="0" r="16"/><circle cx="0" cy="62" r="16"/><circle cx="-70" cy="0" r="16"/></g>
+              <circle r="26" fill="#94A3B8" stroke="#334155" stroke-width="2.5"/>
+              <text y="6" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Si</text>
+            </g>
+            <g transform="translate(320 100)">
+              <g stroke="#475569" stroke-width="5"><line x1="0" y1="0" x2="0" y2="-62"/><line x1="0" y1="0" x2="70" y2="0"/><line x1="0" y1="0" x2="0" y2="62"/><line x1="0" y1="0" x2="-70" y2="0"/></g>
+              <line x1="0" y1="0" x2="44" y2="-50" stroke="#0E6B4F" stroke-width="4"/>
+              <g fill="#CBD5E1" stroke="#475569" stroke-width="2"><circle cx="0" cy="-62" r="16"/><circle cx="70" cy="0" r="16"/><circle cx="0" cy="62" r="16"/><circle cx="-70" cy="0" r="16"/></g>
+              <circle r="26" fill="#0E6B4F" stroke="#0A5240" stroke-width="2.5"/>
+              <text y="6" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">P</text>
+              <circle cx="46" cy="-52" r="10" fill="#2563EB"/>
+            </g>
+            <g transform="translate(530 100)">
+              <g stroke="#475569" stroke-width="5"><line x1="0" y1="0" x2="0" y2="-62"/><line x1="0" y1="0" x2="70" y2="0"/><line x1="0" y1="0" x2="-70" y2="0"/></g>
+              <line x1="0" y1="0" x2="0" y2="62" stroke="#475569" stroke-width="3" stroke-dasharray="4 5"/>
+              <g fill="#CBD5E1" stroke="#475569" stroke-width="2"><circle cx="0" cy="-62" r="16"/><circle cx="70" cy="0" r="16"/><circle cx="0" cy="62" r="16"/><circle cx="-70" cy="0" r="16"/></g>
+              <circle r="26" fill="#DC2626" stroke="#991B1B" stroke-width="2.5"/>
+              <text y="6" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">B</text>
+              <circle cx="0" cy="36" r="7" fill="#fff" stroke="#DC2626" stroke-width="2.5" stroke-dasharray="3 3"/>
+            </g>
+            <g font-size="19" text-anchor="middle">
+              <text x="380" y="58" text-anchor="start" fill="#2563EB">artıq elektron</text>
+              <text x="582" y="150" fill="#DC2626">deşik</text>
+            </g>
+            <g font-size="22" fill="#54665D" text-anchor="middle">
+              <text x="110" y="218">Si: 4 rabitə</text>
+              <text x="320" y="218">P: 5 elektron</text>
+              <text x="530" y="218">B: 3 elektron</text>
+            </g>
+          </svg>
+          <figcaption>Fosfor artıq elektron, bor isə boş yer (deşik) yaradır.</figcaption>
+        </figure>
+
+        <h3>5. Qatqı necə vurulur</h3>
+        <ul>
+          <li><b>Bor:</b> silisium <b>1 400 °C-dən yuxarı</b> temperaturda əridilir və ərintiyə çox az miqdarda bor əlavə edilir. Ərintiyə kiçik silisium kristalı (“toxum”) salınır və fırladılaraq yavaş-yavaş yuxarı çəkilir. Toxumun ətrafında silisium donur və böyük silindrik kristal alınır. Sonra o, kağız qalınlığında nazik lövhələrə — <b>vaflilərə</b> kəsilir.</li>
+          <li><b>Fosfor:</b> lövhələr <b>800–900 °C</b> temperaturlu sobaya qoyulur və içəri fosforlu qaz verilir. Fosfor lövhənin <b>yalnız üst nazik qatına</b> hopur.</li>
+        </ul>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 640 225" role="img" aria-label="İstehsal: ərimiş silisiumdan kristal çəkilir, dilimlərə kəsilir, sobada fosfor vurulur">
+            <line x1="80" y1="8" x2="80" y2="42" stroke="#475569" stroke-width="4"/>
+            <rect x="60" y="40" width="40" height="78" rx="16" fill="#94A3B8" stroke="#334155" stroke-width="2"/>
+            <polygon points="20,122 140,122 128,180 32,180" fill="#64748B"/>
+            <rect x="26" y="112" width="108" height="16" fill="#F59E0B"/>
+            <g fill="#DC2626"><circle cx="45" cy="120" r="3"/><circle cx="80" cy="124" r="3"/><circle cx="115" cy="119" r="3"/></g>
+            <g fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round"><path d="M40 186 q5 6 0 12"/><path d="M80 186 q5 6 0 12"/><path d="M120 186 q5 6 0 12"/></g>
+            <path d="M155 100 h32 m-10 -9 l10 9 l-10 9" fill="none" stroke="#8A998F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="205" y="45" width="42" height="115" rx="12" fill="#94A3B8" stroke="#334155" stroke-width="2"/>
+            <g stroke="#fff" stroke-width="2"><line x1="205" y1="75" x2="247" y2="75"/><line x1="205" y1="102" x2="247" y2="102"/><line x1="205" y1="129" x2="247" y2="129"/></g>
+            <g fill="#64748B"><ellipse cx="292" cy="78" rx="26" ry="8"/><ellipse cx="292" cy="102" rx="26" ry="8"/><ellipse cx="292" cy="126" rx="26" ry="8"/></g>
+            <path d="M330 100 h32 m-10 -9 l10 9 l-10 9" fill="none" stroke="#8A998F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="378" y="40" width="244" height="135" rx="14" fill="#FDE68A" stroke="#A16207" stroke-width="3"/>
+            <rect x="396" y="56" width="208" height="102" rx="8" fill="#FFFBEB"/>
+            <g fill="#0E6B4F"><circle cx="420" cy="74" r="4"/><circle cx="455" cy="88" r="4"/><circle cx="490" cy="72" r="4"/><circle cx="530" cy="86" r="4"/><circle cx="570" cy="74" r="4"/></g>
+            <rect x="420" y="112" width="140" height="10" fill="#0E6B4F"/>
+            <rect x="420" y="122" width="140" height="18" fill="#F87171"/>
+            <g font-size="18" font-weight="700"><text x="568" y="122" fill="#0E6B4F">P</text><text x="568" y="140" fill="#DC2626">B</text></g>
+            <g font-size="22" fill="#54665D" text-anchor="middle">
+              <text x="80" y="218">Ərinti + bor</text>
+              <text x="255" y="218">Lövhələr</text>
+              <text x="500" y="218">Soba, fosfor qazı</text>
+            </g>
+          </svg>
+          <figcaption>Kristalın çəkilməsi, lövhələrə kəsilməsi və fosforun üst qata vurulması.</figcaption>
+        </figure>
+        <p class="lesson-note">Qatqı çox az olur: hər <b>milyon</b> silisium atomuna cəmi bir neçə qatqı atomu düşür. Nəticədə bir lövhədə iki qat yaranır: <b>altda borlu (p), üstdə fosforlu (n)</b>.</p>
+
+        <h3>6. İki qat birləşəndə nə olur</h3>
+        <p>Elektronlar elektronu çox olan yerdən boş yerlərə keçməyə meyillidir. Qatların sərhəddində bir qədər elektron keçir və orada daxili elektrik sahəsi — <b>görünməz bir maneə</b> yaranır. Bu sərhədə <b>p-n keçid</b> deyilir. O, elektronları yalnız <b>bir istiqamətdə</b> buraxır, birtərəfli qapı kimi.</p>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 600 190" role="img" aria-label="p-n keçid: üstdə elektronu çox olan qat, altda deşikli qat, arada maneə">
+            <rect x="20" y="15" width="560" height="70" fill="#DCFCE7" stroke="#0E6B4F" stroke-width="2.5"/>
+            <rect x="20" y="85" width="560" height="20" fill="#FDE68A"/>
+            <rect x="20" y="105" width="560" height="70" fill="#FEE2E2" stroke="#DC2626" stroke-width="2.5"/>
+            <g fill="#2563EB"><circle cx="330" cy="60" r="9"/><circle cx="375" cy="48" r="9"/><circle cx="420" cy="64" r="9"/><circle cx="465" cy="50" r="9"/><circle cx="510" cy="62" r="9"/><circle cx="550" cy="46" r="9"/></g>
+            <g fill="none" stroke="#DC2626" stroke-width="2.5" stroke-dasharray="3 3"><circle cx="330" cy="135" r="9"/><circle cx="375" cy="150" r="9"/><circle cx="420" cy="132" r="9"/><circle cx="465" cy="148" r="9"/><circle cx="510" cy="134" r="9"/><circle cx="550" cy="150" r="9"/></g>
+            <g font-size="16" font-weight="700">
+              <text x="34" y="44" fill="#0A5240">n-qat (fosforlu):</text><text x="34" y="66" fill="#0A5240">elektron çoxdur</text>
+              <text x="34" y="134" fill="#991B1B">p-qat (borlu):</text><text x="34" y="156" fill="#991B1B">deşiklər</text>
+            </g>
+            <text x="34" y="101" font-size="15" fill="#92400E">p-n keçid — birtərəfli qapı</text>
+          </svg>
+          <figcaption>p-n keçid elektronların hərəkətinə istiqamət verir.</figcaption>
+        </figure>
+
+        <h3>7. İşıq panelə düşəndə</h3>
+        <p>Foton silisiuma dəyib enerjisini elektrona ötürür, bilyard topunun digər topu vurması kimi. Elektron yerindən qopur, p-n keçidin sahəsi isə onu fosforlu (n) tərəfə ötürür. İşıq nə qədər güclüdürsə, bir tərəfdə bir o qədər çox elektron toplanır. Bu hadisəyə <b>fotovoltaik effekt</b> deyilir.</p>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 600 185" role="img" aria-label="Foton silisium atomuna dəyir və elektron qopur">
+            <g stroke="#E4A93B" stroke-width="4" stroke-linecap="round"><line x1="60" y1="12" x2="60" y2="22"/><line x1="28" y1="50" x2="18" y2="50"/><line x1="36" y1="26" x2="29" y2="19"/><line x1="84" y1="26" x2="91" y2="19"/></g>
+            <circle cx="60" cy="50" r="22" fill="#E4A93B"/>
+            <line x1="88" y1="66" x2="262" y2="124" stroke="#E4A93B" stroke-width="3" stroke-dasharray="8 6"/>
+            <circle cx="178" cy="96" r="9" fill="#FACC15" stroke="#C2861F" stroke-width="2"/>
+            <text x="150" y="76" font-size="16" fill="#B45309">foton</text>
+            <g stroke="#F97316" stroke-width="3" stroke-linecap="round"><line x1="270" y1="100" x2="262" y2="90"/><line x1="282" y1="96" x2="282" y2="84"/><line x1="294" y1="100" x2="302" y2="90"/></g>
+            <circle cx="285" cy="132" r="24" fill="#94A3B8" stroke="#334155" stroke-width="2.5"/>
+            <text x="285" y="138" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">Si</text>
+            <path d="M312 118 Q400 50 470 62" fill="none" stroke="#2563EB" stroke-width="3.5"/>
+            <polygon points="470,52 488,64 468,72" fill="#2563EB"/>
+            <circle cx="502" cy="64" r="10" fill="#2563EB"/>
+            <text x="450" y="104" font-size="16" fill="#2563EB">elektron qopur</text>
+            <rect x="20" y="166" width="560" height="9" rx="4" fill="#1E3A8A"/>
+          </svg>
+          <figcaption>Fotonun enerjisi elektronu atomdan qoparır.</figcaption>
+        </figure>
+
+        <h3>8. Potensiallar fərqi (gərginlik)</h3>
+        <p>Su yuxarıdan aşağı axır, çünki iki səviyyə arasında <b>hündürlük fərqi</b> var. Elektrikdə də belədir: bir tərəfdə elektronlar toplanıb “yuxarıda”, digər tərəfdə isə “aşağıda” olur. Bu elektrik “hündürlük fərqinə” <b>potensiallar fərqi</b> və ya <b>gərginlik</b> deyilir. Ölçü vahidi <b>voltdur (V)</b>.</p>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 600 210" role="img" aria-label="Yuxarıdakı çəndən aşağıdakı çənə su axır; hündürlük fərqi gərginliyə bənzəyir">
+            <line x1="45" y1="30" x2="45" y2="190" stroke="#F97316" stroke-width="4"/>
+            <polygon points="33,40 45,18 57,40" fill="#F97316"/><polygon points="33,180 45,202 57,180" fill="#F97316"/>
+            <rect x="90" y="30" width="130" height="80" fill="#E0F2FE" stroke="#0284C7" stroke-width="2.5"/>
+            <rect x="91" y="46" width="128" height="63" fill="#38BDF8"/>
+            <rect x="220" y="94" width="232" height="12" fill="#94A3B8"/>
+            <line x1="222" y1="100" x2="450" y2="100" stroke="#0EA5E9" stroke-width="5" stroke-dasharray="12 8"/>
+            <rect x="440" y="100" width="12" height="62" fill="#0EA5E9"/>
+            <rect x="410" y="130" width="140" height="60" fill="#E0F2FE" stroke="#0284C7" stroke-width="2.5"/>
+            <rect x="411" y="160" width="138" height="29" fill="#38BDF8"/>
+            <g font-size="16" fill="#54665D" text-anchor="middle"><text x="155" y="22">yuxarı</text><text x="480" y="122">aşağı</text></g>
+            <g font-size="16" fill="#C2410C"><text x="62" y="140">hündürlük fərqi</text><text x="62" y="162">= gərginlik (V)</text></g>
+          </svg>
+          <figcaption>Gərginlik, iki nöqtə arasındakı elektrik “hündürlük fərqidir”.</figcaption>
+        </figure>
+
+        <h3>9. Elektrik hərəkət qüvvəsi (EHQ)</h3>
+        <p>Su aşağı axdıqca onu yenidən yuxarı qaldıran <b>nasos</b> lazımdır, əks halda axın dayanar. Günəş panelində bu nasos <b>günəş işığıdır</b>: işıq elektronları fasiləsiz olaraq “yuxarı qaldırır”. Elektronları bu şəkildə hərəkətə gətirən qüvvəyə <b>elektrik hərəkət qüvvəsi</b> deyilir.</p>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 600 200" role="img" aria-label="Nasos suyu aşağı çəndən yuxarı qaldırır, su yenidən aşağı axır">
+            <rect x="80" y="25" width="130" height="75" fill="#38BDF8" stroke="#0284C7" stroke-width="2.5"/>
+            <rect x="400" y="115" width="140" height="65" fill="#38BDF8" stroke="#0284C7" stroke-width="2.5"/>
+            <path d="M210 45 H470 V115" fill="none" stroke="#0EA5E9" stroke-width="7"/>
+            <polygon points="330,35 350,45 330,55" fill="#0284C7"/>
+            <path d="M400 168 H130 V100" fill="none" stroke="#0EA5E9" stroke-width="7"/>
+            <polygon points="300,158 280,168 300,178" fill="#0284C7"/>
+            <circle cx="130" cy="138" r="24" fill="#E4A93B" stroke="#C2861F" stroke-width="2.5"/>
+            <path d="M130 150 V126 m-8 8 l8 -9 l8 9" fill="none" stroke="#7C2D12" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="300" y="30" font-size="15" fill="#0369A1" text-anchor="middle">aşağı axır</text>
+            <g font-size="16" fill="#B45309"><text x="166" y="132">Günəş işığı = nasos</text><text x="166" y="152" font-size="14">elektronları yuxarı qaldırır</text></g>
+          </svg>
+          <figcaption>Günəş işığı panel üçün “nasos” rolunu oynayır.</figcaption>
+        </figure>
+
+        <h3>10. Cərəyan necə yaranır</h3>
+        <p>Panelin iki tərəfi naqillə birləşdiriləndə elektronlar naqil boyunca hərəkət etməyə başlayır. Elektronların bu nizamlı hərəkəti <b>elektrik cərəyanıdır</b>, eynilə çay axını kimi. Paneldən alınan cərəyan <b>sabit cərəyandır (DC)</b>.</p>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 600 230" role="img" aria-label="Günəş paneli naqillə lampaya birləşdirilib, elektronlar dövrədə hərəkət edir">
+            <path d="M100 130 V40 H460 V72" fill="none" stroke="#475569" stroke-width="5"/>
+            <path d="M460 142 V212 H200 V200" fill="none" stroke="#475569" stroke-width="5"/>
+            <rect x="60" y="130" width="180" height="70" fill="#1E3A8A" stroke="#93C5FD" stroke-width="2"/>
+            <g stroke="#93C5FD" stroke-width="1.5"><line x1="120" y1="130" x2="120" y2="200"/><line x1="180" y1="130" x2="180" y2="200"/><line x1="60" y1="165" x2="240" y2="165"/></g>
+            <g stroke="#FACC15" stroke-width="3" stroke-linecap="round"><line x1="420" y1="78" x2="408" y2="70"/><line x1="500" y1="78" x2="512" y2="70"/></g>
+            <circle cx="460" cy="100" r="28" fill="#FDE047" stroke="#CA8A04" stroke-width="2.5"/>
+            <rect x="448" y="126" width="24" height="16" fill="#94A3B8"/>
+            <g fill="#2563EB"><circle cx="160" cy="40" r="7"/><circle cx="280" cy="40" r="7"/><circle cx="400" cy="40" r="7"/><circle cx="380" cy="212" r="7"/><circle cx="260" cy="212" r="7"/></g>
+            <g fill="#2563EB"><polygon points="210,30 228,40 210,50"/><polygon points="330,30 348,40 330,50"/><polygon points="330,202 312,212 330,222"/></g>
+            <text x="280" y="68" font-size="16" fill="#2563EB" text-anchor="middle">elektron axını = cərəyan</text>
+            <text x="150" y="120" font-size="16" fill="#54665D" text-anchor="middle">Günəş paneli</text>
+          </svg>
+          <figcaption>Qapalı dövrədə elektronlar paneldən lampaya və geri axır.</figcaption>
+        </figure>
+
+        <h3>11. Dövr necə davam edir</h3>
+        <p>Naqildən axan elektronlar yolda <b>lampanı yandırır, telefonu doldurur, cihazları işlədir</b>, sonra panelin digər tərəfinə qayıdır. Günəş onları yenidən itələyir və dövr fasiləsiz təkrarlanır. Ev sistemində bu sabit cərəyan əvvəlcə <b>inverterdən</b> keçib dəyişən cərəyana çevrilir. Bu barədə növbəti dərsdə danışılır.</p>
+        <figure class="lesson-fig">
+          <svg viewBox="0 0 600 240" role="img" aria-label="Dövr: Günəş itələyir, panel, lampa yanır, elektronlar geri qayıdır">
+            <circle cx="300" cy="125" r="82" fill="none" stroke="#FDBA74" stroke-width="5" stroke-dasharray="12 9"/>
+            <polygon points="366,70 372,94 352,86" fill="#F97316"/>
+            <polygon points="234,180 228,156 248,164" fill="#F97316"/>
+            <circle cx="300" cy="43" r="20" fill="#E4A93B"/>
+            <rect x="368" y="107" width="28" height="36" rx="4" fill="#1E3A8A"/>
+            <circle cx="300" cy="207" r="17" fill="#FDE047" stroke="#CA8A04" stroke-width="2"/>
+            <rect x="204" y="107" width="28" height="36" rx="4" fill="#334155"/>
+            <g font-size="16" fill="#54665D">
+              <text x="330" y="38">1. Günəş itələyir</text>
+              <text x="408" y="131">2. Panel</text>
+              <text x="328" y="226">3. Lampa yanır</text>
+              <text x="192" y="131" text-anchor="end">4. Geri qayıdır</text>
+            </g>
+          </svg>
+          <figcaption>Elektronlar dövrə boyunca fasiləsiz hərəkət edir.</figcaption>
+        </figure>
+
+        <p class="lesson-note"><b>Qısa xülasə:</b> günəş işığının fotonları silisiumdakı elektronları qoparır. Fosforlu (n) və borlu (p) qatların arasındakı p-n keçid onları bir tərəfə yığaraq <b>gərginlik</b> yaradır. Panelin iki ucu naqillə birləşdiriləndə elektronlar dövrə boyunca axır və bu axın bizə <b>elektrik cərəyanı</b> verir.</p>
       `
     },
     {

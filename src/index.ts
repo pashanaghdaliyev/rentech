@@ -7,9 +7,13 @@
  *   GET  /api/news    → KV-dəki news.json, public
  *   PUT  /api/news    → admin bearer token ilə news.json-u yeniləyir
  *   POST /run         → admin token ilə botu əl ilə işə salır
+ *   POST /run?dry=1   → test: AI qərarlarını qaytarır, KV-yə yazmır, ntfy göndərmir
  *   * (digər yollar)  → env.ASSETS-dən static fayl (index.html, admin.html və s.)
  *
  * Cron trigger hər 3 saatda botu işə salır (0 4,8,15 UTC = Bakı 08,12,19).
+ *
+ * Hər xəbər Gemini-dən keçir: mövzuya uyğundursa tərcümə olunub avtomatik dərc
+ * edilir, uyğun deyilsə "redd" olur. Gemini cavab verməsə heç nə dərc olunmur.
  */
 
 import { XMLParser } from "fast-xml-parser";
@@ -38,7 +42,14 @@ const MENBELER: Menbe[] = [
   { url: "https://electrek.co/feed/", ad: "Electrek", kateqoriya: "Texnologiya", suzgec: true, dil: "en" },
   { url: "https://www.energy-storage.news/feed/", ad: "Energy Storage News", kateqoriya: "Texnologiya", suzgec: false, dil: "en" },
   { url: "https://news.mit.edu/topic/mitenergy-rss.xml", ad: "MIT News", kateqoriya: "Texnologiya", suzgec: false, dil: "en" },
+  // Standart təyin edən və təlim/sertifikat verən qurumlar
+  { url: "https://standards.ieee.org/feed/", ad: "IEEE Standards Association", kateqoriya: "Standart və təlim", suzgec: false, dil: "en" },
+  { url: "https://www.solarenergy.org/feed/", ad: "Solar Energy International", kateqoriya: "Standart və təlim", suzgec: false, dil: "en" },
+  { url: "https://irecusa.org/feed/", ad: "IREC", kateqoriya: "Standart və təlim", suzgec: false, dil: "en" },
+  { url: "https://www.nabcep.org/feed/", ad: "NABCEP", kateqoriya: "Standart və təlim", suzgec: false, dil: "en" },
 ];
+
+// Açar söz süzgəci yalnız ucuz ilkin seçimdir — son qərarı Gemini verir (geminiYoxla).
 
 const ACAR_SOZLER = [
   "günəş enerji", "günəş panel", "günəş elektrik", "fotovoltaik",
@@ -57,7 +68,7 @@ const ACAR_SOZLER = [
   "battery", "battery storage", "energy storage", "grid-scale",
   "utility-scale", "gigafactory", "perovskite", "tandem cell", "bifacial",
   "hydrogen", "green hydrogen", "electrolyzer", "electric vehicle",
-  " ev ", "microgrid", "smart grid",
+  "microgrid", "smart grid",
   "solarmodul", "energiewende", "wasserstoff", "batterie",
 ];
 
@@ -81,7 +92,13 @@ const ENERJI_KONTEKST = [
 
 const MAKS_XEBER = 50;
 const REDD_DEDUP_LIMIT = 150;
-const MAKS_TERCUME = MAKS_XEBER;
+const YOXLAMA_QRUPU = 20; // bir Gemini sorğusunda neçə xəbər
+// Bir işə düşmədə ən çox neçə xəbər yoxlanılır. Workers pulsuz planında bir çağırışda
+// 50 xarici sorğu limiti var: ~21 RSS + 4 qrup × 3 cəhd + ntfy — limitdən aşağı qalır.
+const MAKS_YOXLAMA = YOXLAMA_QRUPU * 4;
+const TEZE_GUN = 7; // yalnız son bu qədər gündə çıxan xəbərlər namizəddir
+const GORULEN_KEY = "seen.json"; // artıq yoxlanmış URL-lər (təkrar yoxlanmasın)
+const GORULEN_LIMIT = 3000;
 const XULASE_UZUNLUGU = 260;
 const KV_KEY = "news.json";
 
@@ -99,6 +116,8 @@ interface Xeber {
   dercDate?: string;
   added?: string;
   edited?: boolean;
+  yoxlanib?: boolean; // Gemini mövzu yoxlamasından keçib
+  sebeb?: string; // Gemini-nin qərar səbəbi
   _dil?: string;
 }
 
@@ -254,21 +273,17 @@ async function lentiOxu(menbe: Menbe): Promise<Xeber[]> {
       );
       if (menbe.suzgec && !uygundur(baslıq, xulase, menbe)) continue;
 
-      const status: Xeber["status"] = menbe.dil === "az" ? "derc" : "gozleyir";
-      const yeni: Xeber = {
+      // Status müvəqqətidir — son qərarı botIsle() Gemini yoxlamasından sonra verir
+      netice.push({
         cat: menbe.kateqoriya,
         date: tarixAl(giris),
         title: baslıq,
         excerpt: xulase ? qisalt(xulase) : "",
         source: menbe.ad,
         url: link,
-        status,
+        status: "gozleyir",
         _dil: menbe.dil,
-      };
-      if (status === "derc") {
-        yeni.dercDate = new Date().toISOString();
-      }
-      netice.push(yeni);
+      });
     }
     console.log(`  → ${menbe.ad} … ${netice.length} uyğun xəbər`);
     return netice;
@@ -278,39 +293,94 @@ async function lentiOxu(menbe: Menbe): Promise<Xeber[]> {
   }
 }
 
-// ─────────────────────────── TƏRCÜMƏ ───────────────────────────
+// ──────────────────── MÖVZU YOXLAMASI + TƏRCÜMƏ ────────────────────
 
-const TERCUME_TAPSIRIGI = `Sən enerji sahəsi üzrə peşəkar tərcüməçisən.
-Aşağıdakı xəbər başlıqlarını və xülasələrini Azərbaycan dilinə tərcümə et.
-Mətnlər müxtəlif dillərdə (əsasən ingilis və alman) ola bilər — mənbə dilini özün müəyyən et.
+const YOXLAMA_TAPSIRIGI = `Sən RenTech saytının xəbər redaktorusan. RenTech Azərbaycan auditoriyası üçün
+bərpa olunan enerji və enerji keçidi haqqında xəbər saytıdır.
 
-Qaydalar:
-- Texniki terminləri Azərbaycan enerji sahəsində işlənən formada saxla:
+Hər xəbər üçün iki iş gör:
+1) Mövzuya uyğundurmu — qərar ver (uygun: true/false) və qısa səbəb yaz.
+2) Uyğundursa və Azərbaycan dilində deyilsə — başlığı və xülasəni Azərbaycan dilinə tərcümə et.
+
+UYĞUNDUR — xəbərin ƏSAS mövzusu bunlardan biridirsə:
+- günəş, külək, hidro, geotermal, bioenerji; fotovoltaik texnologiyalar, panellər, inverterlər
+- batareyalar və enerji saxlama sistemləri; hidrogen
+- elektrik şəbəkəsi, ötürmə, enerji səmərəliliyi
+- elektromobillər, onların bazarı və şarj infrastrukturu
+- iqlim siyasəti və iqlim sammitləri (COP və s.), enerji keçidi kontekstində
+- sektorun biznesi: investisiya, maliyyələşmə, tender, birləşmə, iflas, məhkəmə işləri,
+  istehsal gücləri — bərpa olunan enerji, saxlama və ya elektromobil şirkətləri ilə bağlıdırsa
+- Azərbaycanda bərpa olunan enerji layihələri, yaşıl enerji dəhlizləri, bu sahədə dövlət
+  qərarları və beynəlxalq əməkdaşlıq
+- mühəndislər üçün standartlar, normativlər və sertifikatlaşdırma (IEC, IEEE, UL və s.),
+  təlim proqramları, peşə sertifikatları, şəbəkəyə qoşulma qaydaları — enerji, PV,
+  saxlama, elektrik təhlükəsizliyi və ya elektromobil sahəsinə aiddirsə
+  (tibb, aviasiya, media, süni intellekt etikası kimi başqa sahələrin standartları — uyğun deyil)
+
+UYĞUN DEYİL:
+- atom (nüvə) enerjisi və atom elektrik stansiyaları
+- neft və qaz — yalnız yaşıl keçidlə birbaşa bağlı deyilsə
+- ümumi siyasət, diplomatiya, hərbi mövzular, cinayət, qəza, sağlamlıq, idman, mədəniyyət,
+  şou-biznes, süni intellekt və İT — enerji ilə birbaşa bağlı deyilsə
+- adi avtomobil bazarı, rüsumlar, ticarət — xəbər açıq şəkildə elektromobillərdən bəhs etmirsə
+- dövlət rəsmilərini, nazirlikləri və ya hökuməti tənqid edən, ittiham edən, onlara qarşı
+  çıxan xəbərlər — xüsusilə Azərbaycanla bağlı olanlar
+- "enerji", "şəbəkə", "ev" kimi sözlər yalnız təsadüfən keçirsə (məs. "sosial şəbəkə", "Ağ Ev")
+
+Şübhəli halda — uygun: false.
+
+Tərcümə qaydaları:
+- Texniki terminləri Azərbaycan enerji sahəsində işlənən formada yaz:
   inverter, string, fotovoltaik, kVt, MVt, QVt, kVt·s, TVt·s, şəbəkə, batareya.
-- Şirkət, ölkə və layihə adlarını tərcümə etmə, olduğu kimi saxla.
-- Rəqəmləri dəyişmə. Onluq ayırıcı kimi vergül işlət (25,5%).
-- Başlıq qısa və xəbər dilində olsun, şüar kimi yazma.
-- Əlavə şərh, izah və ya fikir yazma — yalnız tərcümə.
+- Şirkət, ölkə və layihə adlarını tərcümə etmə.
+- Rəqəmləri dəyişmə; onluq ayırıcı vergüldür (25,5%).
+- Başlıq qısa və xəbər dilində olsun; əlavə şərh yazma.
+- Mətn artıq Azərbaycan dilindədirsə (lang: "az"), title və excerpt-i olduğu kimi qaytar.
 
-Cavabı YALNIZ bu formatda JSON massivi kimi qaytar:
-[{"i": 0, "title": "...", "excerpt": "..."}, ...]
+Cavabı YALNIZ JSON massivi kimi qaytar:
+[{"i": 0, "uygun": true, "sebeb": "...", "title": "...", "excerpt": "..."}]
 
-Tərcümə ediləcək xəbərlər:
+Xəbərlər:
 `;
 
-async function geminiTercume(xeberler: Xeber[], env: Env): Promise<void> {
-  if (!xeberler.length) return;
-  const apiKey = await secret(env.GEMINI_API_KEY);
-  if (!apiKey) {
-    console.log("  (GEMINI_API_KEY yoxdur — tərcümə edilmədi)");
-    return;
-  }
+const YOXLAMA_SXEMI = {
+  type: "ARRAY",
+  items: {
+    type: "OBJECT",
+    properties: {
+      i: { type: "INTEGER" },
+      uygun: { type: "BOOLEAN" },
+      sebeb: { type: "STRING" },
+      title: { type: "STRING" },
+      excerpt: { type: "STRING" },
+    },
+    required: ["i", "uygun", "sebeb"],
+  },
+};
 
-  const model = env.GEMINI_MODEL || "gemini-flash-lite-latest";
-  const giris = xeberler.map((x, i) => ({ i, title: x.title, excerpt: x.excerpt }));
+interface Qerar {
+  uygun: boolean;
+  sebeb: string;
+  title?: string; // tərcümə (yalnız xarici dildə olanlar üçün)
+  excerpt?: string;
+}
+
+/** Bir qrup xəbəri Gemini-yə göndərir. Alınmasa null qaytarır (fail-closed). */
+async function geminiQrup(qrup: Xeber[], apiKey: string, model: string): Promise<(Qerar | null)[] | null> {
+  const giris = qrup.map((x, i) => ({
+    i,
+    source: x.source,
+    lang: x._dil || "en",
+    title: x.title,
+    excerpt: x.excerpt,
+  }));
   const sorgu = {
-    contents: [{ parts: [{ text: TERCUME_TAPSIRIGI + JSON.stringify(giris, null, 1) }] }],
-    generationConfig: { temperature: 0.2, responseMimeType: "application/json" },
+    contents: [{ parts: [{ text: YOXLAMA_TAPSIRIGI + JSON.stringify(giris, null, 1) }] }],
+    generationConfig: {
+      temperature: 0,
+      responseMimeType: "application/json",
+      responseSchema: YOXLAMA_SXEMI,
+    },
   };
   const unvan = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
@@ -325,12 +395,12 @@ async function geminiTercume(xeberler: Xeber[], env: Env): Promise<void> {
       if (!cavab.ok) {
         const metn = await cavab.text();
         if ([429, 500, 502, 503, 504].includes(cavab.status) && cehd < 3) {
-          console.log(`  (cəhd ${cehd}: HTTP ${cavab.status} — 10 sn gözləyirəm)`);
+          console.log(`  (cəhd ${cehd}: HTTP ${cavab.status} — ${10 * cehd} sn gözləyirəm)`);
           await new Promise((r) => setTimeout(r, 10000 * cehd));
           continue;
         }
-        console.log(`  (tərcümə alınmadı: HTTP ${cavab.status} — ${metn.slice(0, 200)})`);
-        return;
+        console.log(`  (yoxlama alınmadı: HTTP ${cavab.status} — ${metn.slice(0, 200)})`);
+        return null;
       }
       const data: any = await cavab.json();
       const metn = data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -338,42 +408,80 @@ async function geminiTercume(xeberler: Xeber[], env: Env): Promise<void> {
       netice = JSON.parse(metn);
       break;
     } catch (xeta: any) {
-      console.log(`  (tərcümə alınmadı: ${xeta?.message || xeta})`);
-      if (cehd >= 3) return;
+      console.log(`  (yoxlama alınmadı: ${xeta?.message || xeta})`);
+      if (cehd >= 3) return null;
     }
   }
-  if (!Array.isArray(netice)) return;
+  if (!Array.isArray(netice)) return null;
 
-  let sayğac = 0;
-  for (const sətir of netice) {
-    try {
-      const n = Number(sətir.i);
-      if (n >= 0 && n < xeberler.length && sətir.title) {
-        xeberler[n].title = temizMetn(sətir.title);
-        if (sətir.excerpt) xeberler[n].excerpt = qisalt(temizMetn(sətir.excerpt));
-        xeberler[n].tercume = true;
-        sayğac++;
-      }
-    } catch {
-      continue;
-    }
+  const qerarlar: (Qerar | null)[] = qrup.map(() => null);
+  for (const s of netice) {
+    const n = Number(s?.i);
+    if (!Number.isInteger(n) || n < 0 || n >= qrup.length || typeof s.uygun !== "boolean") continue;
+    qerarlar[n] = {
+      uygun: s.uygun,
+      sebeb: temizMetn(String(s.sebeb || "")).slice(0, 200),
+      title: s.title ? temizMetn(String(s.title)) : undefined,
+      excerpt: s.excerpt ? temizMetn(String(s.excerpt)) : undefined,
+    };
   }
-  console.log(`  ${sayğac} xəbər tərcümə olundu`);
+  return qerarlar;
+}
+
+/**
+ * Xəbərləri Gemini ilə yoxlayır və xarici dildə olanları tərcümə edir.
+ * Hər xəbər üçün qərar qaytarır; qərar alınmayanlar üçün null (onlar dərc olunmamalıdır).
+ */
+async function geminiYoxla(xeberler: Xeber[], env: Env): Promise<(Qerar | null)[]> {
+  const bos = xeberler.map(() => null);
+  if (!xeberler.length) return bos;
+  const apiKey = await secret(env.GEMINI_API_KEY);
+  if (!apiKey) {
+    console.log("  (GEMINI_API_KEY yoxdur — yoxlama edilmədi, heç nə dərc olunmur)");
+    return bos;
+  }
+  const model = env.GEMINI_MODEL || "gemini-flash-lite-latest";
+
+  const hamisi: (Qerar | null)[] = [];
+  for (let bas = 0; bas < xeberler.length; bas += YOXLAMA_QRUPU) {
+    const qrup = xeberler.slice(bas, bas + YOXLAMA_QRUPU);
+    const qerarlar = await geminiQrup(qrup, apiKey, model);
+    hamisi.push(...(qerarlar || qrup.map(() => null)));
+  }
+  const say = hamisi.filter(Boolean).length;
+  console.log(`  ${say}/${xeberler.length} xəbər üçün qərar alındı`);
+  return hamisi;
+}
+
+/** Qərarı xəbərə tətbiq edir. Xarici xəbər tərcümə olunmayıbsa false qaytarır (dərc olunmamalıdır). */
+function qerariTetbiqEt(x: Xeber, q: Qerar, indi: string): boolean {
+  const xarici = (x._dil || "en") !== "az" && !x.tercume;
+  if (q.uygun && xarici) {
+    if (!q.title || q.title === x.title) return false; // tərcümə alınmayıb
+    x.title = q.title;
+    if (q.excerpt) x.excerpt = qisalt(q.excerpt);
+    x.tercume = true;
+  }
+  x.status = q.uygun ? "derc" : "redd";
+  if (q.uygun && !x.dercDate) x.dercDate = indi;
+  x.yoxlanib = true;
+  x.sebeb = q.sebeb;
+  return true;
 }
 
 // ─────────────────────────── ntfy ──────────────────────────
 
-async function ntfyGonder(yeniGozleyen: Xeber[], env: Env): Promise<void> {
-  if (!yeniGozleyen.length) return;
+async function ntfyGonder(yeniDerc: Xeber[], env: Env): Promise<void> {
+  if (!yeniDerc.length) return;
   const topic = await secret(env.NTFY_TOPIC);
   if (!topic) return;
 
   const server = env.NTFY_SERVER || "https://ntfy.sh";
   const adminUrl = env.ADMIN_URL || "https://rentech.az/admin.html";
-  const say = yeniGozleyen.length;
+  const say = yeniDerc.length;
 
   const ölkələr = new Map<string, number>();
-  for (const x of yeniGozleyen) {
+  for (const x of yeniDerc) {
     const k = x.cat || "?";
     ölkələr.set(k, (ölkələr.get(k) || 0) + 1);
   }
@@ -382,10 +490,10 @@ async function ntfyGonder(yeniGozleyen: Xeber[], env: Env): Promise<void> {
     .map(([k, v]) => `${k}: ${v}`)
     .join(", ");
 
-  const setirler: string[] = [`${say} yeni xəbər təsdiq gözləyir`, ""];
+  const setirler: string[] = [`${say} yeni xəbər dərc olundu (lazımsızı admin paneldən rədd edin)`, ""];
   setirler.push(bölgü);
   setirler.push("");
-  for (const x of yeniGozleyen.slice(0, 3)) {
+  for (const x of yeniDerc.slice(0, 3)) {
     setirler.push(`• [${x.cat || "?"}] ${(x.title || "").slice(0, 80)}`);
   }
   if (say > 3) setirler.push(`...və ${say - 3} xəbər daha`);
@@ -437,12 +545,34 @@ async function kohnəniYuklə(env: Env, origin?: string): Promise<Xeber[]> {
   return [];
 }
 
-async function botIsle(env: Env, origin?: string): Promise<void> {
-  console.log("RenTech xəbər botu işə düşdü");
+async function gorulenleriYuklə(env: Env): Promise<Set<string>> {
+  try {
+    const xam = await env.NEWS_KV.get(GORULEN_KEY);
+    const siyahi = xam ? JSON.parse(xam) : [];
+    return new Set(Array.isArray(siyahi) ? siyahi : []);
+  } catch {
+    return new Set();
+  }
+}
+
+interface Hesabat {
+  dry: boolean;
+  yeni: number;
+  yoxlanan: number;
+  derc: number;
+  redd: number;
+  qerarsiz: number;
+  xeberler: { source: string; title: string; uygun: boolean | null; sebeb: string; kohne: boolean }[];
+}
+
+async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {}): Promise<Hesabat> {
+  const dry = Boolean(secim.dry);
+  console.log(`RenTech xəbər botu işə düşdü${dry ? " (TEST — KV-yə yazılmır)" : ""}`);
 
   const kohne = await kohnəniYuklə(env, origin);
   const kohneLinkler = new Set(kohne.map((x) => x.url));
   const kohneBasliqlar = new Set(kohne.map((x) => normalBaslıq(x.title || "")));
+  const yoxlanmisLinkler = await gorulenleriYuklə(env);
 
   const yenilər: Xeber[] = [];
   for (const menbe of MENBELER) {
@@ -450,13 +580,16 @@ async function botIsle(env: Env, origin?: string): Promise<void> {
     yenilər.push(...b);
   }
 
-  const təzə: Xeber[] = [];
+  const hedd = new Date(Date.now() - TEZE_GUN * 86400000).toISOString().slice(0, 10);
+  let təzə: Xeber[] = [];
   const görülənLink = new Set<string>();
   const görülənBaslıq = new Set<string>();
   for (const x of yenilər) {
     const b = normalBaslıq(x.title);
     if (
+      x.date < hedd ||
       kohneLinkler.has(x.url) ||
+      yoxlanmisLinkler.has(x.url) ||
       kohneBasliqlar.has(b) ||
       görülənLink.has(x.url) ||
       görülənBaslıq.has(b)
@@ -467,9 +600,62 @@ async function botIsle(env: Env, origin?: string): Promise<void> {
     görülənBaslıq.add(b);
     təzə.push(x);
   }
-  console.log(`\nYeni xəbər: ${təzə.length}`);
+  // Ən təzələr birinci; limitdən artığı növbəti işə düşməyə qalır
+  təzə.sort((a, b) => (a.date < b.date ? 1 : -1));
+  const qalan = Math.max(0, təzə.length - MAKS_YOXLAMA);
+  təzə = təzə.slice(0, MAKS_YOXLAMA);
+  console.log(`\nYeni xəbər: ${təzə.length}${qalan ? ` (+${qalan} növbəti dəfəyə)` : ""}`);
 
-  const hamısı = [...kohne, ...təzə];
+  // Hələ yoxlanmamış köhnə xəbərlər də bir dəfə yoxlanır. Toxunulmur:
+  // redaktə edilənlər, əl ilə əlavə olunanlar və əl ilə təsdiqlənmiş tərcümələr.
+  const menbeDili = new Map(MENBELER.map((m) => [m.ad, m.dil]));
+  const kohneYoxlanacaq = kohne.filter(
+    (x) =>
+      !x.yoxlanib &&
+      !x.edited &&
+      !x.added &&
+      x.status !== "redd" &&
+      !(x.status === "derc" && x.tercume),
+  );
+  for (const x of kohneYoxlanacaq) x._dil = menbeDili.get(x.source) || "en";
+
+  // Köhnələr birinci yoxlanır (saytdakı zibil tez təmizlənsin), qalan yer yenilərə
+  const kohneSec = kohneYoxlanacaq.slice(0, MAKS_YOXLAMA);
+  təzə = təzə.slice(0, MAKS_YOXLAMA - kohneSec.length);
+  const yoxlanacaq = [...təzə, ...kohneSec];
+  if (yoxlanacaq.length) console.log(`Gemini yoxlaması (${yoxlanacaq.length}):`);
+  const qerarlar = await geminiYoxla(yoxlanacaq, env);
+
+  const indi = new Date().toISOString();
+  const hesabat: Hesabat = {
+    dry, yeni: təzə.length, yoxlanan: yoxlanacaq.length, derc: 0, redd: 0, qerarsiz: 0, xeberler: [],
+  };
+  const qebulOlunan = new Set<Xeber>(); // yeni xəbərlərdən KV-yə yazılacaqlar
+  yoxlanacaq.forEach((x, n) => {
+    const q = qerarlar[n];
+    const kohnedir = n >= təzə.length;
+    const basliq = x.title;
+    const tetbiq = q ? qerariTetbiqEt(x, q, indi) : false;
+    if (tetbiq) {
+      if (!kohnedir) qebulOlunan.add(x);
+      if (x.status === "derc") hesabat.derc++;
+      else hesabat.redd++;
+    } else {
+      hesabat.qerarsiz++;
+    }
+    hesabat.xeberler.push({
+      source: x.source,
+      title: basliq,
+      uygun: tetbiq && q ? q.uygun : null,
+      sebeb: q ? q.sebeb : "qərar alınmadı — dərc olunmadı",
+      kohne: kohnedir,
+    });
+  });
+  console.log(`Nəticə: ${hesabat.derc} dərc, ${hesabat.redd} rədd, ${hesabat.qerarsiz} qərarsız (dərc olunmadı)`);
+  if (dry) return hesabat;
+
+  // Qərarı alınmayan yeni xəbərlər yazılmır — növbəti işə düşmədə yenidən yoxlanılacaq
+  const hamısı = [...kohne, ...təzə.filter((x) => qebulOlunan.has(x))];
   let aktiv = hamısı.filter((x) => x.status !== "redd");
   let redd = hamısı.filter((x) => x.status === "redd");
 
@@ -480,36 +666,30 @@ async function botIsle(env: Env, origin?: string): Promise<void> {
   aktiv = aktiv.slice(0, MAKS_XEBER);
   redd = redd.slice(0, REDD_DEDUP_LIMIT);
 
-  const tercumeOlunacaq = aktiv
-    .filter((x) => x.status === "gozleyir" && !x.tercume)
-    .slice(0, MAKS_TERCUME);
-  if (tercumeOlunacaq.length) {
-    console.log(`Tərcümə olunur (${tercumeOlunacaq.length}):`);
-    await geminiTercume(tercumeOlunacaq, env);
-  }
-
   for (const x of [...aktiv, ...redd]) {
     delete x._dil;
   }
 
-  const gozleyen = aktiv.filter((x) => x.status === "gozleyir").length;
   const yazılacaq: NewsFile = {
     _qeyd:
-      "status sahəsi: 'derc' — saytda görünür, 'gozleyir' — təsdiq gözləyir, 'redd' — saytda gizli.",
-    updated: new Date().toISOString().slice(0, 16).replace("T", " "),
+      "status sahəsi: 'derc' — saytda görünür, 'redd' — saytda gizli (sebeb: Gemini-nin qərarı), 'gozleyir' — köhnə format.",
+    updated: indi.slice(0, 16).replace("T", " "),
     items: [...aktiv, ...redd],
   };
 
   await env.NEWS_KV.put(KV_KEY, JSON.stringify(yazılacaq, null, 2));
-  console.log(
-    `\nKV yazıldı — ${aktiv.length} aktiv (${gozleyen} təsdiq gözləyir), ${redd.length} rədd dedup üçün.`,
-  );
+  console.log(`\nKV yazıldı — ${aktiv.length} aktiv, ${redd.length} rədd dedup üçün.`);
 
-  const kohneUrl = new Set(kohne.map((x) => x.url));
-  const yeniGozleyen = aktiv.filter((x) => x.status === "gozleyir" && !kohneUrl.has(x.url));
-  if (yeniGozleyen.length) {
-    await ntfyGonder(yeniGozleyen, env);
+  if (qebulOlunan.size) {
+    const yeniSiyahi = [...[...qebulOlunan].map((x) => x.url), ...yoxlanmisLinkler].slice(0, GORULEN_LIMIT);
+    await env.NEWS_KV.put(GORULEN_KEY, JSON.stringify(yeniSiyahi));
   }
+
+  const yeniDerc = aktiv.filter((x) => x.status === "derc" && qebulOlunan.has(x));
+  if (yeniDerc.length) {
+    await ntfyGonder(yeniDerc, env);
+  }
+  return hesabat;
 }
 
 // ─────────────────────── API HANDLERS ─────────────────────────
@@ -616,8 +796,9 @@ export default {
     // Manual bot trigger
     if (url.pathname === "/run" && request.method === "POST") {
       if (!(await checkAdmin(request, env))) return jsonResp({ error: "unauthorized" }, 401);
-      await botIsle(env, url.origin);
-      return jsonResp({ ok: true });
+      const dry = url.searchParams.get("dry") === "1";
+      const hesabat = await botIsle(env, url.origin, { dry });
+      return jsonResp({ ok: true, ...hesabat });
     }
 
     // Digər hər şey — static asset

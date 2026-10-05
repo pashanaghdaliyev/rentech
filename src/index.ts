@@ -548,6 +548,11 @@ async function kohnəniYuklə(env: Env, origin?: string): Promise<Xeber[]> {
   return [];
 }
 
+/** Mətndə yalnız Azərbaycan əlifbasına xas hərflər varsa (ə, ğ, ı, ş) — Azərbaycan dilidir. */
+function azMetndir(x: Xeber): boolean {
+  return /[əğış]/.test(((x.title || "") + " " + (x.excerpt || "")).toLowerCase());
+}
+
 async function gorulenleriYuklə(env: Env): Promise<Set<string>> {
   try {
     const xam = await env.NEWS_KV.get(GORULEN_KEY);
@@ -620,8 +625,16 @@ async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {})
       x.status !== "redd" &&
       !(x.status === "derc" && x.tercume),
   );
-  // Artıq tərcümə olunmuşlar Azərbaycan dilindədir — Gemini yalnız qərar versin, yenidən tərcümə etməsin
-  for (const x of kohneYoxlanacaq) x._dil = x.tercume ? "az" : menbeDili.get(x.source) || "en";
+  // Mətni həqiqətən Azərbaycan dilindədirsə Gemini yalnız qərar versin, yenidən tərcümə etməsin.
+  // "tercume" bayrağına güvənmirik: köhnə botun bəzi "tərcümə"ləri almanca qalıb.
+  for (const x of kohneYoxlanacaq) {
+    if (azMetndir(x)) {
+      x._dil = "az";
+    } else {
+      x._dil = menbeDili.get(x.source) || "en";
+      x.tercume = false;
+    }
+  }
 
   // Köhnələr birinci yoxlanır (saytdakı zibil tez təmizlənsin), qalan yer yenilərə
   const kohneSec = kohneYoxlanacaq.slice(0, MAKS_YOXLAMA);

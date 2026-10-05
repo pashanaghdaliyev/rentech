@@ -397,7 +397,7 @@ async function geminiQrup(qrup: Xeber[], apiKey: string, model: string): Promise
       });
       if (!cavab.ok) {
         const metn = await cavab.text();
-        if ([429, 500, 502, 503, 504].includes(cavab.status) && cehd < 3) {
+        if ([408, 429, 500, 502, 503, 504, 524].includes(cavab.status) && cehd < 3) {
           console.log(`  (cəhd ${cehd}: HTTP ${cavab.status} — ${10 * cehd} sn gözləyirəm)`);
           await new Promise((r) => setTimeout(r, 10000 * cehd));
           continue;
@@ -620,7 +620,8 @@ async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {})
       x.status !== "redd" &&
       !(x.status === "derc" && x.tercume),
   );
-  for (const x of kohneYoxlanacaq) x._dil = menbeDili.get(x.source) || "en";
+  // Artıq tərcümə olunmuşlar Azərbaycan dilindədir — Gemini yalnız qərar versin, yenidən tərcümə etməsin
+  for (const x of kohneYoxlanacaq) x._dil = x.tercume ? "az" : menbeDili.get(x.source) || "en";
 
   // Köhnələr birinci yoxlanır (saytdakı zibil tez təmizlənsin), qalan yer yenilərə
   const kohneSec = kohneYoxlanacaq.slice(0, MAKS_YOXLAMA);

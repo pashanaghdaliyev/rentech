@@ -972,11 +972,22 @@
     });
   }
 
-  /* Yalnız təsdiqlənmiş xəbərlər göstərilir.
-     status: "gozleyir" — bot gətirib, amma təsdiq gözləyir.
-     status: "redd" — telefondan rədd edilib. */
+  /* Yalnız dərc olunmuş xəbərlər göstərilir, ən çox SAYTDA_XEBER qədər.
+     Sıra (Worker və admin.html ilə eyni): dərc günü azalan → həmin gün
+     yerli (Azərbaycan) xəbərlər üstdə → ən təzə çıxış vaxtı üstdə. */
+  var SAYTDA_XEBER = 7;
+  function xeberSirasi(a, b) {
+    var gun = (b.date || "").localeCompare(a.date || "");
+    if (gun) return gun;
+    var yer = (b.cat === "Azərbaycan") - (a.cat === "Azərbaycan");
+    if (yer) return yer;
+    return (b.pubDate || b.dercDate || "").localeCompare(a.pubDate || a.dercDate || "");
+  }
   function derc(siyahi) {
-    return siyahi.filter(function (x) { return x.status === "derc"; });
+    return siyahi
+      .filter(function (x) { return x.status === "derc"; })
+      .sort(xeberSirasi)
+      .slice(0, SAYTDA_XEBER);
   }
 
   /* Əvvəlcə fayldakı ehtiyat siyahı göstərilir — sayt internetsiz də işləyir. */

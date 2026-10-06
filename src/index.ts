@@ -95,7 +95,7 @@ const ENERJI_KONTEKST = [
   "stansiya", "generasiya", "şəbəkə",
 ];
 
-const MAKS_XEBER = 50;
+const SAXLAMA_GUN = 7; // xəbərlər (hər statusda) bu qədər gün saxlanılır, sonra silinir
 const REDD_DEDUP_LIMIT = 150;
 const YOXLAMA_QRUPU = 20; // bir Gemini sorğusunda neçə xəbər
 // Bir işə düşmədə ən çox neçə xəbər yoxlanılır. Workers pulsuz planında bir çağırışda
@@ -552,6 +552,18 @@ function yerlidir(x: Xeber): boolean {
   return x.cat === "Azərbaycan";
 }
 
+/**
+ * Vahid sıra (sayt və admin.html də eyni qaydanı işlədir):
+ * dərc günü azalan → həmin gün yerli xəbərlər üstdə → ən təzə çıxış vaxtı üstdə.
+ */
+function xeberSirasi(a: Xeber, b: Xeber): number {
+  const gun = (b.date || "").localeCompare(a.date || "");
+  if (gun) return gun;
+  const yer = Number(yerlidir(b)) - Number(yerlidir(a));
+  if (yer) return yer;
+  return (b.pubDate || b.dercDate || "").localeCompare(a.pubDate || a.dercDate || "");
+}
+
 /** Uyğun yeni xəbərlərdən günün seçimi: kvota qədər yerli + xarici, önəm və təzəlik üzrə. */
 function gunlukSecim(uygunlar: Xeber[], yerliKvota: number, xariciKvota: number): Xeber[] {
   const sirala = (a: Xeber, b: Xeber) =>
@@ -748,15 +760,19 @@ async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {})
   // Yeni xəbərlərdən yalnız seçilənlər və rədd olunanlar yazılır. Seçilməyən uyğunlar
   // sadəcə "görülən" siyahısına düşür; qərarı alınmayanlar növbəti dəfə yenidən yoxlanılır.
   const hamısı = [...kohne, ...təzə.filter((x) => secilenler.has(x) || x.status === "redd")];
-  let aktiv = hamısı.filter((x) => x.status !== "redd");
-  let redd = hamısı.filter((x) => x.status === "redd");
+  // 7 gündən köhnə xəbərlər silinir (bugün daxil 7 gün); təkrar yoxlanmanı seen.json önləyir
+  const saxlamaHeddi = bakiGunu(Date.now() - (SAXLAMA_GUN - 1) * 86400000);
+  const saxlanan = hamısı.filter((x) => (x.date || "") >= saxlamaHeddi);
+  if (saxlanan.length < hamısı.length) {
+    console.log(`  ${hamısı.length - saxlanan.length} xəbər ${SAXLAMA_GUN} gündən köhnədir — silindi`);
+  }
+  let aktiv = saxlanan.filter((x) => x.status !== "redd");
+  let redd = saxlanan.filter((x) => x.status === "redd");
 
-  // Ən təzələr üstdə: əvvəl dərc günü, sonra mənbədə çıxış vaxtı
-  const sıralaAcar = (x: Xeber) => `${x.date || ""}|${x.pubDate || x.dercDate || ""}`;
-  aktiv.sort((a, b) => (sıralaAcar(a) < sıralaAcar(b) ? 1 : -1));
-  redd.sort((a, b) => (sıralaAcar(a) < sıralaAcar(b) ? 1 : -1));
+  // Dərc günü azalan, həmin gün yerli xəbərlər üstdə, sonra ən təzə
+  aktiv.sort(xeberSirasi);
+  redd.sort(xeberSirasi);
 
-  aktiv = aktiv.slice(0, MAKS_XEBER);
   redd = redd.slice(0, REDD_DEDUP_LIMIT);
 
   for (const x of [...aktiv, ...redd]) {

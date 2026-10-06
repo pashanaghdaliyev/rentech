@@ -97,6 +97,18 @@
   }
   .filter-chip.active{background:var(--brand);color:#fff;border-color:var(--brand);}
 
+  /* ---------- dərc olunmuş: gün qrupları ---------- */
+  .day-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+    margin:18px 2px 8px;padding-bottom:6px;border-bottom:1px solid var(--line-strong);
+    font-size:14px;font-weight:800;color:var(--ink);
+  }
+  .day-head:first-child{margin-top:4px;}
+  .day-head small{font-size:12px;font-weight:600;color:var(--ink-mute);}
+  .keep-note{font-size:12px;color:var(--ink-mute);font-weight:500;margin-left:8px;}
+  .chip.live{background:var(--brand);color:#fff;}
+  .chip.arch{background:transparent;color:var(--ink-mute);border:1px solid var(--line-strong);}
+
   /* ---------- əl ilə xəbər əlavəsi ---------- */
   .head-add{
     background:var(--brand);color:#fff;border:0;border-radius:10px;
@@ -389,7 +401,7 @@
     token: "",
     items: [],           // bütün xəbərlər
     meta: null,          // KV-dən gələn _qeyd və s.
-    statusTab: "gozleyir", // hansı status göstərilir
+    statusTab: "derc",   // hansı status göstərilir
     filter: "Bütün",     // kateqoriya süzgəci: "Bütün" | "ABŞ" | ...
     editingUrl: null,    // hazırda redaktə olunan xəbərin url-i
     selected: {},        // {url: true} — seçilmiş xəbərlər (yalnız cari tab-da)
@@ -512,18 +524,33 @@
     if (state.filter !== "Bütün") {
       p = p.filter(function(x){ return x.cat === state.filter; });
     }
-    // Dərc olunmuş tab: son dərc olunanlar başda (dercDate mövcuddursa),
-    // əks halda mənbə tarixinə görə. Digər tabları toxunmadan buraxırıq.
-    if (state.statusTab === "derc") {
-      p = p.slice().sort(function(a, b){
-        var ka = a.dercDate || a.date || "";
-        var kb = b.dercDate || b.date || "";
-        if (ka < kb) return 1;
-        if (ka > kb) return -1;
-        return 0;
-      });
-    }
+    // Dərc olunmuş tab: saytla eyni sıra (gün → yerli üstdə → ən təzə)
+    if (state.statusTab === "derc") p = p.slice().sort(xeberSirasi);
     return p;
+  }
+
+  // Sayt (index.html) və Worker ilə eyni qayda — dəyişsəniz üçünü də dəyişin
+  var SAYTDA_XEBER = 7;
+  var SAXLAMA_GUN = 7;
+  var AY_ADLARI = ["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"];
+  function xeberSirasi(a, b){
+    var gun = (b.date || "").localeCompare(a.date || "");
+    if (gun) return gun;
+    var yer = (b.cat === "Azərbaycan") - (a.cat === "Azərbaycan");
+    if (yer) return yer;
+    return (b.pubDate || b.dercDate || "").localeCompare(a.pubDate || a.dercDate || "");
+  }
+  function gunAdi(iso){
+    var p = (iso || "").split("-");
+    if (p.length !== 3) return iso || "Tarixsiz";
+    return Number(p[2]) + " " + AY_ADLARI[Number(p[1]) - 1] + " " + p[0];
+  }
+  // Saytda hazırda görünən xəbərlərin url-ləri (süzgəcdən asılı olmayaraq)
+  function saytdakiUrller(){
+    var m = {};
+    byStatus("derc").slice().sort(xeberSirasi).slice(0, SAYTDA_XEBER)
+      .forEach(function(x){ m[x.url] = true; });
+    return m;
   }
 
   function emptyMessage(){
@@ -546,7 +573,22 @@
       return;
     }
 
+    var isDerc = state.statusTab === "derc";
+    var saytda = isDerc ? saytdakiUrller() : {};
+    var gunSayi = {};
+    if (isDerc) shown.forEach(function(x){ gunSayi[x.date] = (gunSayi[x.date] || 0) + 1; });
+    var sonGun = null;
+
     shown.forEach(function(x){
+      if (isDerc && x.date !== sonGun) {
+        sonGun = x.date;
+        var dh = document.createElement("div");
+        dh.className = "day-head";
+        dh.innerHTML = "<span></span><small></small>";
+        dh.firstChild.textContent = gunAdi(x.date);
+        dh.lastChild.textContent = gunSayi[x.date] + " xəbər";
+        listBox.appendChild(dh);
+      }
       var card = document.createElement("article");
       card.className = "card" + (state.selected[x.url] ? " selected" : "");
       card.dataset.url = x.url;
@@ -565,6 +607,12 @@
       chip.className = "chip";
       chip.textContent = x.cat;
       meta.appendChild(chip);
+      if (isDerc) {
+        var yer = document.createElement("span");
+        yer.className = "chip " + (saytda[x.url] ? "live" : "arch");
+        yer.textContent = saytda[x.url] ? "Saytda" : "Arxiv";
+        meta.appendChild(yer);
+      }
       var srcTxt = document.createElement("span");
       srcTxt.textContent = x.source + " · " + x.date;
       meta.appendChild(srcTxt);
@@ -677,6 +725,10 @@
     var strong = document.createElement("span");
     strong.textContent = nShown + " xəbər " + labelMap[state.statusTab];
     countBox.appendChild(strong);
+    var note = document.createElement("span");
+    note.className = "keep-note";
+    note.textContent = "· " + SAXLAMA_GUN + " gündən sonra avtomatik silinir";
+    countBox.appendChild(note);
     document.title = nGoz ? "(" + nGoz + ") RenTech admin" : "RenTech admin";
     if ("setAppBadge" in navigator) {
       navigator.setAppBadge(nGoz).catch(function(){});

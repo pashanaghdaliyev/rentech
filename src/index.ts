@@ -7,13 +7,14 @@
  *   GET  /api/news    → KV-dəki news.json, public
  *   PUT  /api/news    → admin bearer token ilə news.json-u yeniləyir
  *   POST /run         → admin token ilə botu əl ilə işə salır
- *   POST /run?dry=1   → test: AI qərarlarını qaytarır, KV-yə yazmır, ntfy göndərmir
+ *   POST /run?dry=1   → test: AI qərarlarını və seçimi qaytarır, KV-yə yazmır
  *   * (digər yollar)  → env.ASSETS-dən static fayl (index.html, admin.html və s.)
  *
- * Cron trigger hər 3 saatda botu işə salır (0 4,8,15 UTC = Bakı 08,12,19).
+ * Cron trigger botu gündə bir dəfə işə salır (0 4 UTC = Bakı 08:00).
  *
- * Hər xəbər Gemini-dən keçir: mövzuya uyğundursa tərcümə olunub avtomatik dərc
- * edilir, uyğun deyilsə "redd" olur. Gemini cavab verməsə heç nə dərc olunmur.
+ * Son 24 saatın xəbərləri Gemini-dən keçir: mövzuya uyğunluq + önəm balı (1–10).
+ * Uyğunlardan gündə 7 xəbər dərc olunur — 2 yerli + 5 xarici, önəm və təzəlik üzrə.
+ * Dərc olunanların tarixi dərc günüdür (Bakı vaxtı). Gemini cavab verməsə heç nə dərc olunmur.
  */
 
 import { XMLParser } from "fast-xml-parser";
@@ -98,9 +99,12 @@ const MAKS_XEBER = 50;
 const REDD_DEDUP_LIMIT = 150;
 const YOXLAMA_QRUPU = 20; // bir Gemini sorğusunda neçə xəbər
 // Bir işə düşmədə ən çox neçə xəbər yoxlanılır. Workers pulsuz planında bir çağırışda
-// 50 xarici sorğu limiti var: ~21 RSS + 4 qrup × 3 cəhd + ntfy — limitdən aşağı qalır.
+// 50 xarici sorğu limiti var: ~18 RSS + 4 qrup × 3 cəhd + təkrar tərcümə — limitdən aşağı qalır.
 const MAKS_YOXLAMA = YOXLAMA_QRUPU * 4;
-const TEZE_GUN = 7; // yalnız son bu qədər gündə çıxan xəbərlər namizəddir
+const TEZE_SAAT = 24; // yalnız son bu qədər saatda çıxan xəbərlər namizəddir
+const GUNLUK_YERLI = 2; // gündə dərc olunan Azərbaycan xəbərləri
+const GUNLUK_XARICI = 5; // gündə dərc olunan xarici xəbərlər
+const BAKI_FERQ_SAAT = 4; // UTC+4
 const GORULEN_KEY = "seen.json"; // artıq yoxlanmış URL-lər (təkrar yoxlanmasın)
 const GORULEN_LIMIT = 3000;
 const XULASE_UZUNLUGU = 260;
@@ -110,7 +114,8 @@ const KV_KEY = "news.json";
 
 interface Xeber {
   cat: string;
-  date: string;
+  date: string; // dərc günü (Bakı vaxtı), YYYY-MM-DD
+  pubDate?: string; // mənbədə çıxış vaxtı (ISO) — sıralama üçün
   title: string;
   excerpt: string;
   source: string;
@@ -122,6 +127,7 @@ interface Xeber {
   edited?: boolean;
   yoxlanib?: boolean; // Gemini mövzu yoxlamasından keçib
   sebeb?: string; // Gemini-nin qərar səbəbi
+  onem?: number; // Gemini-nin önəm balı (1–10)
   _dil?: string;
 }
 
@@ -139,9 +145,7 @@ export interface Env {
   ASSETS: Fetcher;
   GEMINI_API_KEY: SecretRef;
   ADMIN_TOKEN: SecretRef;
-  NTFY_TOPIC?: SecretRef;
   GEMINI_MODEL?: string;
-  NTFY_SERVER?: string;
   ADMIN_URL?: string;
 }
 
@@ -179,16 +183,22 @@ function qisalt(metn: string, hedd: number = XULASE_UZUNLUGU): string {
   return parca.replace(/[ ,.;:—-]+$/, "") + "…";
 }
 
+/** Mənbədəki çıxış vaxtı, tam ISO formatında. Tapılmasa boş sətir (namizəd olmur). */
 function tarixAl(giris: any): string {
   const kandidatlar = [giris.pubDate, giris.published, giris.updated, giris["dc:date"]];
   for (const t of kandidatlar) {
     if (!t) continue;
-    const d = new Date(t);
+    const d = new Date(metnAl(t));
     if (!isNaN(d.getTime())) {
-      return d.toISOString().slice(0, 10);
+      return d.toISOString();
     }
   }
-  return new Date().toISOString().slice(0, 10);
+  return "";
+}
+
+/** Bakı vaxtı ilə bugünkü tarix (YYYY-MM-DD). */
+function bakiGunu(an: number = Date.now()): string {
+  return new Date(an + BAKI_FERQ_SAAT * 3600000).toISOString().slice(0, 10);
 }
 
 function uygundur(baslıq: string, xulase: string, menbe?: Menbe): boolean {
@@ -284,11 +294,14 @@ async function lentiOxu(menbe: Menbe): Promise<Xeber[]> {
         metnAl(giris.description ?? giris.summary ?? giris.content ?? giris["content:encoded"] ?? ""),
       );
       if (menbe.suzgec && !uygundur(baslıq, xulase, menbe)) continue;
+      const pubDate = tarixAl(giris);
+      if (!pubDate) continue; // tarixsiz xəbərin təzəliyini bilmirik
 
-      // Status müvəqqətidir — son qərarı botIsle() Gemini yoxlamasından sonra verir
+      // Status və date müvəqqətidir — son qərarı botIsle() Gemini yoxlamasından sonra verir
       netice.push({
         cat: menbe.kateqoriya,
-        date: tarixAl(giris),
+        date: pubDate.slice(0, 10),
+        pubDate,
         title: baslıq,
         excerpt: xulase ? qisalt(xulase) : "",
         source: menbe.ad,
@@ -310,9 +323,17 @@ async function lentiOxu(menbe: Menbe): Promise<Xeber[]> {
 const YOXLAMA_TAPSIRIGI = `Sən RenTech saytının xəbər redaktorusan. RenTech Azərbaycan auditoriyası üçün
 bərpa olunan enerji və enerji keçidi haqqında xəbər saytıdır.
 
-Hər xəbər üçün iki iş gör:
+Hər xəbər üçün üç iş gör:
 1) Mövzuya uyğundurmu — qərar ver (uygun: true/false) və qısa səbəb yaz.
-2) Uyğundursa və Azərbaycan dilində deyilsə — başlığı və xülasəni Azərbaycan dilinə tərcümə et.
+2) Önəm balı ver (onem: 1–10) — xəbərin oxucular arasında nə qədər çox oxunacağı və
+   sektor üçün nə qədər vacib olduğu. Saytda gündə yalnız ən yüksək ballı 7 xəbər çıxır.
+   Yüksək (8–10): böyük layihələr, rekordlar, Azərbaycanda yeni stansiya, müqavilə və ya
+   dövlət qərarı, qlobal bazara təsir edən hadisələr, böyük şirkətlərin mühüm addımları,
+   geniş auditoriyanın maraqlanacağı xəbərlər.
+   Orta (4–7): regional layihələr, sənaye hesabatları, yeni texnologiyalar.
+   Aşağı (1–3): kiçik şirkətlərin press-relizləri, dar texniki qeydlər, təkrar xəbərlər.
+   Uyğun olmayan xəbərə onem: 0 yaz.
+3) Uyğundursa və Azərbaycan dilində deyilsə — başlığı və xülasəni Azərbaycan dilinə tərcümə et.
 
 UYĞUNDUR — xəbərin ƏSAS mövzusu bunlardan biridirsə:
 - günəş, külək, hidro, geotermal, bioenerji; fotovoltaik texnologiyalar, panellər, inverterlər
@@ -354,7 +375,7 @@ Tərcümə qaydaları:
   orijinal dildə saxlama. lang "az"-dırsa, olduğu kimi qaytar.
 
 Cavabı YALNIZ JSON massivi kimi qaytar:
-[{"i": 0, "uygun": true, "sebeb": "...", "title": "...", "excerpt": "..."}]
+[{"i": 0, "uygun": true, "onem": 7, "sebeb": "...", "title": "...", "excerpt": "..."}]
 
 Xəbərlər:
 `;
@@ -366,16 +387,18 @@ const YOXLAMA_SXEMI = {
     properties: {
       i: { type: "INTEGER" },
       uygun: { type: "BOOLEAN" },
+      onem: { type: "INTEGER" },
       sebeb: { type: "STRING" },
       title: { type: "STRING" },
       excerpt: { type: "STRING" },
     },
-    required: ["i", "uygun", "sebeb", "title", "excerpt"],
+    required: ["i", "uygun", "onem", "sebeb", "title", "excerpt"],
   },
 };
 
 interface Qerar {
   uygun: boolean;
+  onem: number; // 0–10
   sebeb: string;
   title?: string; // tərcümə (yalnız xarici dildə olanlar üçün)
   excerpt?: string;
@@ -436,6 +459,7 @@ async function geminiQrup(qrup: Xeber[], apiKey: string, model: string): Promise
     if (!Number.isInteger(n) || n < 0 || n >= qrup.length || typeof s.uygun !== "boolean") continue;
     qerarlar[n] = {
       uygun: s.uygun,
+      onem: Math.max(0, Math.min(10, Math.round(Number(s.onem) || 0))),
       sebeb: temizMetn(String(s.sebeb || "")).slice(0, 200),
       title: s.title ? temizMetn(String(s.title)) : undefined,
       excerpt: s.excerpt ? temizMetn(String(s.excerpt)) : undefined,
@@ -486,8 +510,12 @@ async function geminiYoxla(xeberler: Xeber[], env: Env): Promise<(Qerar | null)[
   return hamisi;
 }
 
-/** Qərarı xəbərə tətbiq edir. Xarici xəbər tərcümə olunmayıbsa false qaytarır (dərc olunmamalıdır). */
-function qerariTetbiqEt(x: Xeber, q: Qerar, indi: string): boolean {
+/**
+ * Qərarı xəbərə tətbiq edir: tərcümə, səbəb, bal; uyğun deyilsə "redd".
+ * Uyğun xəbərin statusuna toxunmur — dərc qərarını gündəlik seçim verir.
+ * Xarici xəbər tərcümə olunmayıbsa false qaytarır (dərc olunmamalıdır).
+ */
+function qerariTetbiqEt(x: Xeber, q: Qerar): boolean {
   const xarici = (x._dil || "en") !== "az" && !x.tercume;
   if (q.uygun && xarici) {
     if (!q.title || q.title === x.title) return false; // tərcümə alınmayıb
@@ -495,61 +523,28 @@ function qerariTetbiqEt(x: Xeber, q: Qerar, indi: string): boolean {
     if (q.excerpt) x.excerpt = qisalt(q.excerpt);
     x.tercume = true;
   }
-  x.status = q.uygun ? "derc" : "redd";
-  if (q.uygun && !x.dercDate) x.dercDate = indi;
+  if (!q.uygun) x.status = "redd";
   x.yoxlanib = true;
   x.sebeb = q.sebeb;
+  x.onem = q.onem;
   return true;
 }
 
-// ─────────────────────────── ntfy ──────────────────────────
+function yerlidir(x: Xeber): boolean {
+  return x.cat === "Azərbaycan";
+}
 
-async function ntfyGonder(yeniDerc: Xeber[], env: Env): Promise<void> {
-  if (!yeniDerc.length) return;
-  const topic = await secret(env.NTFY_TOPIC);
-  if (!topic) return;
-
-  const server = env.NTFY_SERVER || "https://ntfy.sh";
-  const adminUrl = env.ADMIN_URL || "https://rentech.az/admin.html";
-  const say = yeniDerc.length;
-
-  const ölkələr = new Map<string, number>();
-  for (const x of yeniDerc) {
-    const k = x.cat || "?";
-    ölkələr.set(k, (ölkələr.get(k) || 0) + 1);
-  }
-  const bölgü = [...ölkələr.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .map(([k, v]) => `${k}: ${v}`)
-    .join(", ");
-
-  const setirler: string[] = [`${say} yeni xəbər dərc olundu (lazımsızı admin paneldən rədd edin)`, ""];
-  setirler.push(bölgü);
-  setirler.push("");
-  for (const x of yeniDerc.slice(0, 3)) {
-    setirler.push(`• [${x.cat || "?"}] ${(x.title || "").slice(0, 80)}`);
-  }
-  if (say > 3) setirler.push(`...və ${say - 3} xəbər daha`);
-
-  const yuk = {
-    topic,
-    title: `RenTech: ${say} yeni xəbər`,
-    message: setirler.join("\n"),
-    click: adminUrl,
-    tags: ["newspaper"],
-    priority: 3,
-  };
-  try {
-    const cavab = await fetch(server, {
-      method: "POST",
-      headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify(yuk),
-    });
-    if (!cavab.ok) throw new Error(`HTTP ${cavab.status}`);
-    console.log(`ntfy bildirişi göndərildi (${say} xəbər)`);
-  } catch (xeta: any) {
-    console.log(`  (ntfy göndərilmədi: ${xeta?.message || xeta})`);
-  }
+/** Uyğun yeni xəbərlərdən günün seçimi: kvota qədər yerli + xarici, önəm və təzəlik üzrə. */
+function gunlukSecim(uygunlar: Xeber[], yerliKvota: number, xariciKvota: number): Xeber[] {
+  const sirala = (a: Xeber, b: Xeber) =>
+    (b.onem || 0) - (a.onem || 0) || ((b.pubDate || "") > (a.pubDate || "") ? 1 : -1);
+  const yerli = uygunlar.filter(yerlidir).sort(sirala);
+  const xarici = uygunlar.filter((x) => !yerlidir(x)).sort(sirala);
+  const cem = yerliKvota + xariciKvota;
+  // Bir qrupda xəbər çatmasa boş yer o biri qrupla doldurulur
+  const yerliSay = Math.min(yerli.length, Math.max(yerliKvota, cem - xarici.length));
+  const xariciSay = Math.min(xarici.length, cem - yerliSay);
+  return [...yerli.slice(0, yerliSay), ...xarici.slice(0, xariciSay)];
 }
 
 // ─────────────────────────── ƏSAS BOT ──────────────────────────
@@ -600,7 +595,15 @@ interface Hesabat {
   derc: number;
   redd: number;
   qerarsiz: number;
-  xeberler: { source: string; title: string; uygun: boolean | null; sebeb: string; kohne: boolean }[];
+  xeberler: {
+    source: string;
+    title: string;
+    uygun: boolean | null;
+    onem: number | null;
+    secildi: boolean;
+    sebeb: string;
+    kohne: boolean;
+  }[];
 }
 
 async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {}): Promise<Hesabat> {
@@ -618,14 +621,14 @@ async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {})
     yenilər.push(...b);
   }
 
-  const hedd = new Date(Date.now() - TEZE_GUN * 86400000).toISOString().slice(0, 10);
+  const hedd = new Date(Date.now() - TEZE_SAAT * 3600000).toISOString();
   let təzə: Xeber[] = [];
   const görülənLink = new Set<string>();
   const görülənBaslıq = new Set<string>();
   for (const x of yenilər) {
     const b = normalBaslıq(x.title);
     if (
-      x.date < hedd ||
+      (x.pubDate || "") < hedd ||
       kohneLinkler.has(x.url) ||
       yoxlanmisLinkler.has(x.url) ||
       kohneBasliqlar.has(b) ||
@@ -638,11 +641,11 @@ async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {})
     görülənBaslıq.add(b);
     təzə.push(x);
   }
-  // Ən təzələr birinci; limitdən artığı növbəti işə düşməyə qalır
-  təzə.sort((a, b) => (a.date < b.date ? 1 : -1));
+  // Ən təzələr birinci; limitdən artığı yoxlanmır
+  təzə.sort((a, b) => ((a.pubDate || "") < (b.pubDate || "") ? 1 : -1));
   const qalan = Math.max(0, təzə.length - MAKS_YOXLAMA);
   təzə = təzə.slice(0, MAKS_YOXLAMA);
-  console.log(`\nYeni xəbər: ${təzə.length}${qalan ? ` (+${qalan} növbəti dəfəyə)` : ""}`);
+  console.log(`\nYeni xəbər (son ${TEZE_SAAT} saat): ${təzə.length}${qalan ? ` (+${qalan} yoxlanmadı)` : ""}`);
 
   // Hələ yoxlanmamış köhnə xəbərlər də bir dəfə yoxlanır. Toxunulmur:
   // redaktə edilənlər, əl ilə əlavə olunanlar və əl ilə təsdiqlənmiş tərcümələr.
@@ -666,47 +669,72 @@ async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {})
     }
   }
 
-  // Köhnələr birinci yoxlanır (saytdakı zibil tez təmizlənsin), qalan yer yenilərə
-  const kohneSec = kohneYoxlanacaq.slice(0, MAKS_YOXLAMA);
-  təzə = təzə.slice(0, MAKS_YOXLAMA - kohneSec.length);
+  // Yenilər birinci yoxlanır (günün seçimi onlardan olur), qalan yer köhnələrə
+  const kohneSec = kohneYoxlanacaq.slice(0, MAKS_YOXLAMA - təzə.length);
   const yoxlanacaq = [...təzə, ...kohneSec];
   if (yoxlanacaq.length) console.log(`Gemini yoxlaması (${yoxlanacaq.length}):`);
   const qerarlar = await geminiYoxla(yoxlanacaq, env);
 
   const indi = new Date().toISOString();
+  const bugun = bakiGunu();
   const hesabat: Hesabat = {
     dry, yeni: təzə.length, yoxlanan: yoxlanacaq.length, derc: 0, redd: 0, qerarsiz: 0, xeberler: [],
   };
-  const qebulOlunan = new Set<Xeber>(); // yeni xəbərlərdən KV-yə yazılacaqlar
+  const qerarliYeni: Xeber[] = []; // qərarı alınmış yeni xəbərlər (növbəti dəfə yoxlanmasın)
+  const uygunYeni: Xeber[] = [];
+  const tetbiqOlundu = yoxlanacaq.map((x, n) => {
+    const q = qerarlar[n];
+    const tetbiq = q ? qerariTetbiqEt(x, q) : false;
+    if (tetbiq && n < təzə.length) {
+      qerarliYeni.push(x);
+      if (q!.uygun) uygunYeni.push(x);
+    }
+    return tetbiq;
+  });
+
+  // Gündəlik kvota: bu gün artıq dərc olunanlar çıxılır (məs. /run əl ilə təkrar işə salınıbsa)
+  const bugunDerc = kohne.filter((x) => x.status === "derc" && x.pubDate && x.date === bugun);
+  const yerliKvota = Math.max(0, GUNLUK_YERLI - bugunDerc.filter(yerlidir).length);
+  const xariciKvota = Math.max(0, GUNLUK_XARICI - bugunDerc.filter((x) => !yerlidir(x)).length);
+  const secilenler = new Set(gunlukSecim(uygunYeni, yerliKvota, xariciKvota));
+  for (const x of secilenler) {
+    x.status = "derc";
+    x.date = bugun;
+    x.dercDate = indi;
+  }
+
   yoxlanacaq.forEach((x, n) => {
     const q = qerarlar[n];
     const kohnedir = n >= təzə.length;
-    const basliq = x.title;
-    const tetbiq = q ? qerariTetbiqEt(x, q, indi) : false;
-    if (tetbiq) {
-      if (!kohnedir) qebulOlunan.add(x);
-      if (x.status === "derc") hesabat.derc++;
-      else hesabat.redd++;
-    } else {
-      hesabat.qerarsiz++;
-    }
+    const tetbiq = tetbiqOlundu[n];
+    if (!tetbiq) hesabat.qerarsiz++;
+    else if (secilenler.has(x)) hesabat.derc++;
+    else if (x.status === "redd") hesabat.redd++;
     hesabat.xeberler.push({
       source: x.source,
-      title: basliq,
+      title: x.title,
       uygun: tetbiq && q ? q.uygun : null,
+      onem: tetbiq && q ? q.onem : null,
+      secildi: secilenler.has(x),
       sebeb: q ? q.sebeb : "qərar alınmadı — dərc olunmadı",
       kohne: kohnedir,
     });
   });
-  console.log(`Nəticə: ${hesabat.derc} dərc, ${hesabat.redd} rədd, ${hesabat.qerarsiz} qərarsız (dərc olunmadı)`);
+  hesabat.xeberler.sort((a, b) => Number(b.secildi) - Number(a.secildi) || (b.onem || 0) - (a.onem || 0));
+  console.log(
+    `Nəticə: ${hesabat.derc} dərc (kvota ${yerliKvota}+${xariciKvota}), ${uygunYeni.length - hesabat.derc} uyğun seçilmədi, ` +
+      `${hesabat.redd} rədd, ${hesabat.qerarsiz} qərarsız`,
+  );
   if (dry) return hesabat;
 
-  // Qərarı alınmayan yeni xəbərlər yazılmır — növbəti işə düşmədə yenidən yoxlanılacaq
-  const hamısı = [...kohne, ...təzə.filter((x) => qebulOlunan.has(x))];
+  // Yeni xəbərlərdən yalnız seçilənlər və rədd olunanlar yazılır. Seçilməyən uyğunlar
+  // sadəcə "görülən" siyahısına düşür; qərarı alınmayanlar növbəti dəfə yenidən yoxlanılır.
+  const hamısı = [...kohne, ...təzə.filter((x) => secilenler.has(x) || x.status === "redd")];
   let aktiv = hamısı.filter((x) => x.status !== "redd");
   let redd = hamısı.filter((x) => x.status === "redd");
 
-  const sıralaAcar = (x: Xeber) => x.dercDate || x.date || "";
+  // Ən təzələr üstdə: əvvəl dərc günü, sonra mənbədə çıxış vaxtı
+  const sıralaAcar = (x: Xeber) => `${x.date || ""}|${x.pubDate || x.dercDate || ""}`;
   aktiv.sort((a, b) => (sıralaAcar(a) < sıralaAcar(b) ? 1 : -1));
   redd.sort((a, b) => (sıralaAcar(a) < sıralaAcar(b) ? 1 : -1));
 
@@ -719,7 +747,8 @@ async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {})
 
   const yazılacaq: NewsFile = {
     _qeyd:
-      "status sahəsi: 'derc' — saytda görünür, 'redd' — saytda gizli (sebeb: Gemini-nin qərarı), 'gozleyir' — köhnə format.",
+      "status sahəsi: 'derc' — saytda görünür, 'redd' — saytda gizli (sebeb: Gemini-nin qərarı), 'gozleyir' — köhnə format. " +
+      "date — dərc günü (Bakı), pubDate — mənbədə çıxış vaxtı, onem — Gemini balı (1–10).",
     updated: indi.slice(0, 16).replace("T", " "),
     items: [...aktiv, ...redd],
   };
@@ -727,14 +756,9 @@ async function botIsle(env: Env, origin?: string, secim: { dry?: boolean } = {})
   await env.NEWS_KV.put(KV_KEY, JSON.stringify(yazılacaq, null, 2));
   console.log(`\nKV yazıldı — ${aktiv.length} aktiv, ${redd.length} rədd dedup üçün.`);
 
-  if (qebulOlunan.size) {
-    const yeniSiyahi = [...[...qebulOlunan].map((x) => x.url), ...yoxlanmisLinkler].slice(0, GORULEN_LIMIT);
+  if (qerarliYeni.length) {
+    const yeniSiyahi = [...qerarliYeni.map((x) => x.url), ...yoxlanmisLinkler].slice(0, GORULEN_LIMIT);
     await env.NEWS_KV.put(GORULEN_KEY, JSON.stringify(yeniSiyahi));
-  }
-
-  const yeniDerc = aktiv.filter((x) => x.status === "derc" && qebulOlunan.has(x));
-  if (yeniDerc.length) {
-    await ntfyGonder(yeniDerc, env);
   }
   return hesabat;
 }

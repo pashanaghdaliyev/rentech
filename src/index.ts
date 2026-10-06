@@ -332,6 +332,9 @@ Hər xəbər üçün üç iş gör:
    geniş auditoriyanın maraqlanacağı xəbərlər.
    Orta (4–7): regional layihələr, sənaye hesabatları, yeni texnologiyalar.
    Aşağı (1–3): kiçik şirkətlərin press-relizləri, dar texniki qeydlər, təkrar xəbərlər.
+   HƏMİŞƏ 10: Azərbaycanın strateji yaşıl enerji layihələri — Xəzər–Qara dəniz–Avropa
+   Yaşıl Enerji Dəhlizi, GECO (Green Energy Corridor Power Company), Qara dəniz sualtı
+   kabeli, Azərbaycan–Mərkəzi Asiya yaşıl dəhlizi.
    Uyğun olmayan xəbərə onem: 0 yaz.
 3) Uyğundursa və Azərbaycan dilində deyilsə — başlığı və xülasəni Azərbaycan dilinə tərcümə et.
 
@@ -516,6 +519,7 @@ async function geminiYoxla(xeberler: Xeber[], env: Env): Promise<(Qerar | null)[
  * Xarici xəbər tərcümə olunmayıbsa false qaytarır (dərc olunmamalıdır).
  */
 function qerariTetbiqEt(x: Xeber, q: Qerar): boolean {
+  const strateji = stratejidir(x); // orijinal mətnlə, tərcümədən əvvəl
   const xarici = (x._dil || "en") !== "az" && !x.tercume;
   if (q.uygun && xarici) {
     if (!q.title || q.title === x.title) return false; // tərcümə alınmayıb
@@ -526,8 +530,22 @@ function qerariTetbiqEt(x: Xeber, q: Qerar): boolean {
   if (!q.uygun) x.status = "redd";
   x.yoxlanib = true;
   x.sebeb = q.sebeb;
-  x.onem = q.onem;
+  // Strateji layihələr Gemini-nin balından asılı olmayaraq həmişə ən yüksək bal alır
+  x.onem = q.uygun && (strateji || stratejidir(x)) ? 10 : q.onem;
   return true;
+}
+
+/** Azərbaycanın strateji yaşıl enerji layihələri (Yaşıl Enerji Dəhlizi, GECO və s.). */
+const STRATEJI_ACARLAR = [
+  "yaşıl enerji dəhliz", "yaşıl dəhliz", "geco", "green energy corridor",
+  "xəzər-qara dəniz", "xəzər–qara dəniz", "qara dəniz kabel", "qara dənizin dibi",
+  "caspian-black sea", "black sea submarine cable", "black sea cable",
+  "azərbaycan-mərkəzi asiya", "azərbaycan–mərkəzi asiya",
+];
+
+function stratejidir(x: Xeber): boolean {
+  const metn = ((x.title || "") + " " + (x.excerpt || "")).toLowerCase();
+  return STRATEJI_ACARLAR.some((s) => metn.includes(s));
 }
 
 function yerlidir(x: Xeber): boolean {

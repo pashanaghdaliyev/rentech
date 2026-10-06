@@ -106,8 +106,6 @@
   .day-head:first-child{margin-top:4px;}
   .day-head small{font-size:12px;font-weight:600;color:var(--ink-mute);}
   .keep-note{font-size:12px;color:var(--ink-mute);font-weight:500;margin-left:8px;}
-  .chip.live{background:var(--brand);color:#fff;}
-  .chip.arch{background:transparent;color:var(--ink-mute);border:1px solid var(--line-strong);}
 
   /* ---------- əl ilə xəbər əlavəsi ---------- */
   .head-add{
@@ -219,12 +217,9 @@
   .card .actions button{flex:1;padding:10px 12px;font-weight:700;border-radius:10px;font-size:14px;}
   .btn-approve{background:var(--brand);color:#fff;border:0;}
   .btn-approve:hover{background:var(--brand-dark);}
-  .btn-reject{background:transparent;color:var(--danger);border:2px solid var(--danger-soft);}
-  .btn-reject:hover{border-color:var(--danger);}
   .btn-edit{background:var(--sun-soft);color:var(--brand-dark);border:1px solid transparent;}
   .btn-edit:hover{border-color:var(--sun);}
-  .btn-restore{background:var(--brand-soft);color:var(--brand);border:1px solid transparent;}
-  .btn-restore:hover{border-color:var(--brand);}
+  .add-hint{margin:0;font-size:13px;color:var(--ink-mute);}
 
   /* ---------- inline edit form ---------- */
   .edit-form{display:flex;flex-direction:column;gap:8px;}
@@ -309,7 +304,6 @@
         <span id="master-label">Hamısını seç</span>
       </button>
       <button class="btn-solid bulk-act" id="bulk-action" type="button" hidden></button>
-      <button class="btn-solid danger bulk-act" id="bulk-hard-delete" type="button" hidden></button>
     </div>
     <div class="list" id="list"></div>
     <div class="add-panel" id="add-panel" hidden>
@@ -341,12 +335,11 @@
           <input type="text" id="add-source" placeholder="məs. apa.az" autocomplete="off">
         </div>
       </div>
-      <label class="check-inline">
-        <input type="checkbox" id="add-foreign">
-        <span>Xarici dildədir — botun növbəti işə salınmasında Azərbaycan dilinə tərcümə edilsin</span>
-      </label>
+      <!-- Əl ilə əlavə dərhal sayta çıxır və bot onu tərcümə etmir — mətn Azərbaycan dilində olmalıdır -->
+      <input type="checkbox" id="add-foreign" hidden>
+      <p class="add-hint">Başlıq və xülasəni Azərbaycan dilində yazın — xəbər dərhal sayta çıxır.</p>
       <div class="add-actions">
-        <button class="btn-approve" id="add-save" type="button">Gözləyənlərə əlavə et</button>
+        <button class="btn-approve" id="add-save" type="button">Sayta əlavə et</button>
         <button class="btn-neutral" id="add-cancel" type="button">Ləğv et</button>
       </div>
     </div>
@@ -392,16 +385,15 @@
   var lastFetchedUrl = "";     // eyni URL üçün ikinci fetch etmə
 
   var STATUS_TABS = [
-    { id: "gozleyir", label: "Gözləyən" },
-    { id: "derc",     label: "Dərc olunmuş" },
-    { id: "redd",     label: "Rədd edilmiş" },
+    { id: "saytda", label: "Saytda" },      // hazırda saytda görünən 7 xəbər
+    { id: "arxiv",  label: "Ötən 7 gün" },  // qalan dərc olunmuşlar (7 gündən sonra silinir)
   ];
 
   var state = {
     token: "",
     items: [],           // bütün xəbərlər
     meta: null,          // KV-dən gələn _qeyd və s.
-    statusTab: "derc",   // hansı status göstərilir
+    statusTab: "saytda", // hansı tab göstərilir: "saytda" | "arxiv"
     filter: "Bütün",     // kateqoriya süzgəci: "Bütün" | "ABŞ" | ...
     editingUrl: null,    // hazırda redaktə olunan xəbərin url-i
     selected: {},        // {url: true} — seçilmiş xəbərlər (yalnız cari tab-da)
@@ -410,9 +402,8 @@
 
   // Tab dəyişəndə seçim təmizlənir
   var TAB_BULK_LABEL = {
-    gozleyir: function(n){ return "Seçilənləri dərc et (" + n + ")"; },
-    derc:     function(n){ return "Seçilənləri saytdan sil (" + n + ")"; },
-    redd:     function(n){ return "Seçilənləri bərpa et (" + n + ")"; },
+    saytda: function(n){ return "Seçilənləri sil (" + n + ")"; },
+    arxiv:  function(n){ return "Seçilənləri sil (" + n + ")"; },
   };
 
   // ---------- toast ----------
@@ -482,12 +473,17 @@
 
   // ---------- render ----------
   function byStatus(s){ return state.items.filter(function(x){ return x.status === s; }); }
-  function currentList(){ return byStatus(state.statusTab); }
+  // Dərc olunmuşlar saytla eyni sırada; ilk SAYTDA_XEBER saytdadır, qalanı arxivdir
+  function tabList(tab){
+    var p = byStatus("derc").sort(xeberSirasi);
+    return tab === "saytda" ? p.slice(0, SAYTDA_XEBER) : p.slice(SAYTDA_XEBER);
+  }
+  function currentList(){ return tabList(state.statusTab); }
 
   function renderTabs(){
     tabsBox.innerHTML = "";
     STATUS_TABS.forEach(function(t){
-      var n = byStatus(t.id).length;
+      var n = tabList(t.id).length;
       var b = document.createElement("button");
       b.className = "tab" + (state.statusTab === t.id ? " active" : "");
       b.innerHTML = t.label + " <span class=\"n\">" + n + "</span>";
@@ -524,8 +520,6 @@
     if (state.filter !== "Bütün") {
       p = p.filter(function(x){ return x.cat === state.filter; });
     }
-    // Dərc olunmuş tab: saytla eyni sıra (gün → yerli üstdə → ən təzə)
-    if (state.statusTab === "derc") p = p.slice().sort(xeberSirasi);
     return p;
   }
 
@@ -545,18 +539,9 @@
     if (p.length !== 3) return iso || "Tarixsiz";
     return Number(p[2]) + " " + AY_ADLARI[Number(p[1]) - 1] + " " + p[0];
   }
-  // Saytda hazırda görünən xəbərlərin url-ləri (süzgəcdən asılı olmayaraq)
-  function saytdakiUrller(){
-    var m = {};
-    byStatus("derc").slice().sort(xeberSirasi).slice(0, SAYTDA_XEBER)
-      .forEach(function(x){ m[x.url] = true; });
-    return m;
-  }
-
   function emptyMessage(){
-    if (state.statusTab === "gozleyir") return "Təsdiq gözləyən xəbər yoxdur.";
-    if (state.statusTab === "derc")     return "Saytda hazırda dərc olunmuş xəbər yoxdur.";
-    return "Rədd edilmiş xəbər yoxdur.";
+    if (state.statusTab === "saytda") return "Saytda hazırda xəbər yoxdur.";
+    return "Ötən 7 gündə başqa dərc olunmuş xəbər yoxdur.";
   }
 
   function renderList(){
@@ -573,14 +558,12 @@
       return;
     }
 
-    var isDerc = state.statusTab === "derc";
-    var saytda = isDerc ? saytdakiUrller() : {};
     var gunSayi = {};
-    if (isDerc) shown.forEach(function(x){ gunSayi[x.date] = (gunSayi[x.date] || 0) + 1; });
+    shown.forEach(function(x){ gunSayi[x.date] = (gunSayi[x.date] || 0) + 1; });
     var sonGun = null;
 
     shown.forEach(function(x){
-      if (isDerc && x.date !== sonGun) {
+      if (x.date !== sonGun) {
         sonGun = x.date;
         var dh = document.createElement("div");
         dh.className = "day-head";
@@ -607,12 +590,6 @@
       chip.className = "chip";
       chip.textContent = x.cat;
       meta.appendChild(chip);
-      if (isDerc) {
-        var yer = document.createElement("span");
-        yer.className = "chip " + (saytda[x.url] ? "live" : "arch");
-        yer.textContent = saytda[x.url] ? "Saytda" : "Arxiv";
-        meta.appendChild(yer);
-      }
       var srcTxt = document.createElement("span");
       srcTxt.textContent = x.source + " · " + x.date;
       meta.appendChild(srcTxt);
@@ -658,18 +635,8 @@
       return b;
     }
 
-    if (state.statusTab === "gozleyir") {
-      actions.appendChild(mkBtn("btn-approve", "Dərc et", function(){ approve(x.url, card); }));
-      actions.appendChild(mkBtn("btn-reject",  "Rədd et", function(){ reject(x.url, card); }));
-      actions.appendChild(mkBtn("btn-solid danger", "Tamamilə sil", function(){ hardDelete(x.url, card); }));
-    } else if (state.statusTab === "derc") {
-      actions.appendChild(mkBtn("btn-edit",   "Redaktə et", function(){ startEdit(x.url); }));
-      actions.appendChild(mkBtn("btn-reject", "Saytdan sil", function(){ removeFromSite(x.url, card); }));
-      actions.appendChild(mkBtn("btn-solid danger", "Tamamilə sil", function(){ hardDelete(x.url, card); }));
-    } else { // redd
-      actions.appendChild(mkBtn("btn-restore", "Bərpa et (saytda göstər)", function(){ restore(x.url, card); }));
-      actions.appendChild(mkBtn("btn-solid danger", "Tamamilə sil", function(){ hardDelete(x.url, card); }));
-    }
+    actions.appendChild(mkBtn("btn-edit", "Redaktə et", function(){ startEdit(x.url); }));
+    actions.appendChild(mkBtn("btn-solid danger", "Sil", function(){ removeNews(x.url, card); }));
     return actions;
   }
 
@@ -718,9 +685,8 @@
   }
 
   function updateTitleAndBadge(){
-    var nGoz = byStatus("gozleyir").length;
     var nShown = currentList().length;
-    var labelMap = { gozleyir: "gözləyir", derc: "dərc olunub", redd: "rədd edilib" };
+    var labelMap = { saytda: "saytda", arxiv: "ötən 7 gündə dərc olunub" };
     countBox.innerHTML = "";
     var strong = document.createElement("span");
     strong.textContent = nShown + " xəbər " + labelMap[state.statusTab];
@@ -729,9 +695,9 @@
     note.className = "keep-note";
     note.textContent = "· " + SAXLAMA_GUN + " gündən sonra avtomatik silinir";
     countBox.appendChild(note);
-    document.title = nGoz ? "(" + nGoz + ") RenTech admin" : "RenTech admin";
-    if ("setAppBadge" in navigator) {
-      navigator.setAppBadge(nGoz).catch(function(){});
+    document.title = "RenTech admin";
+    if ("clearAppBadge" in navigator) {
+      navigator.clearAppBadge().catch(function(){});
     }
   }
 
@@ -773,37 +739,11 @@
     });
   }
 
-  function approve(url, card){
-    return setStatus(url, "derc", "telefondan dərc: " + url, "Dərc olundu", card);
-  }
-
-  function reject(url, card){
-    return setStatus(url, "redd", "telefondan rədd: " + url, "Rədd edildi", card);
-  }
-
-  function removeFromSite(url, card){
-    if (!confirm("Bu xəbəri saytdan silim? (Rədd edilmişlərdən sonra bərpa edə bilərsən.)")) return;
-    return setStatus(url, "redd", "telefondan saytdan sil: " + url, "Saytdan silindi", card);
-  }
-
-  function hardDelete(url, card){
-    if (!confirm("Bu xəbəri news.json-dan tamamilə silim? Geri qaytarıla bilməz.")) return;
-    if (card) card.classList.add("busy");
-    return updateItems(function(items){
-      for (var i = items.length - 1; i >= 0; i--) {
-        if (items[i].url === url) items.splice(i, 1);
-      }
-    }, "telefondan tamamilə sil: " + url).then(function(){
-      toast("Tamamilə silindi");
-      render();
-    }).catch(function(err){
-      if (card) card.classList.remove("busy");
-      showWriteError(err);
-    });
-  }
-
-  function restore(url, card){
-    return setStatus(url, "derc", "telefondan bərpa: " + url, "Saytda göstərilir", card);
+  // "Sil" xəbəri gizli "redd" statusuna keçirir: admin-də və saytda görünmür,
+  // bot onu təkrar gətirmir, 7 gündən sonra Worker tamamilə silir.
+  function removeNews(url, card){
+    if (!confirm("Bu xəbəri silim?")) return;
+    return setStatus(url, "redd", "admin: sil " + url, "Silindi", card);
   }
 
   function startEdit(url){
@@ -869,30 +809,20 @@
       ? selCount + " / " + shown.length + " seçilib"
       : "Hamısını seç";
 
-    var hardBtn = $("bulk-hard-delete");
     if (selCount > 0) {
       bulkActionBtn.hidden = false;
       bulkActionBtn.textContent = TAB_BULK_LABEL[state.statusTab](selCount);
-      bulkActionBtn.className = "btn-solid bulk-act" +
-        (state.statusTab === "derc" ? " danger" : "");
-      hardBtn.hidden = false;
-      hardBtn.textContent = "Tamamilə sil (" + selCount + ")";
+      bulkActionBtn.className = "btn-solid bulk-act danger";
     } else {
       bulkActionBtn.hidden = true;
-      hardBtn.hidden = true;
     }
   }
 
   function bulkAction(){
     var urls = selectedUrls();
     if (!urls.length) return;
-    var tab = state.statusTab;
-    var newStatus, actLabel, commitMsg, successMsg;
-    if (tab === "gozleyir")      { newStatus = "derc"; actLabel = "dərc et"; commitMsg = "bulk dərc"; successMsg = "dərc olundu"; }
-    else if (tab === "derc")     { newStatus = "redd"; actLabel = "saytdan sil"; commitMsg = "bulk saytdan sil"; successMsg = "saytdan silindi"; }
-    else                          { newStatus = "derc"; actLabel = "bərpa et"; commitMsg = "bulk bərpa"; successMsg = "bərpa edildi"; }
-
-    if (!confirm(urls.length + " xəbəri " + actLabel + "?")) return;
+    var newStatus = "redd", commitMsg = "bulk sil", successMsg = "silindi";
+    if (!confirm(urls.length + " xəbəri silim?")) return;
     var set = {};
     urls.forEach(function(u){ set[u] = true; });
 
@@ -906,26 +836,6 @@
       }
     }, "telefondan " + commitMsg + " (" + urls.length + " xəbər)").then(function(){
       toast(urls.length + " xəbər " + successMsg);
-      state.selected = {};
-      render();
-    }).catch(function(err){
-      showWriteError(err);
-    });
-  }
-
-  function bulkHardDelete(){
-    var urls = selectedUrls();
-    if (!urls.length) return;
-    if (!confirm(urls.length + " xəbəri news.json-dan tamamilə silim? Geri qaytarıla bilməz.")) return;
-    var set = {};
-    urls.forEach(function(u){ set[u] = true; });
-
-    updateItems(function(items){
-      for (var i = items.length - 1; i >= 0; i--) {
-        if (set[items[i].url]) items.splice(i, 1);
-      }
-    }, "telefondan bulk tamamilə sil (" + urls.length + " xəbər)").then(function(){
-      toast(urls.length + " xəbər tamamilə silindi");
       state.selected = {};
       render();
     }).catch(function(err){
@@ -1026,7 +936,6 @@
     var excerpt = addExcerpt.value.trim();
     var source = addSource.value.trim();
     var cat = addCat.value;
-    var foreign = addForeign.checked;
 
     if (!url) { toast("Link boş ola bilməz", true); addUrl.focus(); return; }
     if (!title) { toast("Başlıq boş ola bilməz", true); addTitle.focus(); return; }
@@ -1053,29 +962,32 @@
       }
     }
 
+    var indi = new Date();
     var yeni = {
       cat: cat,
-      date: new Date().toISOString().slice(0, 10),
+      // Dərc günü Bakı vaxtı ilə (Worker-dəki bakiGunu() ilə eyni)
+      date: new Date(indi.getTime() + 4 * 3600000).toISOString().slice(0, 10),
+      pubDate: indi.toISOString(),
+      dercDate: indi.toISOString(),
       title: title,
       excerpt: excerpt,
       source: source,
       url: url,
-      status: "gozleyir",
+      status: "derc",
       added: "manual"
     };
-    // Xarici dildə deyilsə, tərcümə flag-ini qoy ki, bot yenidən Gemini-yə göndərməsin.
-    // Xarici dildədirsə (foreign=true), flag qoymuruq — bot növbəti işə salınmada tərcümə edəcək.
-    if (!foreign) yeni.tercume = true;
+    // Bot əl ilə əlavə olunanlara toxunmur — mətn artıq Azərbaycan dilindədir
+    yeni.tercume = true;
 
     addSaveBtn.disabled = true;
     updateItems(function(items){
       items.unshift(yeni);
     }, "telefondan əl ilə əlavə: " + url).then(function(){
-      toast("Gözləyənlərə əlavə olundu");
+      toast("Sayta əlavə olundu");
       resetAddForm();
       addSaveBtn.disabled = false;
       state.mode = "list";
-      state.statusTab = "gozleyir";
+      state.statusTab = "saytda";
       state.filter = "Bütün";
       state.selected = {};
       render();
@@ -1142,7 +1054,6 @@
   $("refresh-btn").addEventListener("click", loadAll);
   masterBtn.addEventListener("click", toggleMaster);
   bulkActionBtn.addEventListener("click", bulkAction);
-  $("bulk-hard-delete").addEventListener("click", bulkHardDelete);
   addToggleBtn.addEventListener("click", toggleAddPanel);
   addSaveBtn.addEventListener("click", addManual);
   addCancelBtn.addEventListener("click", function(){
